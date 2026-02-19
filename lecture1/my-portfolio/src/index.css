@@ -1,0 +1,51 @@
+/* CSS 초기화 */
+* {
+  box-sizing: border-box;
+}
+
+/* HTML, Body 초기화 */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Root 앱 컨테이너 설정 */
+#root {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* CSS 변수 정의 - Welstory 컬러 팔레트 */
+:root {
+  /* Primary Colors */
+  --color-primary: #F04E23;
+  --color-primary-light: #FF7A52;
+  --color-primary-dark: #D03A10;
+
+  /* Secondary Colors */
+  --color-secondary: #1A1A1A;
+  --color-accent: #2B3A2E;
+
+  /* Background Colors */
+  --color-bg-primary: #FFFFFF;
+  --color-bg-secondary: #F5F5F5;
+
+  /* Text Colors */
+  --color-text-primary: #1A1A1A;
+  --color-text-secondary: #555555;
+  --color-text-muted: #999999;
+
+  /* Interactive Colors */
+  --color-button-primary: #F04E23;
+  --color-button-hover: #D03A10;
+  --color-link: #F04E23;
+  --color-link-hover: #D03A10;
+
+  /* Border & Divider */
+  --color-border: #E0E0E0;
+  --color-divider: #CCCCCC;
+}
