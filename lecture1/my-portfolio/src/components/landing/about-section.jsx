@@ -16,6 +16,7 @@ import { Link } from 'react-router-dom';
 function AboutSection() {
   return (
     <Box
+      id='about'
       sx={{
         width: '100%',
         backgroundColor: 'var(--color-bg-primary)',

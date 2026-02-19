@@ -20,6 +20,7 @@ function ProjectsSection() {
 
   return (
     <Box
+      id='projects'
       sx={{
         width: '100%',
         backgroundColor: 'var(--color-bg-primary)',
