@@ -37,53 +37,52 @@ function ScrollReveal({ children, delay = 0 }) {
 }
 
 /** 스킬 데이터 */
-const SKILLS = [
-  {
-    abbr: 'Fg',
-    name: 'Figma',
-    bgColor: '#1E1E2E',
-    accentColor: '#A259FF',
-    level: 5,
-    category: 'Design',
-    abilities: ['화면 설계', '프로토타이핑', '컴포넌트 시스템'],
-  },
-  {
-    abbr: 'Ps',
-    name: 'Photoshop',
-    bgColor: '#001E36',
-    accentColor: '#31A8FF',
-    level: 5,
-    category: 'Design',
-    abilities: ['이미지 편집', '합성 / 보정', '배너 제작'],
-  },
-  {
-    abbr: 'Ai',
-    name: 'Illustrator',
-    bgColor: '#300000',
-    accentColor: '#FF7C00',
-    level: 4,
-    category: 'Design',
-    abilities: ['벡터 그래픽', '로고 디자인', '아이콘 제작'],
-  },
-  {
+const skillsData = [
+  { id: 1, icon: 'orange-diamond', name: 'HTML', category: 'Frontend' },
+  { id: 2, icon: 'palette', name: 'CSS', category: 'Frontend' },
+  { id: 3, icon: 'zap', name: 'Photoshop', category: 'Design' },
+  { id: 4, icon: 'atom', name: 'Illustrator', category: 'Design' },
+  { id: 5, icon: 'target', name: 'Figma', category: 'Design' },
+];
+
+/** 아이콘별 시각적 속성 매핑 */
+const SKILL_VISUAL = {
+  'orange-diamond': {
     abbr: '</>',
-    name: 'HTML',
     bgColor: '#E34C26',
     accentColor: '#FFFFFF',
     level: 3,
-    category: 'Frontend',
     abilities: ['시맨틱 마크업', '웹 접근성', 'SEO 구조'],
   },
-  {
+  'palette': {
     abbr: '{ }',
-    name: 'CSS',
     bgColor: '#264DE4',
     accentColor: '#FFFFFF',
     level: 3,
-    category: 'Frontend',
     abilities: ['반응형 레이아웃', '애니메이션', '스타일링'],
   },
-];
+  'zap': {
+    abbr: 'Ps',
+    bgColor: '#001E36',
+    accentColor: '#31A8FF',
+    level: 5,
+    abilities: ['이미지 편집', '합성 / 보정', '배너 제작'],
+  },
+  'atom': {
+    abbr: 'Ai',
+    bgColor: '#300000',
+    accentColor: '#FF7C00',
+    level: 4,
+    abilities: ['벡터 그래픽', '로고 디자인', '아이콘 제작'],
+  },
+  'target': {
+    abbr: 'Fg',
+    bgColor: '#1E1E2E',
+    accentColor: '#A259FF',
+    level: 5,
+    abilities: ['화면 설계', '프로토타이핑', '컴포넌트 시스템'],
+  },
+};
 
 /**
  * DotLevel 컴포넌트
@@ -128,7 +127,8 @@ function SkillCard({ skill }) {
   const [hovered, setHovered] = useState(false);
   const isOpen = hovered || isMobile;
 
-  const { abbr, name, bgColor, accentColor, level, abilities, category } = skill;
+  const { icon, name, category } = skill;
+  const { abbr, bgColor, accentColor, level, abilities } = SKILL_VISUAL[icon] ?? {};
 
   return (
     <Box
@@ -279,8 +279,8 @@ function SkillCard({ skill }) {
  * <SkillSection />
  */
 function SkillSection() {
-  const designSkills = SKILLS.filter((s) => s.category === 'Design');
-  const frontendSkills = SKILLS.filter((s) => s.category === 'Frontend');
+  const designSkills = skillsData.filter((s) => s.category === 'Design');
+  const frontendSkills = skillsData.filter((s) => s.category === 'Frontend');
 
   return (
     <Box
