@@ -23,7 +23,7 @@ function Navigation() {
 
   const navItems = [
     { label: 'Home', path: '/', sectionId: null },
-    { label: 'About Me', path: '/', sectionId: 'about' },
+    { label: 'About Me', path: '/about', sectionId: null },
     { label: 'Projects', path: '/projects', sectionId: null },
   ];
 
@@ -51,6 +51,7 @@ function Navigation() {
   };
 
   const isHomeActive = location.pathname === '/';
+  const isAboutActive = location.pathname === '/about';
   const isProjectsActive = location.pathname === '/projects';
 
   return (
@@ -81,6 +82,7 @@ function Navigation() {
             { navItems.map((item) => {
               const isActive =
                 item.label === 'Home' ? isHomeActive :
+                item.label === 'About Me' ? isAboutActive :
                 item.label === 'Projects' ? isProjectsActive :
                 false;
 
