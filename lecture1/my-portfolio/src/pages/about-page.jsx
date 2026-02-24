@@ -22,6 +22,8 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useRef, useState } from 'react';
 
+import { usePortfolio } from '../context/PortfolioContext';
+
 /** 카테고리별 색상/스타일 설정 */
 const CATEGORY_CONFIG = {
   Frontend: {
@@ -58,43 +60,6 @@ const CATEGORY_ORDER = ['Frontend', 'Framework', 'Design'];
 /** 스킬 추가 다이얼로그 기본 폼 값 */
 const BLANK_FORM = { name: '', category: 'Frontend', description: '' };
 
-/** 초기 About Me 데이터 */
-const INITIAL_DATA = {
-  basicInfo: {
-    name: '이효진',
-    education: '',
-    major: 'IT계열',
-    experience: '프론트엔드 개발 학습 중',
-    photo: '',
-  },
-  sections: [
-    {
-      id: 'dev-story',
-      title: '나의 개발 스토리',
-      content: '웹디자이너로 다양한 프로젝트를 진행하며 많은 웹사이트를 제작해왔습니다. 처음에는 디자인 결과물을 만드는 것에 집중했지만, 점점 "이 화면이 어떻게 구현될까?"라는 궁금증이 생기기 시작했습니다. HTML과 CSS를 직접 다루며 마크업 구조를 이해하게 되었고, 자연스럽게 JavaScript와 React까지 관심이 확장되었습니다. 지금은 단순히 예쁜 화면을 만드는 것을 넘어, 구조적으로 안정적이고 유지보수가 쉬운 UI를 설계하는 프론트엔드 개발자로 성장하는 과정에 있습니다. 디자인과 개발을 모두 이해하는 사람이 되는 것이 저의 목표입니다.',
-      showInHome: true,
-    },
-    {
-      id: 'philosophy',
-      title: '개발 철학',
-      content: '오랜 실무 경험을 통해, 결과물보다 더 중요한 것은 "유지보수와 협업"이라는 것을 배웠습니다.',
-      showInHome: true,
-    },
-    {
-      id: 'personal',
-      title: '개인적인 이야기',
-      content: '새로운 기술을 배우는 것을 즐깁니다. 최근에는 AI 기반 개발 도구와 생산성 향상 툴에 많은 관심을 가지고 있습니다. 일과 삶의 균형을 중요하게 생각하며, 항상 한 단계 더 발전한 내일의 저를 만들기 위해 노력하고 있습니다.',
-      showInHome: false,
-    },
-  ],
-  skills: [
-    { id: 1, icon: 'html', name: 'HTML', category: 'Frontend', description: '시맨틱 마크업, 웹 접근성, SEO 구조', showInMain: true },
-    { id: 2, icon: 'css', name: 'CSS', category: 'Frontend', description: '반응형 레이아웃, 애니메이션, 스타일링', showInMain: true },
-    { id: 3, icon: 'photoshop', name: 'Photoshop', category: 'Design', description: '이미지 편집, 합성 / 보정, 배너 제작', showInMain: true },
-    { id: 4, icon: 'illustrator', name: 'Illustrator', category: 'Design', description: '벡터 그래픽, 로고 디자인, 아이콘 제작', showInMain: true },
-    { id: 5, icon: 'figma', name: 'Figma', category: 'Design', description: '화면 설계, 프로토타이핑, 컴포넌트 시스템', showInMain: true },
-  ],
-};
 
 /**
  * PhotoUploadArea 컴포넌트
@@ -417,7 +382,7 @@ function AddSkillDialog({ open, onClose, onAdd }) {
  * <AboutPage />
  */
 function AboutPage() {
-  const [aboutData, setAboutData] = useState(INITIAL_DATA);
+  const { aboutMeData: aboutData, setAboutMeData: setAboutData } = usePortfolio();
   const [activeTab, setActiveTab] = useState(0);
   const [addDialogOpen, setAddDialogOpen] = useState(false);
 

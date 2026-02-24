@@ -1,8 +1,11 @@
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { usePortfolio } from '../../context/PortfolioContext';
 
 /** 스크롤 진입 시 페이드업 애니메이션 래퍼 */
 function ScrollReveal({ children, delay = 0 }) {
@@ -34,57 +37,18 @@ function ScrollReveal({ children, delay = 0 }) {
   );
 }
 
-/** 스킬 데이터 */
-const skillsData = [
-  { id: 1, icon: 'orange-diamond', name: 'HTML', category: 'Frontend' },
-  { id: 2, icon: 'palette', name: 'CSS', category: 'Frontend' },
-  { id: 3, icon: 'zap', name: 'Photoshop', category: 'Design' },
-  { id: 4, icon: 'atom', name: 'Illustrator', category: 'Design' },
-  { id: 5, icon: 'target', name: 'Figma', category: 'Design' },
-];
-
-/** 아이콘별 시각적 속성 매핑 */
+/** 아이콘별 시각적 속성 매핑 (Context 아이콘 키 기준) */
 const SKILL_VISUAL = {
-  'orange-diamond': {
-    abbr: '</>',
-    bgColor: '#E34C26',
-    accentColor: '#FFFFFF',
-    level: 3,
-    abilities: ['시맨틱 마크업', '웹 접근성', 'SEO 구조'],
-  },
-  'palette': {
-    abbr: '{ }',
-    bgColor: '#264DE4',
-    accentColor: '#FFFFFF',
-    level: 3,
-    abilities: ['반응형 레이아웃', '애니메이션', '스타일링'],
-  },
-  'zap': {
-    abbr: 'Ps',
-    bgColor: '#001E36',
-    accentColor: '#31A8FF',
-    level: 5,
-    abilities: ['이미지 편집', '합성 / 보정', '배너 제작'],
-  },
-  'atom': {
-    abbr: 'Ai',
-    bgColor: '#300000',
-    accentColor: '#FF7C00',
-    level: 4,
-    abilities: ['벡터 그래픽', '로고 디자인', '아이콘 제작'],
-  },
-  'target': {
-    abbr: 'Fg',
-    bgColor: '#1E1E2E',
-    accentColor: '#A259FF',
-    level: 5,
-    abilities: ['화면 설계', '프로토타이핑', '컴포넌트 시스템'],
-  },
+  html: { abbr: '</>', bgColor: '#E34C26', accentColor: '#FFFFFF' },
+  css: { abbr: '{ }', bgColor: '#264DE4', accentColor: '#FFFFFF' },
+  photoshop: { abbr: 'Ps', bgColor: '#001E36', accentColor: '#31A8FF' },
+  illustrator: { abbr: 'Ai', bgColor: '#300000', accentColor: '#FF7C00' },
+  figma: { abbr: 'Fg', bgColor: '#1E1E2E', accentColor: '#A259FF' },
 };
 
 /**
  * SkillCard 컴포넌트
- * 인터랙티브 스킬 카드 — 기본(아이콘+이름+점) / 호버(능력 목록 슬라이드인)
+ * 아이콘 배지 + 카테고리 태그 + 툴 이름
  *
  * Props:
  * @param {object} skill - 스킬 데이터 [Required]
@@ -118,7 +82,7 @@ function SkillCard({ skill }) {
           mb: 3,
         }}
       >
-        {/* Adobe 스타일 아이콘 배지 */}
+        {/* 아이콘 배지 */}
         <Box
           sx={{
             width: 52,
@@ -175,7 +139,7 @@ function SkillCard({ skill }) {
 
 /**
  * SkillSection 컴포넌트
- * 인터랙티브 스킬 카드 섹션 — Design Tools / Frontend 카테고리 분리
+ * Context에서 상위 4개 스킬을 가져와 표시
  *
  * Props: 없음
  *
@@ -183,8 +147,12 @@ function SkillCard({ skill }) {
  * <SkillSection />
  */
 function SkillSection() {
-  const designSkills = skillsData.filter((s) => s.category === 'Design');
-  const frontendSkills = skillsData.filter((s) => s.category === 'Frontend');
+  const navigate = useNavigate();
+  const { getHomeData } = usePortfolio();
+  const { topSkills } = getHomeData();
+
+  const designSkills = topSkills.filter((s) => s.category === 'Design');
+  const frontendSkills = topSkills.filter((s) => s.category === 'Frontend');
 
   return (
     <Box
@@ -238,52 +206,79 @@ function SkillSection() {
         </ScrollReveal>
 
         {/* Design Tools 그룹 */}
-        <ScrollReveal delay={ 0.08 }>
-          <Box sx={{ mb: { xs: 6, md: 8 } }}>
-            <Typography
-              sx={{
-                fontSize: '0.68rem',
-                fontWeight: 700,
-                color: 'var(--color-text-muted)',
-                letterSpacing: '0.2em',
-                textTransform: 'uppercase',
-                mb: 2.5,
-              }}
-            >
-              Design Tools
-            </Typography>
-            <Grid container spacing={ 2 }>
-              { designSkills.map((skill) => (
-                <Grid key={ skill.name } size={{ xs: 12, sm: 6, md: 4 }}>
-                  <SkillCard skill={ skill } />
-                </Grid>
-              )) }
-            </Grid>
-          </Box>
-        </ScrollReveal>
+        { designSkills.length > 0 && (
+          <ScrollReveal delay={ 0.08 }>
+            <Box sx={{ mb: { xs: 6, md: 8 } }}>
+              <Typography
+                sx={{
+                  fontSize: '0.68rem',
+                  fontWeight: 700,
+                  color: 'var(--color-text-muted)',
+                  letterSpacing: '0.2em',
+                  textTransform: 'uppercase',
+                  mb: 2.5,
+                }}
+              >
+                Design Tools
+              </Typography>
+              <Grid container spacing={ 2 }>
+                { designSkills.map((skill) => (
+                  <Grid key={ skill.id } size={{ xs: 12, sm: 6, md: 4 }}>
+                    <SkillCard skill={ skill } />
+                  </Grid>
+                )) }
+              </Grid>
+            </Box>
+          </ScrollReveal>
+        ) }
 
         {/* Frontend 그룹 */}
-        <ScrollReveal delay={ 0.12 }>
-          <Box>
-            <Typography
+        { frontendSkills.length > 0 && (
+          <ScrollReveal delay={ 0.12 }>
+            <Box sx={{ mb: { xs: 6, md: 8 } }}>
+              <Typography
+                sx={{
+                  fontSize: '0.68rem',
+                  fontWeight: 700,
+                  color: 'var(--color-text-muted)',
+                  letterSpacing: '0.2em',
+                  textTransform: 'uppercase',
+                  mb: 2.5,
+                }}
+              >
+                Frontend
+              </Typography>
+              <Grid container spacing={ 2 }>
+                { frontendSkills.map((skill) => (
+                  <Grid key={ skill.id } size={{ xs: 12, sm: 6, md: 4 }}>
+                    <SkillCard skill={ skill } />
+                  </Grid>
+                )) }
+              </Grid>
+            </Box>
+          </ScrollReveal>
+        ) }
+
+        {/* 전체 스킬 보기 버튼 */}
+        <ScrollReveal delay={ 0.16 }>
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+            <Button
+              onClick={ () => navigate('/about') }
+              variant='outlined'
               sx={{
-                fontSize: '0.68rem',
-                fontWeight: 700,
-                color: 'var(--color-text-muted)',
-                letterSpacing: '0.2em',
-                textTransform: 'uppercase',
-                mb: 2.5,
+                borderColor: 'var(--color-primary)',
+                color: 'var(--color-primary)',
+                fontWeight: 600,
+                px: 4,
+                py: 1.2,
+                '&:hover': {
+                  backgroundColor: 'rgba(240,78,35,0.06)',
+                  borderColor: 'var(--color-primary)',
+                },
               }}
             >
-              Frontend
-            </Typography>
-            <Grid container spacing={ 2 }>
-              { frontendSkills.map((skill) => (
-                <Grid key={ skill.name } size={{ xs: 12, sm: 6, md: 4 }}>
-                  <SkillCard skill={ skill } />
-                </Grid>
-              )) }
-            </Grid>
+              전체 스킬 보기 →
+            </Button>
           </Box>
         </ScrollReveal>
 

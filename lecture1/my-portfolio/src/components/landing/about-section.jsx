@@ -1,9 +1,12 @@
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { usePortfolio } from '../../context/PortfolioContext';
 
 /** 스크롤 진입 시 페이드업 애니메이션 래퍼 */
 function ScrollReveal({ children, delay = 0 }) {
@@ -73,6 +76,10 @@ const TAGS = [
  * <AboutSection />
  */
 function AboutSection() {
+  const navigate = useNavigate();
+  const { getHomeData } = usePortfolio();
+  const { storySummary, basicInfo } = getHomeData();
+
   return (
     <Box
       id='about'
@@ -151,44 +158,60 @@ function AboutSection() {
                   backgroundColor: '#0F0F0F',
                   borderRadius: 2,
                   overflow: 'hidden',
-                  /* 도트 그리드 (Hero와 동일한 패턴으로 통일감) */
-                  backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px)',
+                  backgroundImage: basicInfo.photo
+                    ? 'none'
+                    : 'radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px)',
                   backgroundSize: '28px 28px',
                 }}
               >
-                <Box
-                  sx={{
-                    position: 'absolute',
-                    inset: 0,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: 1.5,
-                  }}
-                >
-                  <Typography
+                { basicInfo.photo ? (
+                  <Box
+                    component='img'
+                    src={ basicInfo.photo }
+                    alt={ basicInfo.name }
                     sx={{
-                      fontSize: { xs: '3.5rem', md: '4.5rem' },
-                      fontWeight: 800,
-                      color: 'rgba(255,255,255,0.12)',
-                      letterSpacing: '-0.04em',
-                      lineHeight: 1,
+                      position: 'absolute',
+                      inset: 0,
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                    }}
+                  />
+                ) : (
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      inset: 0,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 1.5,
                     }}
                   >
-                    Me.
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: '0.65rem',
-                      color: 'rgba(255,255,255,0.18)',
-                      letterSpacing: '0.2em',
-                      textTransform: 'uppercase',
-                    }}
-                  >
-                    Photo here
-                  </Typography>
-                </Box>
+                    <Typography
+                      sx={{
+                        fontSize: { xs: '3.5rem', md: '4.5rem' },
+                        fontWeight: 800,
+                        color: 'rgba(255,255,255,0.12)',
+                        letterSpacing: '-0.04em',
+                        lineHeight: 1,
+                      }}
+                    >
+                      Me.
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: '0.65rem',
+                        color: 'rgba(255,255,255,0.18)',
+                        letterSpacing: '0.2em',
+                        textTransform: 'uppercase',
+                      }}
+                    >
+                      Photo here
+                    </Typography>
+                  </Box>
+                ) }
               </Box>
             </Grid>
 
@@ -222,23 +245,27 @@ function AboutSection() {
                     lineHeight: 2,
                   }}
                 >
-                  처음 Figma를 열었을 때, 화면 속에서 아이디어가 형태를 갖추는 과정이
-                  너무 재미있었습니다. 이후 개발자 동료들과 협업하며 '디자인 의도'가
-                  얼마나 잘 전달되느냐가 결과물의 품질을 결정한다는 것을 깨달았습니다.
+                  { storySummary }
                 </Typography>
 
-                <Typography
+                <Button
+                  onClick={ () => navigate('/about') }
+                  variant='outlined'
+                  size='small'
                   sx={{
-                    fontSize: { xs: '1rem', md: '1.05rem' },
-                    color: 'var(--color-text-secondary)',
-                    lineHeight: 2,
+                    alignSelf: 'flex-start',
+                    borderColor: 'var(--color-primary)',
+                    color: 'var(--color-primary)',
+                    fontWeight: 600,
+                    px: 2.5,
+                    '&:hover': {
+                      backgroundColor: 'rgba(240,78,35,0.06)',
+                      borderColor: 'var(--color-primary)',
+                    },
                   }}
                 >
-                  지금은 디자인 파일 한 장이 개발팀의 고민을 줄이고, 사용자 경험을
-                  높이는 다리가 되는 것을 목표로 합니다. UI/UX 디자인과 프론트엔드
-                  퍼블리싱을 함께 다룰 수 있는 역량을 바탕으로, 스타트업에서 즉시
-                  전력이 되는 디자이너로 성장하고 싶습니다.
-                </Typography>
+                  더 알아보기 →
+                </Button>
 
                 <Divider sx={{ borderColor: 'var(--color-border)', my: 0.5 }} />
 
