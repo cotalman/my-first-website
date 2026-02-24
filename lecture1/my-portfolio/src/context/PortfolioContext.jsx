@@ -82,23 +82,12 @@ export const PortfolioProvider = ({ children }) => {
     }));
   }, []);
 
-  /** 스킬 우선순위(level) 수정 */
-  const updateSkillLevel = useCallback((skillId, newLevel) => {
-    setAboutMeData((prev) => ({
-      ...prev,
-      skills: prev.skills.map((s) =>
-        s.id === skillId ? { ...s, level: newLevel } : s
-      ),
-    }));
-  }, []);
-
   const contextValue = useMemo(() => ({
     aboutMeData,
     setAboutMeData,
     homeData,
     updateSectionContent,
-    updateSkillLevel,
-  }), [aboutMeData, homeData, updateSectionContent, updateSkillLevel]);
+  }), [aboutMeData, homeData, updateSectionContent]);
 
   return (
     <PortfolioContext.Provider value={ contextValue }>

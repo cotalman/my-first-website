@@ -18,7 +18,6 @@ import Grid from '@mui/material/Grid';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import Slider from '@mui/material/Slider';
 import Snackbar from '@mui/material/Snackbar';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
@@ -63,7 +62,7 @@ const ICON_CONFIG = {
 const CATEGORY_ORDER = ['Frontend', 'Framework', 'Design'];
 
 /** 스킬 추가 다이얼로그 기본 폼 값 */
-const BLANK_FORM = { name: '', category: 'Frontend', level: 50, description: '' };
+const BLANK_FORM = { name: '', category: 'Frontend', description: '' };
 
 
 /**
@@ -237,17 +236,16 @@ function SectionTabPanel({ section, value, index, onContentChange }) {
 
 /**
  * SkillCard 컴포넌트
- * 개별 스킬 카드 — 아이콘 배지 + 이름 + 카테고리 + 홈 노출 우선순위 슬라이더
+ * 개별 스킬 카드 — 아이콘 배지 + 이름 + 카테고리
  *
  * Props:
  * @param {object} skill - 스킬 데이터 객체 [Required]
- * @param {function} onLevelChange - (skillId, newLevel) 우선순위 변경 핸들러 [Required]
  *
  * Example usage:
- * <SkillCard skill={skill} onLevelChange={fn} />
+ * <SkillCard skill={skill} />
  */
-const SkillCard = memo(function SkillCard({ skill, onLevelChange }) {
-  const { icon, name, category, description, id, level } = skill;
+const SkillCard = memo(function SkillCard({ skill }) {
+  const { icon, name, category, description } = skill;
 
   const iconCfg = ICON_CONFIG[icon] || {
     abbr: name.slice(0, 2).toUpperCase(),
@@ -332,27 +330,6 @@ const SkillCard = memo(function SkillCard({ skill, onLevelChange }) {
 
         </Box>
 
-        {/* 홈 노출 우선순위 슬라이더 */}
-        <Box sx={{ mt: 1.5 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
-            <Typography sx={{ fontSize: '0.68rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>
-              홈 노출 우선순위
-            </Typography>
-            <Typography sx={{ fontSize: '0.68rem', color: catCfg.color, fontWeight: 700 }}>
-              { level ?? 50 }
-            </Typography>
-          </Box>
-          <Slider
-            value={ level ?? 50 }
-            onChange={ (_, v) => onLevelChange(id, v) }
-            min={ 0 }
-            max={ 100 }
-            size='small'
-            aria-label={ `${name} 홈 노출 우선순위` }
-            sx={{ color: catCfg.color, py: 0.5 }}
-          />
-        </Box>
-
       </Box>
     </Tooltip>
   );
@@ -360,7 +337,7 @@ const SkillCard = memo(function SkillCard({ skill, onLevelChange }) {
 
 /**
  * AddSkillDialog 컴포넌트
- * 새 스킬 추가 다이얼로그 — 기술명 / 카테고리 / 숙련도 슬라이더 / 설명
+ * 새 스킬 추가 다이얼로그 — 기술명 / 카테고리 / 설명
  *
  * Props:
  * @param {boolean} open - 다이얼로그 열림 여부 [Required]
@@ -379,7 +356,6 @@ function AddSkillDialog({ open, onClose, onAdd }) {
       id: Date.now(),
       icon: form.name.toLowerCase().replace(/\s+/g, ''),
       name: form.name.trim(),
-      level: form.level,
       category: form.category,
       description: form.description.trim(),
     });
@@ -423,25 +399,6 @@ function AddSkillDialog({ open, onClose, onAdd }) {
               )) }
             </Select>
           </FormControl>
-
-          <Box>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-              <Typography sx={{ fontSize: '0.82rem', color: 'var(--color-text-secondary)' }}>
-                홈 노출 우선순위
-              </Typography>
-              <Typography sx={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--color-primary)' }}>
-                { form.level }
-              </Typography>
-            </Box>
-            <Slider
-              value={ form.level }
-              onChange={ (_, v) => setForm((p) => ({ ...p, level: v })) }
-              min={ 0 }
-              max={ 100 }
-              aria-label='홈 노출 우선순위'
-              sx={{ color: 'var(--color-primary)' }}
-            />
-          </Box>
 
           <TextField
             label='설명 (툴팁)'
@@ -497,7 +454,6 @@ function AboutPage() {
     aboutMeData: aboutData,
     setAboutMeData: setAboutData,
     updateSectionContent,
-    updateSkillLevel,
   } = usePortfolio();
   const [activeTab, setActiveTab] = useState(0);
   const [addDialogOpen, setAddDialogOpen] = useState(false);
@@ -533,11 +489,6 @@ function AboutPage() {
     updateSectionContent(sectionId, newContent);
     showSnackbar('내용이 저장되었습니다. 홈 탭에 반영됩니다.');
   }, [updateSectionContent, showSnackbar]);
-
-  /** 스킬 우선순위 변경 */
-  const handleSkillLevelChange = useCallback((skillId, newLevel) => {
-    updateSkillLevel(skillId, newLevel);
-  }, [updateSkillLevel]);
 
   const { basicInfo, sections, skills } = aboutData;
 
@@ -788,7 +739,7 @@ function AboutPage() {
               <Grid container spacing={ 2 }>
                 { catSkills.map((skill) => (
                   <Grid key={ skill.id } size={{ xs: 12, sm: 6, md: 4 }}>
-                    <SkillCard skill={ skill } onLevelChange={ handleSkillLevelChange } />
+                    <SkillCard skill={ skill } />
                   </Grid>
                 )) }
               </Grid>
