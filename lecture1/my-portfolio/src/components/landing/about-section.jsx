@@ -1,7 +1,6 @@
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { memo, useEffect, useRef, useState } from 'react';
@@ -267,39 +266,6 @@ function AboutSection() {
                   더 알아보기 →
                 </Button>
 
-                <Divider sx={{ borderColor: 'var(--color-border)', my: 0.5 }} />
-
-                {/* 간단 수치 */}
-                <Box sx={{ display: 'flex', gap: { xs: 4, md: 6 } }}>
-                  { [
-                    { value: '3+', label: '년 디자인 경력' },
-                    { value: '20+', label: '프로젝트 완료' },
-                    { value: '100%', label: '소통 의지' },
-                  ].map((stat) => (
-                    <Box key={ stat.label }>
-                      <Typography
-                        sx={{
-                          fontSize: { xs: '1.5rem', md: '1.8rem' },
-                          fontWeight: 800,
-                          color: 'var(--color-text-primary)',
-                          lineHeight: 1,
-                          letterSpacing: '-0.02em',
-                        }}
-                      >
-                        { stat.value }
-                      </Typography>
-                      <Typography
-                        sx={{
-                          fontSize: '0.75rem',
-                          color: 'var(--color-text-muted)',
-                          mt: 0.5,
-                        }}
-                      >
-                        { stat.label }
-                      </Typography>
-                    </Box>
-                  )) }
-                </Box>
               </Box>
             </Grid>
           </Grid>
