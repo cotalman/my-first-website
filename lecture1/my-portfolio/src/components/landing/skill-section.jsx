@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import { useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePortfolio } from '../../context/PortfolioContext';
 
@@ -53,7 +53,7 @@ const SKILL_VISUAL = {
  * Props:
  * @param {object} skill - 스킬 데이터 [Required]
  */
-function SkillCard({ skill }) {
+const SkillCard = memo(function SkillCard({ skill }) {
   const { icon, name, category } = skill;
   const { abbr, bgColor, accentColor } = SKILL_VISUAL[icon] ?? {};
 
@@ -135,7 +135,7 @@ function SkillCard({ skill }) {
       </Typography>
     </Box>
   );
-}
+});
 
 /**
  * SkillSection 컴포넌트
@@ -148,11 +148,11 @@ function SkillCard({ skill }) {
  */
 function SkillSection() {
   const navigate = useNavigate();
-  const { getHomeData } = usePortfolio();
-  const { topSkills } = getHomeData();
+  const { homeData } = usePortfolio();
+  const { topSkills } = homeData;
 
-  const designSkills = topSkills.filter((s) => s.category === 'Design');
-  const frontendSkills = topSkills.filter((s) => s.category === 'Frontend');
+  const designSkills = useMemo(() => topSkills.filter((s) => s.category === 'Design'), [topSkills]);
+  const frontendSkills = useMemo(() => topSkills.filter((s) => s.category === 'Frontend'), [topSkills]);
 
   return (
     <Box

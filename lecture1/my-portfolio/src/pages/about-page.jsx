@@ -1,6 +1,8 @@
 import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
 import PersonIcon from '@mui/icons-material/Person';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
+import Alert from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -10,17 +12,20 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import Fade from '@mui/material/Fade';
 import FormControl from '@mui/material/FormControl';
 import Grid from '@mui/material/Grid';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+import Slider from '@mui/material/Slider';
+import Snackbar from '@mui/material/Snackbar';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import { useRef, useState } from 'react';
+import { memo, useCallback, useMemo, useRef, useState } from 'react';
 
 import { usePortfolio } from '../context/PortfolioContext';
 
@@ -58,7 +63,7 @@ const ICON_CONFIG = {
 const CATEGORY_ORDER = ['Frontend', 'Framework', 'Design'];
 
 /** 스킬 추가 다이얼로그 기본 폼 값 */
-const BLANK_FORM = { name: '', category: 'Frontend', description: '' };
+const BLANK_FORM = { name: '', category: 'Frontend', level: 50, description: '' };
 
 
 /**
@@ -72,7 +77,7 @@ const BLANK_FORM = { name: '', category: 'Frontend', description: '' };
  * Example usage:
  * <PhotoUploadArea photo={photo} onPhotoChange={handlePhotoChange} />
  */
-function PhotoUploadArea({ photo, onPhotoChange }) {
+const PhotoUploadArea = memo(function PhotoUploadArea({ photo, onPhotoChange }) {
   const inputRef = useRef(null);
 
   return (
@@ -127,56 +132,122 @@ function PhotoUploadArea({ photo, onPhotoChange }) {
         ref={ inputRef }
         type='file'
         accept='image/*'
+        aria-label='프로필 사진 업로드'
         style={{ display: 'none' }}
         onChange={ onPhotoChange }
       />
     </Box>
   );
-}
+});
 
 /**
  * SectionTabPanel 컴포넌트
- * 탭 패널 콘텐츠 — 내용 텍스트
+ * 탭 패널 콘텐츠 — 내용 텍스트 + 인라인 편집
  *
  * Props:
  * @param {object} section - 섹션 데이터 객체 [Required]
- * @param {string} section.content - 섹션 본문 [Required]
  * @param {number} value - 현재 활성 탭 인덱스 [Required]
  * @param {number} index - 이 패널의 인덱스 [Required]
+ * @param {function} onContentChange - (sectionId, newContent) 편집 저장 핸들러 [Required]
  *
  * Example usage:
- * <SectionTabPanel section={section} value={activeTab} index={0} />
+ * <SectionTabPanel section={section} value={activeTab} index={0} onContentChange={fn} />
  */
-function SectionTabPanel({ section, value, index }) {
+function SectionTabPanel({ section, value, index, onContentChange }) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [draft, setDraft] = useState(section.content);
+
   if (value !== index) return null;
 
+  const handleSave = () => {
+    onContentChange(section.id, draft);
+    setIsEditing(false);
+  };
+
+  const handleCancel = () => {
+    setDraft(section.content);
+    setIsEditing(false);
+  };
+
   return (
-    <Box role='tabpanel' sx={{ pt: { xs: 3, md: 4 } }}>
-      <Typography
-        sx={{
-          fontSize: { xs: '1rem', md: '1.05rem' },
-          color: 'var(--color-text-secondary)',
-          lineHeight: 2,
-        }}
-      >
-        { section.content }
-      </Typography>
+    <Box
+      role='tabpanel'
+      aria-label={ `${section.title} 내용` }
+      sx={{ pt: { xs: 3, md: 4 } }}
+    >
+      { isEditing ? (
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <TextField
+            value={ draft }
+            onChange={ (e) => setDraft(e.target.value) }
+            multiline
+            rows={ 5 }
+            fullWidth
+            size='small'
+            autoFocus
+            aria-label={ `${section.title} 편집` }
+            sx={{ '& .MuiOutlinedInput-root': { fontSize: '1rem', lineHeight: 2 } }}
+          />
+          <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end' }}>
+            <Button size='small' onClick={ handleCancel } sx={{ color: 'var(--color-text-muted)' }}>
+              취소
+            </Button>
+            <Button
+              size='small'
+              variant='contained'
+              onClick={ handleSave }
+              sx={{ backgroundColor: 'var(--color-primary)', fontWeight: 700 }}
+            >
+              저장
+            </Button>
+          </Box>
+        </Box>
+      ) : (
+        <Box>
+          <Fade in key={ section.content }>
+            <Typography
+              sx={{
+                fontSize: { xs: '1rem', md: '1.05rem' },
+                color: 'var(--color-text-secondary)',
+                lineHeight: 2,
+                mb: 2,
+              }}
+            >
+              { section.content }
+            </Typography>
+          </Fade>
+          <Button
+            size='small'
+            startIcon={ <EditIcon sx={{ fontSize: '0.9rem' }} /> }
+            onClick={ () => { setDraft(section.content); setIsEditing(true); } }
+            sx={{
+              color: 'var(--color-text-muted)',
+              fontSize: '0.8rem',
+              '&:hover': { color: 'var(--color-primary)' },
+            }}
+            aria-label={ `${section.title} 수정` }
+          >
+            수정
+          </Button>
+        </Box>
+      ) }
     </Box>
   );
 }
 
 /**
  * SkillCard 컴포넌트
- * 개별 스킬 카드 — 아이콘 배지 + 이름 + 숙련도 바 + 메인 표시 토글
- * 호버 시 description 툴팁 표시
+ * 개별 스킬 카드 — 아이콘 배지 + 이름 + 카테고리 + 홈 노출 우선순위 슬라이더
  *
  * Props:
  * @param {object} skill - 스킬 데이터 객체 [Required]
+ * @param {function} onLevelChange - (skillId, newLevel) 우선순위 변경 핸들러 [Required]
+ *
  * Example usage:
- * <SkillCard skill={skill} />
+ * <SkillCard skill={skill} onLevelChange={fn} />
  */
-function SkillCard({ skill }) {
-  const { icon, name, category, description } = skill;
+const SkillCard = memo(function SkillCard({ skill, onLevelChange }) {
+  const { icon, name, category, description, id, level } = skill;
 
   const iconCfg = ICON_CONFIG[icon] || {
     abbr: name.slice(0, 2).toUpperCase(),
@@ -261,10 +332,31 @@ function SkillCard({ skill }) {
 
         </Box>
 
+        {/* 홈 노출 우선순위 슬라이더 */}
+        <Box sx={{ mt: 1.5 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+            <Typography sx={{ fontSize: '0.68rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>
+              홈 노출 우선순위
+            </Typography>
+            <Typography sx={{ fontSize: '0.68rem', color: catCfg.color, fontWeight: 700 }}>
+              { level ?? 50 }
+            </Typography>
+          </Box>
+          <Slider
+            value={ level ?? 50 }
+            onChange={ (_, v) => onLevelChange(id, v) }
+            min={ 0 }
+            max={ 100 }
+            size='small'
+            aria-label={ `${name} 홈 노출 우선순위` }
+            sx={{ color: catCfg.color, py: 0.5 }}
+          />
+        </Box>
+
       </Box>
     </Tooltip>
   );
-}
+});
 
 /**
  * AddSkillDialog 컴포넌트
@@ -287,9 +379,9 @@ function AddSkillDialog({ open, onClose, onAdd }) {
       id: Date.now(),
       icon: form.name.toLowerCase().replace(/\s+/g, ''),
       name: form.name.trim(),
+      level: form.level,
       category: form.category,
       description: form.description.trim(),
-      showInMain: false,
     });
     setForm(BLANK_FORM);
     onClose();
@@ -331,6 +423,25 @@ function AddSkillDialog({ open, onClose, onAdd }) {
               )) }
             </Select>
           </FormControl>
+
+          <Box>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+              <Typography sx={{ fontSize: '0.82rem', color: 'var(--color-text-secondary)' }}>
+                홈 노출 우선순위
+              </Typography>
+              <Typography sx={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--color-primary)' }}>
+                { form.level }
+              </Typography>
+            </Box>
+            <Slider
+              value={ form.level }
+              onChange={ (_, v) => setForm((p) => ({ ...p, level: v })) }
+              min={ 0 }
+              max={ 100 }
+              aria-label='홈 노출 우선순위'
+              sx={{ color: 'var(--color-primary)' }}
+            />
+          </Box>
 
           <TextField
             label='설명 (툴팁)'
@@ -382,12 +493,22 @@ function AddSkillDialog({ open, onClose, onAdd }) {
  * <AboutPage />
  */
 function AboutPage() {
-  const { aboutMeData: aboutData, setAboutMeData: setAboutData } = usePortfolio();
+  const {
+    aboutMeData: aboutData,
+    setAboutMeData: setAboutData,
+    updateSectionContent,
+    updateSkillLevel,
+  } = usePortfolio();
   const [activeTab, setActiveTab] = useState(0);
   const [addDialogOpen, setAddDialogOpen] = useState(false);
+  const [snackbar, setSnackbar] = useState({ open: false, message: '' });
+
+  const showSnackbar = useCallback((message) => {
+    setSnackbar({ open: true, message });
+  }, []);
 
   /** 프로필 사진 선택 → URL.createObjectURL 로컬 미리보기 */
-  const handlePhotoChange = (e) => {
+  const handlePhotoChange = useCallback((e) => {
     const file = e.target.files[0];
     if (!file) return;
     const url = URL.createObjectURL(file);
@@ -395,25 +516,37 @@ function AboutPage() {
       ...prev,
       basicInfo: { ...prev.basicInfo, photo: url },
     }));
-  };
+    showSnackbar('프로필 사진이 업데이트되었습니다.');
+  }, [setAboutData, showSnackbar]);
 
   /** 새 스킬 추가 */
-  const handleAddSkill = (newSkill) => {
+  const handleAddSkill = useCallback((newSkill) => {
     setAboutData((prev) => ({
       ...prev,
       skills: [...prev.skills, newSkill],
     }));
-  };
+    showSnackbar('새 스킬이 추가되었습니다. 홈 탭에 반영됩니다.');
+  }, [setAboutData, showSnackbar]);
 
+  /** 섹션 내용 저장 */
+  const handleSectionContentChange = useCallback((sectionId, newContent) => {
+    updateSectionContent(sectionId, newContent);
+    showSnackbar('내용이 저장되었습니다. 홈 탭에 반영됩니다.');
+  }, [updateSectionContent, showSnackbar]);
+
+  /** 스킬 우선순위 변경 */
+  const handleSkillLevelChange = useCallback((skillId, newLevel) => {
+    updateSkillLevel(skillId, newLevel);
+  }, [updateSkillLevel]);
 
   const { basicInfo, sections, skills } = aboutData;
 
-  /** 카테고리별 그룹핑 */
-  const groupedSkills = CATEGORY_ORDER.reduce((acc, cat) => {
+  /** 카테고리별 그룹핑 — skills 변경 시에만 재계산 */
+  const groupedSkills = useMemo(() => CATEGORY_ORDER.reduce((acc, cat) => {
     const catSkills = skills.filter((s) => s.category === cat);
     if (catSkills.length > 0) acc[cat] = catSkills;
     return acc;
-  }, {});
+  }, {}), [skills]);
 
   return (
     <Box
@@ -549,8 +682,14 @@ function AboutPage() {
                 },
               }}
             >
-              { sections.map((section) => (
-                <Tab key={ section.id } label={ section.title } />
+              { sections.map((section, i) => (
+                <Tab
+                  key={ section.id }
+                  label={ section.title }
+                  id={ `tab-${section.id}` }
+                  aria-controls={ `tabpanel-${section.id}` }
+                  aria-selected={ activeTab === i }
+                />
               )) }
             </Tabs>
           </Box>
@@ -562,6 +701,7 @@ function AboutPage() {
                 section={ section }
                 value={ activeTab }
                 index={ i }
+                onContentChange={ handleSectionContentChange }
               />
             )) }
           </Box>
@@ -648,7 +788,7 @@ function AboutPage() {
               <Grid container spacing={ 2 }>
                 { catSkills.map((skill) => (
                   <Grid key={ skill.id } size={{ xs: 12, sm: 6, md: 4 }}>
-                    <SkillCard skill={ skill } />
+                    <SkillCard skill={ skill } onLevelChange={ handleSkillLevelChange } />
                   </Grid>
                 )) }
               </Grid>
@@ -664,6 +804,23 @@ function AboutPage() {
         />
 
       </Container>
+
+      {/* 저장 피드백 스낵바 */}
+      <Snackbar
+        open={ snackbar.open }
+        autoHideDuration={ 2500 }
+        onClose={ () => setSnackbar((p) => ({ ...p, open: false })) }
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={ () => setSnackbar((p) => ({ ...p, open: false })) }
+          severity='success'
+          variant='filled'
+          sx={{ fontSize: '0.85rem' }}
+        >
+          { snackbar.message }
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

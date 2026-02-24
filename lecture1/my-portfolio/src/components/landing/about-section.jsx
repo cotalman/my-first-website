@@ -4,7 +4,7 @@ import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import { useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePortfolio } from '../../context/PortfolioContext';
 
@@ -77,8 +77,8 @@ const TAGS = [
  */
 function AboutSection() {
   const navigate = useNavigate();
-  const { getHomeData } = usePortfolio();
-  const { storySummary, basicInfo } = getHomeData();
+  const { homeData } = usePortfolio();
+  const { storySummary, basicInfo } = homeData;
 
   return (
     <Box
@@ -422,4 +422,4 @@ function AboutSection() {
   );
 }
 
-export default AboutSection;
+export default memo(AboutSection);

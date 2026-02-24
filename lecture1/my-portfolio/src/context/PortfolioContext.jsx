@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 
 const PortfolioContext = createContext();
 
@@ -52,8 +52,8 @@ const INITIAL_ABOUT_DATA = {
 export const PortfolioProvider = ({ children }) => {
   const [aboutMeData, setAboutMeData] = useState(INITIAL_ABOUT_DATA);
 
-  /** 홈 탭용 데이터 자동 생성 */
-  const getHomeData = () => {
+  /** aboutMeData 변경 시에만 재계산 — 홈 탭용 파생 데이터 */
+  const homeData = useMemo(() => {
     const devStory = aboutMeData.sections.find((s) => s.id === 'dev-story');
     const storySummary = devStory?.content
       ? devStory.content.length > 160
@@ -62,7 +62,7 @@ export const PortfolioProvider = ({ children }) => {
       : '';
 
     const topSkills = [...aboutMeData.skills]
-      .sort((a, b) => b.level - a.level)
+      .sort((a, b) => (b.level ?? 0) - (a.level ?? 0))
       .slice(0, 4);
 
     return {
@@ -70,10 +70,38 @@ export const PortfolioProvider = ({ children }) => {
       topSkills,
       basicInfo: aboutMeData.basicInfo,
     };
-  };
+  }, [aboutMeData]);
+
+  /** 섹션 내용 수정 */
+  const updateSectionContent = useCallback((sectionId, newContent) => {
+    setAboutMeData((prev) => ({
+      ...prev,
+      sections: prev.sections.map((s) =>
+        s.id === sectionId ? { ...s, content: newContent } : s
+      ),
+    }));
+  }, []);
+
+  /** 스킬 우선순위(level) 수정 */
+  const updateSkillLevel = useCallback((skillId, newLevel) => {
+    setAboutMeData((prev) => ({
+      ...prev,
+      skills: prev.skills.map((s) =>
+        s.id === skillId ? { ...s, level: newLevel } : s
+      ),
+    }));
+  }, []);
+
+  const contextValue = useMemo(() => ({
+    aboutMeData,
+    setAboutMeData,
+    homeData,
+    updateSectionContent,
+    updateSkillLevel,
+  }), [aboutMeData, homeData, updateSectionContent, updateSkillLevel]);
 
   return (
-    <PortfolioContext.Provider value={{ aboutMeData, setAboutMeData, getHomeData }}>
+    <PortfolioContext.Provider value={ contextValue }>
       { children }
     </PortfolioContext.Provider>
   );
