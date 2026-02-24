@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import { memo, useEffect, useMemo, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePortfolio } from '../../context/PortfolioContext';
 
@@ -151,9 +151,6 @@ function SkillSection() {
   const { homeData } = usePortfolio();
   const { topSkills } = homeData;
 
-  const designSkills = useMemo(() => topSkills.filter((s) => s.category === 'Design'), [topSkills]);
-  const frontendSkills = useMemo(() => topSkills.filter((s) => s.category === 'Frontend'), [topSkills]);
-
   return (
     <Box
       sx={{
@@ -205,59 +202,16 @@ function SkillSection() {
           </Box>
         </ScrollReveal>
 
-        {/* Design Tools 그룹 */}
-        { designSkills.length > 0 && (
-          <ScrollReveal delay={ 0.08 }>
-            <Box sx={{ mb: { xs: 6, md: 8 } }}>
-              <Typography
-                sx={{
-                  fontSize: '0.68rem',
-                  fontWeight: 700,
-                  color: 'var(--color-text-muted)',
-                  letterSpacing: '0.2em',
-                  textTransform: 'uppercase',
-                  mb: 2.5,
-                }}
-              >
-                Design Tools
-              </Typography>
-              <Grid container spacing={ 2 }>
-                { designSkills.map((skill) => (
-                  <Grid key={ skill.id } size={{ xs: 12, sm: 6, md: 4 }}>
-                    <SkillCard skill={ skill } />
-                  </Grid>
-                )) }
+        {/* 스킬 카드 4개 */}
+        <ScrollReveal delay={ 0.08 }>
+          <Grid container spacing={ 2 } sx={{ mb: { xs: 8, md: 10 } }}>
+            { topSkills.map((skill) => (
+              <Grid key={ skill.id } size={{ xs: 6, md: 3 }}>
+                <SkillCard skill={ skill } />
               </Grid>
-            </Box>
-          </ScrollReveal>
-        ) }
-
-        {/* Frontend 그룹 */}
-        { frontendSkills.length > 0 && (
-          <ScrollReveal delay={ 0.12 }>
-            <Box sx={{ mb: { xs: 6, md: 8 } }}>
-              <Typography
-                sx={{
-                  fontSize: '0.68rem',
-                  fontWeight: 700,
-                  color: 'var(--color-text-muted)',
-                  letterSpacing: '0.2em',
-                  textTransform: 'uppercase',
-                  mb: 2.5,
-                }}
-              >
-                Frontend
-              </Typography>
-              <Grid container spacing={ 2 }>
-                { frontendSkills.map((skill) => (
-                  <Grid key={ skill.id } size={{ xs: 12, sm: 6, md: 4 }}>
-                    <SkillCard skill={ skill } />
-                  </Grid>
-                )) }
-              </Grid>
-            </Box>
-          </ScrollReveal>
-        ) }
+            )) }
+          </Grid>
+        </ScrollReveal>
 
         {/* 전체 스킬 보기 버튼 */}
         <ScrollReveal delay={ 0.16 }>
