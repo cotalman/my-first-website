@@ -1,7 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
 import PersonIcon from '@mui/icons-material/Person';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
-import SortIcon from '@mui/icons-material/Sort';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import Avatar from '@mui/material/Avatar';
@@ -19,7 +18,6 @@ import IconButton from '@mui/material/IconButton';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import Slider from '@mui/material/Slider';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import TextField from '@mui/material/TextField';
@@ -61,7 +59,7 @@ const ICON_CONFIG = {
 const CATEGORY_ORDER = ['Frontend', 'Framework', 'Design'];
 
 /** 스킬 추가 다이얼로그 기본 폼 값 */
-const BLANK_FORM = { name: '', category: 'Frontend', level: 50, description: '' };
+const BLANK_FORM = { name: '', category: 'Frontend', description: '' };
 
 /** 초기 About Me 데이터 */
 const INITIAL_DATA = {
@@ -93,11 +91,11 @@ const INITIAL_DATA = {
     },
   ],
   skills: [
-    { id: 1, icon: 'html', name: 'HTML', level: 80, category: 'Frontend', description: '시맨틱 마크업, 웹 접근성, SEO 구조', showInMain: true },
-    { id: 2, icon: 'css', name: 'CSS', level: 75, category: 'Frontend', description: '반응형 레이아웃, 애니메이션, 스타일링', showInMain: true },
-    { id: 3, icon: 'photoshop', name: 'Photoshop', level: 85, category: 'Design', description: '이미지 편집, 합성 / 보정, 배너 제작', showInMain: true },
-    { id: 4, icon: 'illustrator', name: 'Illustrator', level: 75, category: 'Design', description: '벡터 그래픽, 로고 디자인, 아이콘 제작', showInMain: true },
-    { id: 5, icon: 'figma', name: 'Figma', level: 65, category: 'Design', description: '화면 설계, 프로토타이핑, 컴포넌트 시스템', showInMain: true },
+    { id: 1, icon: 'html', name: 'HTML', category: 'Frontend', description: '시맨틱 마크업, 웹 접근성, SEO 구조', showInMain: true },
+    { id: 2, icon: 'css', name: 'CSS', category: 'Frontend', description: '반응형 레이아웃, 애니메이션, 스타일링', showInMain: true },
+    { id: 3, icon: 'photoshop', name: 'Photoshop', category: 'Design', description: '이미지 편집, 합성 / 보정, 배너 제작', showInMain: true },
+    { id: 4, icon: 'illustrator', name: 'Illustrator', category: 'Design', description: '벡터 그래픽, 로고 디자인, 아이콘 제작', showInMain: true },
+    { id: 5, icon: 'figma', name: 'Figma', category: 'Design', description: '화면 설계, 프로토타이핑, 컴포넌트 시스템', showInMain: true },
   ],
 };
 
@@ -218,7 +216,7 @@ function SectionTabPanel({ section, value, index }) {
  * <SkillCard skill={skill} onToggleMain={handleToggleShowInMain} />
  */
 function SkillCard({ skill, onToggleMain }) {
-  const { icon, name, level, category, description, showInMain, id } = skill;
+  const { icon, name, category, description, showInMain, id } = skill;
 
   const iconCfg = ICON_CONFIG[icon] || {
     abbr: name.slice(0, 2).toUpperCase(),
@@ -320,35 +318,6 @@ function SkillCard({ skill, onToggleMain }) {
           </Tooltip>
         </Box>
 
-        {/* 숙련도 바 */}
-        <Box>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.75 }}>
-            <Typography sx={{ fontSize: '0.68rem', color: 'var(--color-text-muted)', fontWeight: 600, letterSpacing: '0.04em' }}>
-              숙련도
-            </Typography>
-            <Typography sx={{ fontSize: '0.68rem', color: catCfg.color, fontWeight: 700 }}>
-              { level }%
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              height: 4,
-              borderRadius: 2,
-              backgroundColor: 'var(--color-bg-secondary)',
-              overflow: 'hidden',
-            }}
-          >
-            <Box
-              sx={{
-                height: '100%',
-                width: `${level}%`,
-                borderRadius: 2,
-                backgroundColor: catCfg.color,
-                transition: 'width 0.6s ease',
-              }}
-            />
-          </Box>
-        </Box>
       </Box>
     </Tooltip>
   );
@@ -375,7 +344,6 @@ function AddSkillDialog({ open, onClose, onAdd }) {
       id: Date.now(),
       icon: form.name.toLowerCase().replace(/\s+/g, ''),
       name: form.name.trim(),
-      level: form.level,
       category: form.category,
       description: form.description.trim(),
       showInMain: false,
@@ -420,22 +388,6 @@ function AddSkillDialog({ open, onClose, onAdd }) {
               )) }
             </Select>
           </FormControl>
-
-          <Box>
-            <Typography sx={{ fontSize: '0.82rem', color: 'var(--color-text-secondary)', mb: 1.5 }}>
-              숙련도:{' '}
-              <Box component='span' sx={{ fontWeight: 700, color: 'var(--color-primary)' }}>
-                { form.level }%
-              </Box>
-            </Typography>
-            <Slider
-              value={ form.level }
-              onChange={ (_, newValue) => setForm((p) => ({ ...p, level: newValue })) }
-              min={ 0 }
-              max={ 100 }
-              sx={{ color: 'var(--color-primary)' }}
-            />
-          </Box>
 
           <TextField
             label='설명 (툴팁)'
@@ -490,7 +442,6 @@ function AboutPage() {
   const [aboutData, setAboutData] = useState(INITIAL_DATA);
   const [activeTab, setActiveTab] = useState(0);
   const [addDialogOpen, setAddDialogOpen] = useState(false);
-  const [sortByLevel, setSortByLevel] = useState(false);
 
   /** 프로필 사진 선택 → URL.createObjectURL 로컬 미리보기 */
   const handlePhotoChange = (e) => {
@@ -523,14 +474,9 @@ function AboutPage() {
 
   const { basicInfo, sections, skills } = aboutData;
 
-  /** 숙련도 정렬 처리 */
-  const displaySkills = sortByLevel
-    ? [...skills].sort((a, b) => b.level - a.level)
-    : skills;
-
   /** 카테고리별 그룹핑 */
   const groupedSkills = CATEGORY_ORDER.reduce((acc, cat) => {
-    const catSkills = displaySkills.filter((s) => s.category === cat);
+    const catSkills = skills.filter((s) => s.category === cat);
     if (catSkills.length > 0) acc[cat] = catSkills;
     return acc;
   }, {});
@@ -727,23 +673,6 @@ function AboutPage() {
             </Box>
 
             <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-              <Tooltip title={ sortByLevel ? '기본 순서로 보기' : '숙련도 높은 순 정렬' }>
-                <IconButton
-                  onClick={ () => setSortByLevel((p) => !p) }
-                  sx={{
-                    border: '1px solid',
-                    borderRadius: 1.5,
-                    borderColor: sortByLevel ? 'var(--color-primary)' : 'var(--color-border)',
-                    color: sortByLevel ? 'var(--color-primary)' : 'var(--color-text-muted)',
-                    width: 40,
-                    height: 40,
-                    '&:hover': { borderColor: 'var(--color-primary)', color: 'var(--color-primary)' },
-                  }}
-                >
-                  <SortIcon sx={{ fontSize: '1.1rem' }} />
-                </IconButton>
-              </Tooltip>
-
               <Button
                 startIcon={ <AddIcon /> }
                 onClick={ () => setAddDialogOpen(true) }
