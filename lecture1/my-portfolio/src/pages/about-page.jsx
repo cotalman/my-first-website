@@ -15,7 +15,7 @@ const INITIAL_DATA = {
     name: '이효진',
     education: '',
     major: 'IT계열',
-    experience: '신입, 프론트엔드 개발 학습 중',
+    experience: '프론트엔드 개발 학습 중',
     photo: '',
   },
   sections: [
