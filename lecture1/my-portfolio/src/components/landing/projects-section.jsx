@@ -81,7 +81,7 @@ function ProjectsSection() {
               lineHeight: 1.8,
             }}
           >
-            직접 기획하고 개발한 프로젝트들입니다.
+            기획하고 개발한 프로젝트입니다.
           </Typography>
         </Box>
 
