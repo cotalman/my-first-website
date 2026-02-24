@@ -24,7 +24,7 @@ function Navigation() {
   const navItems = [
     { label: 'Home', path: '/', sectionId: null },
     { label: 'About Me', path: '/', sectionId: 'about' },
-    { label: 'Projects', path: '/', sectionId: 'projects' },
+    { label: 'Projects', path: '/projects', sectionId: null },
   ];
 
   /** 섹션으로 부드럽게 스크롤 */
@@ -51,6 +51,7 @@ function Navigation() {
   };
 
   const isHomeActive = location.pathname === '/';
+  const isProjectsActive = location.pathname === '/projects';
 
   return (
     <AppBar
@@ -78,9 +79,10 @@ function Navigation() {
           </Typography>
           <Box sx={{ display: 'flex', gap: 1 }}>
             { navItems.map((item) => {
-              const isActive = item.label === 'Home'
-                ? isHomeActive
-                : false;
+              const isActive =
+                item.label === 'Home' ? isHomeActive :
+                item.label === 'Projects' ? isProjectsActive :
+                false;
 
               return (
                 <Button
