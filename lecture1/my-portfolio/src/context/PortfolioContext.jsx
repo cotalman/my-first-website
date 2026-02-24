@@ -8,7 +8,7 @@ const INITIAL_ABOUT_DATA = {
     education: '',
     major: 'IT계열',
     experience: '프론트엔드 개발 학습 중',
-    photo: '',
+    photo: localStorage.getItem('portfolio_photo') || '',
   },
   sections: [
     {

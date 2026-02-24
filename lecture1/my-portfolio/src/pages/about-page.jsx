@@ -466,12 +466,17 @@ function AboutPage() {
   const handlePhotoChange = useCallback((e) => {
     const file = e.target.files[0];
     if (!file) return;
-    const url = URL.createObjectURL(file);
-    setAboutData((prev) => ({
-      ...prev,
-      basicInfo: { ...prev.basicInfo, photo: url },
-    }));
-    showSnackbar('프로필 사진이 업데이트되었습니다.');
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const base64 = event.target.result;
+      localStorage.setItem('portfolio_photo', base64);
+      setAboutData((prev) => ({
+        ...prev,
+        basicInfo: { ...prev.basicInfo, photo: base64 },
+      }));
+      showSnackbar('프로필 사진이 업데이트되었습니다.');
+    };
+    reader.readAsDataURL(file);
   }, [setAboutData, showSnackbar]);
 
   /** 새 스킬 추가 */
