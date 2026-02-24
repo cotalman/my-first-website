@@ -115,12 +115,11 @@ function PhotoUploadArea({ photo, onPhotoChange }) {
 
 /**
  * SectionTabPanel 컴포넌트
- * 탭 패널 콘텐츠 — 내용 텍스트 + 홈 탭 표시 여부 뱃지
+ * 탭 패널 콘텐츠 — 내용 텍스트
  *
  * Props:
  * @param {object} section - 섹션 데이터 객체 [Required]
  * @param {string} section.content - 섹션 본문 [Required]
- * @param {boolean} section.showInHome - 홈 탭 노출 여부 [Required]
  * @param {number} value - 현재 활성 탭 인덱스 [Required]
  * @param {number} index - 이 패널의 인덱스 [Required]
  *
@@ -132,40 +131,6 @@ function SectionTabPanel({ section, value, index }) {
 
   return (
     <Box role='tabpanel' sx={{ pt: { xs: 3, md: 4 } }}>
-
-      {/* 홈 탭 표시 뱃지 */}
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
-        <Typography
-          sx={{
-            fontSize: '0.72rem',
-            fontWeight: 600,
-            color: 'var(--color-text-muted)',
-            letterSpacing: '0.06em',
-            textTransform: 'uppercase',
-          }}
-        >
-          홈 탭 표시
-        </Typography>
-        <Chip
-          label={ section.showInHome ? '표시됨' : '표시 안 됨' }
-          size='small'
-          sx={{
-            height: 22,
-            fontSize: '0.7rem',
-            fontWeight: 600,
-            backgroundColor: section.showInHome
-              ? 'rgba(240,78,35,0.1)'
-              : 'var(--color-bg-secondary)',
-            color: section.showInHome
-              ? 'var(--color-primary)'
-              : 'var(--color-text-muted)',
-            border: '1px solid',
-            borderColor: section.showInHome
-              ? 'rgba(240,78,35,0.3)'
-              : 'var(--color-border)',
-          }}
-        />
-      </Box>
 
       {/* 본문 */}
       <Typography
