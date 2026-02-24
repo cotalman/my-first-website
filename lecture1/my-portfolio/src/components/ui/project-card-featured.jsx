@@ -166,37 +166,23 @@ function ProjectCardFeatured({ project }) {
               )) }
             </Box>
 
-            {/* 작업기간 / 기여도 */}
-            <Box
-              sx={{
-                display: 'flex',
-                gap: 3,
-                py: 2,
-                borderTop: '1px solid var(--color-border)',
-                borderBottom: '1px solid var(--color-border)',
-              }}
-            >
-              { work_period && (
-                <Box>
-                  <Typography sx={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', fontWeight: 700, mb: 0.25 }}>
-                    작업 기간
-                  </Typography>
-                  <Typography sx={{ fontSize: '0.875rem', color: 'var(--color-text-primary)', fontWeight: 600 }}>
-                    { work_period }
-                  </Typography>
-                </Box>
-              ) }
-              { contribution && (
-                <Box>
-                  <Typography sx={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', fontWeight: 700, mb: 0.25 }}>
-                    기여도
-                  </Typography>
-                  <Typography sx={{ fontSize: '0.875rem', color: 'var(--color-text-primary)', fontWeight: 600 }}>
-                    { contribution }
-                  </Typography>
-                </Box>
-              ) }
-            </Box>
+            {/* 작업기간 */}
+            { work_period && (
+              <Box
+                sx={{
+                  py: 2,
+                  borderTop: '1px solid var(--color-border)',
+                  borderBottom: '1px solid var(--color-border)',
+                }}
+              >
+                <Typography sx={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', fontWeight: 700, mb: 0.25 }}>
+                  작업 기간
+                </Typography>
+                <Typography sx={{ fontSize: '0.875rem', color: 'var(--color-text-primary)', fontWeight: 600 }}>
+                  { work_period }
+                </Typography>
+              </Box>
+            ) }
 
             {/* 버튼 영역 */}
             <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>

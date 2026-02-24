@@ -156,29 +156,17 @@ function ProjectCard({ project }) {
           )) }
         </Box>
 
-        {/* 작업기간 / 기여도 */}
-        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-          { work_period && (
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-              <Typography sx={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>
-                기간
-              </Typography>
-              <Typography sx={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>
-                { work_period }
-              </Typography>
-            </Box>
-          ) }
-          { contribution && (
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-              <Typography sx={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>
-                기여도
-              </Typography>
-              <Typography sx={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>
-                { contribution }
-              </Typography>
-            </Box>
-          ) }
-        </Box>
+        {/* 작업기간 */}
+        { work_period && (
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+            <Typography sx={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>
+              기간
+            </Typography>
+            <Typography sx={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>
+              { work_period }
+            </Typography>
+          </Box>
+        ) }
 
         {/* 버튼 영역 */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 'auto', pt: 0.5 }}>
