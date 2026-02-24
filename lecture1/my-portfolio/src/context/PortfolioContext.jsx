@@ -31,11 +31,11 @@ const INITIAL_ABOUT_DATA = {
     },
   ],
   skills: [
-    { id: 1, icon: 'html', name: 'HTML', level: 80, category: 'Frontend', description: '시맨틱 마크업, 웹 접근성, SEO 구조' },
-    { id: 2, icon: 'css', name: 'CSS', level: 75, category: 'Frontend', description: '반응형 레이아웃, 애니메이션, 스타일링' },
-    { id: 3, icon: 'photoshop', name: 'Photoshop', level: 85, category: 'Design', description: '이미지 편집, 합성 / 보정, 배너 제작' },
-    { id: 4, icon: 'illustrator', name: 'Illustrator', level: 75, category: 'Design', description: '벡터 그래픽, 로고 디자인, 아이콘 제작' },
-    { id: 5, icon: 'figma', name: 'Figma', level: 65, category: 'Design', description: '화면 설계, 프로토타이핑, 컴포넌트 시스템' },
+    { id: 1, icon: 'html', name: 'HTML', level: 70, category: 'Frontend', description: '시맨틱 마크업, 웹 접근성, SEO 구조' },
+    { id: 2, icon: 'css', name: 'CSS', level: 60, category: 'Frontend', description: '반응형 레이아웃, 애니메이션, 스타일링' },
+    { id: 3, icon: 'photoshop', name: 'Photoshop', level: 100, category: 'Design', description: '이미지 편집, 합성 / 보정, 배너 제작' },
+    { id: 4, icon: 'illustrator', name: 'Illustrator', level: 90, category: 'Design', description: '벡터 그래픽, 로고 디자인, 아이콘 제작' },
+    { id: 5, icon: 'figma', name: 'Figma', level: 80, category: 'Design', description: '화면 설계, 프로토타이핑, 컴포넌트 시스템' },
   ],
 };
 
