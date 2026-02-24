@@ -126,8 +126,8 @@ function AboutSection() {
                 mb: 3,
               }}
             >
-              "저는 디자이너이기 전에
-              <Box component='span' sx={{ color: 'var(--color-primary)' }}> 번역가</Box>입니다."
+              "디자인으로 문제를 풀고,
+              <Box component='span' sx={{ color: 'var(--color-primary)' }}> 소통하는</Box> 디자이너"
             </Typography>
             <Typography
               sx={{
