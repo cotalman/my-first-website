@@ -1,8 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
 import PersonIcon from '@mui/icons-material/Person';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
-import StarIcon from '@mui/icons-material/Star';
-import StarBorderIcon from '@mui/icons-material/StarBorder';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -14,7 +12,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import FormControl from '@mui/material/FormControl';
 import Grid from '@mui/material/Grid';
-import IconButton from '@mui/material/IconButton';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
@@ -210,13 +207,11 @@ function SectionTabPanel({ section, value, index }) {
  *
  * Props:
  * @param {object} skill - 스킬 데이터 객체 [Required]
- * @param {function} onToggleMain - 메인 표시 여부 토글 핸들러 [Required]
- *
  * Example usage:
- * <SkillCard skill={skill} onToggleMain={handleToggleShowInMain} />
+ * <SkillCard skill={skill} />
  */
-function SkillCard({ skill, onToggleMain }) {
-  const { icon, name, category, description, showInMain, id } = skill;
+function SkillCard({ skill }) {
+  const { icon, name, category, description } = skill;
 
   const iconCfg = ICON_CONFIG[icon] || {
     abbr: name.slice(0, 2).toUpperCase(),
@@ -299,23 +294,6 @@ function SkillCard({ skill, onToggleMain }) {
             />
           </Box>
 
-          {/* 메인 표시 토글 버튼 */}
-          <Tooltip title={ showInMain ? '메인 표시 해제' : '메인에 표시' } placement='top'>
-            <IconButton
-              size='small'
-              onClick={ (e) => { e.stopPropagation(); onToggleMain(id); } }
-              sx={{
-                p: 0.5,
-                color: showInMain ? '#F5C518' : 'var(--color-border)',
-                '&:hover': { color: '#F5C518', backgroundColor: 'rgba(245,197,24,0.08)' },
-              }}
-            >
-              { showInMain
-                ? <StarIcon sx={{ fontSize: '1rem' }} />
-                : <StarBorderIcon sx={{ fontSize: '1rem' }} />
-              }
-            </IconButton>
-          </Tooltip>
         </Box>
 
       </Box>
@@ -462,15 +440,6 @@ function AboutPage() {
     }));
   };
 
-  /** 스킬 메인 표시 여부 토글 */
-  const handleToggleShowInMain = (skillId) => {
-    setAboutData((prev) => ({
-      ...prev,
-      skills: prev.skills.map((s) =>
-        s.id === skillId ? { ...s, showInMain: !s.showInMain } : s
-      ),
-    }));
-  };
 
   const { basicInfo, sections, skills } = aboutData;
 
@@ -714,10 +683,7 @@ function AboutPage() {
               <Grid container spacing={ 2 }>
                 { catSkills.map((skill) => (
                   <Grid key={ skill.id } size={{ xs: 12, sm: 6, md: 4 }}>
-                    <SkillCard
-                      skill={ skill }
-                      onToggleMain={ handleToggleShowInMain }
-                    />
+                    <SkillCard skill={ skill } />
                   </Grid>
                 )) }
               </Grid>
