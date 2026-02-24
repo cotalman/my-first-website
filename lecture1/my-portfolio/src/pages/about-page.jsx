@@ -97,7 +97,6 @@ const PhotoUploadArea = memo(function PhotoUploadArea({ photo, onPhotoChange }) 
           width: '100%',
           height: '100%',
           backgroundColor: 'var(--color-bg-secondary)',
-          border: '2px solid var(--color-border)',
           color: 'var(--color-text-muted)',
         }}
       >
