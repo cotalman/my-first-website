@@ -1,13 +1,67 @@
+import AddIcon from '@mui/icons-material/Add';
 import PersonIcon from '@mui/icons-material/Person';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
+import SortIcon from '@mui/icons-material/Sort';
+import StarIcon from '@mui/icons-material/Star';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import Container from '@mui/material/Container';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import FormControl from '@mui/material/FormControl';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import Slider from '@mui/material/Slider';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
+import TextField from '@mui/material/TextField';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useRef, useState } from 'react';
+
+/** 카테고리별 색상/스타일 설정 */
+const CATEGORY_CONFIG = {
+  Frontend: {
+    color: '#0070F3',
+    bgColor: 'rgba(0,112,243,0.08)',
+    borderColor: 'rgba(0,112,243,0.2)',
+  },
+  Framework: {
+    color: '#00BCD4',
+    bgColor: 'rgba(0,188,212,0.08)',
+    borderColor: 'rgba(0,188,212,0.2)',
+  },
+  Design: {
+    color: '#A259FF',
+    bgColor: 'rgba(162,89,255,0.08)',
+    borderColor: 'rgba(162,89,255,0.2)',
+  },
+};
+
+/** 아이콘 배지 설정 — 브랜드 색상 */
+const ICON_CONFIG = {
+  html: { abbr: '</>', bgColor: '#E34C26', color: '#FFFFFF' },
+  css: { abbr: '{ }', bgColor: '#264DE4', color: '#FFFFFF' },
+  javascript: { abbr: 'JS', bgColor: '#F7DF1E', color: '#333333' },
+  react: { abbr: 'Re', bgColor: '#20232A', color: '#61DAFB' },
+  figma: { abbr: 'Fg', bgColor: '#1E1E2E', color: '#A259FF' },
+  photoshop: { abbr: 'Ps', bgColor: '#001E36', color: '#31A8FF' },
+  illustrator: { abbr: 'Ai', bgColor: '#300000', color: '#FF7C00' },
+};
+
+/** 카테고리 표시 순서 */
+const CATEGORY_ORDER = ['Frontend', 'Framework', 'Design'];
+
+/** 스킬 추가 다이얼로그 기본 폼 값 */
+const BLANK_FORM = { name: '', category: 'Frontend', level: 50, description: '' };
 
 /** 초기 About Me 데이터 */
 const INITIAL_DATA = {
@@ -37,6 +91,13 @@ const INITIAL_DATA = {
       content: '새로운 기술을 배우는 것을 즐깁니다. 최근에는 AI 기반 개발 도구와 생산성 향상 툴에 많은 관심을 가지고 있습니다. 일과 삶의 균형을 중요하게 생각하며, 항상 한 단계 더 발전한 내일의 저를 만들기 위해 노력하고 있습니다.',
       showInHome: false,
     },
+  ],
+  skills: [
+    { id: 1, icon: 'html', name: 'HTML', level: 80, category: 'Frontend', description: '시맨틱 마크업, 웹 접근성, SEO 구조', showInMain: true },
+    { id: 2, icon: 'css', name: 'CSS', level: 75, category: 'Frontend', description: '반응형 레이아웃, 애니메이션, 스타일링', showInMain: true },
+    { id: 3, icon: 'javascript', name: 'JavaScript', level: 70, category: 'Frontend', description: 'DOM 조작, ES6+, 비동기 처리', showInMain: false },
+    { id: 4, icon: 'react', name: 'React', level: 60, category: 'Framework', description: '함수형 컴포넌트, Hooks, 상태관리', showInMain: false },
+    { id: 5, icon: 'figma', name: 'Figma', level: 65, category: 'Design', description: '화면 설계, 프로토타이핑, 컴포넌트 시스템', showInMain: true },
   ],
 };
 
@@ -131,8 +192,6 @@ function SectionTabPanel({ section, value, index }) {
 
   return (
     <Box role='tabpanel' sx={{ pt: { xs: 3, md: 4 } }}>
-
-      {/* 본문 */}
       <Typography
         sx={{
           fontSize: { xs: '1rem', md: '1.05rem' },
@@ -147,10 +206,280 @@ function SectionTabPanel({ section, value, index }) {
 }
 
 /**
+ * SkillCard 컴포넌트
+ * 개별 스킬 카드 — 아이콘 배지 + 이름 + 숙련도 바 + 메인 표시 토글
+ * 호버 시 description 툴팁 표시
+ *
+ * Props:
+ * @param {object} skill - 스킬 데이터 객체 [Required]
+ * @param {function} onToggleMain - 메인 표시 여부 토글 핸들러 [Required]
+ *
+ * Example usage:
+ * <SkillCard skill={skill} onToggleMain={handleToggleShowInMain} />
+ */
+function SkillCard({ skill, onToggleMain }) {
+  const { icon, name, level, category, description, showInMain, id } = skill;
+
+  const iconCfg = ICON_CONFIG[icon] || {
+    abbr: name.slice(0, 2).toUpperCase(),
+    bgColor: '#666666',
+    color: '#FFFFFF',
+  };
+  const catCfg = CATEGORY_CONFIG[category] || {
+    color: 'var(--color-text-secondary)',
+    bgColor: 'var(--color-bg-secondary)',
+    borderColor: 'var(--color-border)',
+  };
+
+  return (
+    <Tooltip title={ description || '' } placement='top' arrow>
+      <Box
+        sx={{
+          p: 2.5,
+          border: '1px solid var(--color-border)',
+          borderRadius: 2,
+          backgroundColor: '#FFFFFF',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 1.5,
+          transition: 'box-shadow 0.25s ease, transform 0.25s ease',
+          '&:hover': {
+            boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
+            transform: 'translateY(-2px)',
+          },
+        }}
+      >
+        {/* 아이콘 배지 + 이름 + 카테고리 + 즐겨찾기 */}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          {/* 아이콘 배지 */}
+          <Box
+            sx={{
+              width: 40,
+              height: 40,
+              borderRadius: 1.5,
+              backgroundColor: iconCfg.bgColor,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: iconCfg.color,
+              fontSize: (icon === 'html' || icon === 'css') ? '0.6rem' : '0.72rem',
+              fontWeight: 800,
+              fontFamily: 'monospace',
+              flexShrink: 0,
+              letterSpacing: '-0.01em',
+            }}
+          >
+            { iconCfg.abbr }
+          </Box>
+
+          {/* 이름 + 카테고리 칩 */}
+          <Box sx={{ flex: 1, minWidth: 0 }}>
+            <Typography
+              sx={{
+                fontSize: '0.9rem',
+                fontWeight: 700,
+                color: 'var(--color-text-primary)',
+                lineHeight: 1.2,
+              }}
+            >
+              { name }
+            </Typography>
+            <Chip
+              label={ category }
+              size='small'
+              sx={{
+                mt: 0.5,
+                height: 18,
+                fontSize: '0.62rem',
+                fontWeight: 600,
+                backgroundColor: catCfg.bgColor,
+                color: catCfg.color,
+                border: '1px solid',
+                borderColor: catCfg.borderColor,
+              }}
+            />
+          </Box>
+
+          {/* 메인 표시 토글 버튼 */}
+          <Tooltip title={ showInMain ? '메인 표시 해제' : '메인에 표시' } placement='top'>
+            <IconButton
+              size='small'
+              onClick={ (e) => { e.stopPropagation(); onToggleMain(id); } }
+              sx={{
+                p: 0.5,
+                color: showInMain ? '#F5C518' : 'var(--color-border)',
+                '&:hover': { color: '#F5C518', backgroundColor: 'rgba(245,197,24,0.08)' },
+              }}
+            >
+              { showInMain
+                ? <StarIcon sx={{ fontSize: '1rem' }} />
+                : <StarBorderIcon sx={{ fontSize: '1rem' }} />
+              }
+            </IconButton>
+          </Tooltip>
+        </Box>
+
+        {/* 숙련도 바 */}
+        <Box>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.75 }}>
+            <Typography sx={{ fontSize: '0.68rem', color: 'var(--color-text-muted)', fontWeight: 600, letterSpacing: '0.04em' }}>
+              숙련도
+            </Typography>
+            <Typography sx={{ fontSize: '0.68rem', color: catCfg.color, fontWeight: 700 }}>
+              { level }%
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              height: 4,
+              borderRadius: 2,
+              backgroundColor: 'var(--color-bg-secondary)',
+              overflow: 'hidden',
+            }}
+          >
+            <Box
+              sx={{
+                height: '100%',
+                width: `${level}%`,
+                borderRadius: 2,
+                backgroundColor: catCfg.color,
+                transition: 'width 0.6s ease',
+              }}
+            />
+          </Box>
+        </Box>
+      </Box>
+    </Tooltip>
+  );
+}
+
+/**
+ * AddSkillDialog 컴포넌트
+ * 새 스킬 추가 다이얼로그 — 기술명 / 카테고리 / 숙련도 슬라이더 / 설명
+ *
+ * Props:
+ * @param {boolean} open - 다이얼로그 열림 여부 [Required]
+ * @param {function} onClose - 닫기 핸들러 [Required]
+ * @param {function} onAdd - 스킬 추가 핸들러 [Required]
+ *
+ * Example usage:
+ * <AddSkillDialog open={open} onClose={handleClose} onAdd={handleAddSkill} />
+ */
+function AddSkillDialog({ open, onClose, onAdd }) {
+  const [form, setForm] = useState(BLANK_FORM);
+
+  const handleAdd = () => {
+    if (!form.name.trim()) return;
+    onAdd({
+      id: Date.now(),
+      icon: form.name.toLowerCase().replace(/\s+/g, ''),
+      name: form.name.trim(),
+      level: form.level,
+      category: form.category,
+      description: form.description.trim(),
+      showInMain: false,
+    });
+    setForm(BLANK_FORM);
+    onClose();
+  };
+
+  const handleClose = () => {
+    setForm(BLANK_FORM);
+    onClose();
+  };
+
+  return (
+    <Dialog open={ open } onClose={ handleClose } maxWidth='xs' fullWidth>
+      <DialogTitle sx={{ fontWeight: 700, fontSize: '1rem', pb: 1 }}>
+        스킬 추가
+      </DialogTitle>
+
+      <DialogContent>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5, pt: 1 }}>
+          <TextField
+            label='기술명'
+            value={ form.name }
+            onChange={ (e) => setForm((p) => ({ ...p, name: e.target.value })) }
+            size='small'
+            fullWidth
+            autoFocus
+            placeholder='예: TypeScript'
+          />
+
+          <FormControl fullWidth size='small'>
+            <InputLabel id='add-skill-category-label'>카테고리</InputLabel>
+            <Select
+              labelId='add-skill-category-label'
+              value={ form.category }
+              label='카테고리'
+              onChange={ (e) => setForm((p) => ({ ...p, category: e.target.value })) }
+            >
+              { Object.keys(CATEGORY_CONFIG).map((cat) => (
+                <MenuItem key={ cat } value={ cat }>{ cat }</MenuItem>
+              )) }
+            </Select>
+          </FormControl>
+
+          <Box>
+            <Typography sx={{ fontSize: '0.82rem', color: 'var(--color-text-secondary)', mb: 1.5 }}>
+              숙련도:{' '}
+              <Box component='span' sx={{ fontWeight: 700, color: 'var(--color-primary)' }}>
+                { form.level }%
+              </Box>
+            </Typography>
+            <Slider
+              value={ form.level }
+              onChange={ (_, newValue) => setForm((p) => ({ ...p, level: newValue })) }
+              min={ 0 }
+              max={ 100 }
+              sx={{ color: 'var(--color-primary)' }}
+            />
+          </Box>
+
+          <TextField
+            label='설명 (툴팁)'
+            value={ form.description }
+            onChange={ (e) => setForm((p) => ({ ...p, description: e.target.value })) }
+            size='small'
+            fullWidth
+            placeholder='예: 반응형 레이아웃, 애니메이션'
+            multiline
+            rows={ 2 }
+          />
+        </Box>
+      </DialogContent>
+
+      <DialogActions sx={{ px: 3, pb: 2.5, gap: 1 }}>
+        <Button
+          onClick={ handleClose }
+          sx={{ color: 'var(--color-text-muted)' }}
+        >
+          취소
+        </Button>
+        <Button
+          onClick={ handleAdd }
+          variant='contained'
+          disabled={ !form.name.trim() }
+          sx={{
+            backgroundColor: 'var(--color-primary)',
+            fontWeight: 700,
+            '&:hover': { backgroundColor: 'var(--color-primary-dark)' },
+          }}
+        >
+          추가
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
+/**
  * AboutPage 컴포넌트
  * 상세 자기소개 탭 페이지
  * - 기본 정보 카드: 프로필 사진 업로드 + 이름 / 전공 / 경력
  * - 콘텐츠 탭: 나의 개발 스토리 / 개발 철학 / 개인적인 이야기
+ * - 기술 스택: 카테고리별 스킬 카드 그리드 + 스킬 추가 다이얼로그
  *
  * Props: 없음
  *
@@ -160,6 +489,8 @@ function SectionTabPanel({ section, value, index }) {
 function AboutPage() {
   const [aboutData, setAboutData] = useState(INITIAL_DATA);
   const [activeTab, setActiveTab] = useState(0);
+  const [addDialogOpen, setAddDialogOpen] = useState(false);
+  const [sortByLevel, setSortByLevel] = useState(false);
 
   /** 프로필 사진 선택 → URL.createObjectURL 로컬 미리보기 */
   const handlePhotoChange = (e) => {
@@ -172,7 +503,37 @@ function AboutPage() {
     }));
   };
 
-  const { basicInfo, sections } = aboutData;
+  /** 새 스킬 추가 */
+  const handleAddSkill = (newSkill) => {
+    setAboutData((prev) => ({
+      ...prev,
+      skills: [...prev.skills, newSkill],
+    }));
+  };
+
+  /** 스킬 메인 표시 여부 토글 */
+  const handleToggleShowInMain = (skillId) => {
+    setAboutData((prev) => ({
+      ...prev,
+      skills: prev.skills.map((s) =>
+        s.id === skillId ? { ...s, showInMain: !s.showInMain } : s
+      ),
+    }));
+  };
+
+  const { basicInfo, sections, skills } = aboutData;
+
+  /** 숙련도 정렬 처리 */
+  const displaySkills = sortByLevel
+    ? [...skills].sort((a, b) => b.level - a.level)
+    : skills;
+
+  /** 카테고리별 그룹핑 */
+  const groupedSkills = CATEGORY_ORDER.reduce((acc, cat) => {
+    const catSkills = displaySkills.filter((s) => s.category === cat);
+    if (catSkills.length > 0) acc[cat] = catSkills;
+    return acc;
+  }, {});
 
   return (
     <Box
@@ -218,13 +579,11 @@ function AboutPage() {
               gap: { xs: 3, md: 5 },
             }}
           >
-            {/* 프로필 사진 */}
             <PhotoUploadArea
               photo={ basicInfo.photo }
               onPhotoChange={ handlePhotoChange }
             />
 
-            {/* 이름 + 정보 */}
             <Box sx={{ textAlign: { xs: 'center', sm: 'left' } }}>
               <Typography
                 component='h1'
@@ -282,9 +641,9 @@ function AboutPage() {
             overflow: 'hidden',
             backgroundColor: '#FFFFFF',
             boxShadow: '0 2px 16px rgba(0,0,0,0.04)',
+            mb: { xs: 4, md: 6 },
           }}
         >
-          {/* 탭 헤더 */}
           <Box sx={{ borderBottom: '1px solid var(--color-border)', px: { xs: 1, md: 3 } }}>
             <Tabs
               value={ activeTab }
@@ -316,7 +675,6 @@ function AboutPage() {
             </Tabs>
           </Box>
 
-          {/* 탭 콘텐츠 */}
           <Box sx={{ px: { xs: 3, md: 5 }, pb: { xs: 4, md: 5 } }}>
             { sections.map((section, i) => (
               <SectionTabPanel
@@ -328,6 +686,122 @@ function AboutPage() {
             )) }
           </Box>
         </Box>
+
+        {/* ── 기술 스택 섹션 ── */}
+        <Box>
+          {/* 섹션 헤더 */}
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'flex-end',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: 2,
+              mb: { xs: 5, md: 6 },
+            }}
+          >
+            <Box>
+              <Typography
+                sx={{
+                  fontSize: { xs: '0.75rem', md: '0.8rem' },
+                  fontWeight: 600,
+                  color: 'var(--color-primary)',
+                  letterSpacing: '0.2em',
+                  textTransform: 'uppercase',
+                  mb: 1,
+                }}
+              >
+                Tech Stack
+              </Typography>
+              <Typography
+                variant='h2'
+                sx={{
+                  fontSize: { xs: '1.4rem', md: '1.8rem' },
+                  fontWeight: 800,
+                  color: 'var(--color-text-primary)',
+                  letterSpacing: '-0.02em',
+                }}
+              >
+                기술 스택
+              </Typography>
+            </Box>
+
+            <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+              <Tooltip title={ sortByLevel ? '기본 순서로 보기' : '숙련도 높은 순 정렬' }>
+                <IconButton
+                  onClick={ () => setSortByLevel((p) => !p) }
+                  sx={{
+                    border: '1px solid',
+                    borderRadius: 1.5,
+                    borderColor: sortByLevel ? 'var(--color-primary)' : 'var(--color-border)',
+                    color: sortByLevel ? 'var(--color-primary)' : 'var(--color-text-muted)',
+                    width: 40,
+                    height: 40,
+                    '&:hover': { borderColor: 'var(--color-primary)', color: 'var(--color-primary)' },
+                  }}
+                >
+                  <SortIcon sx={{ fontSize: '1.1rem' }} />
+                </IconButton>
+              </Tooltip>
+
+              <Button
+                startIcon={ <AddIcon /> }
+                onClick={ () => setAddDialogOpen(true) }
+                variant='outlined'
+                size='small'
+                sx={{
+                  height: 40,
+                  borderColor: 'var(--color-border)',
+                  color: 'var(--color-text-secondary)',
+                  fontWeight: 600,
+                  px: 2,
+                  '&:hover': {
+                    borderColor: 'var(--color-primary)',
+                    color: 'var(--color-primary)',
+                    backgroundColor: 'rgba(240,78,35,0.04)',
+                  },
+                }}
+              >
+                스킬 추가
+              </Button>
+            </Box>
+          </Box>
+
+          {/* 카테고리별 그룹 */}
+          { Object.entries(groupedSkills).map(([category, catSkills]) => (
+            <Box key={ category } sx={{ mb: { xs: 5, md: 6 } }}>
+              <Typography
+                sx={{
+                  fontSize: '0.68rem',
+                  fontWeight: 700,
+                  color: 'var(--color-text-muted)',
+                  letterSpacing: '0.2em',
+                  textTransform: 'uppercase',
+                  mb: 2.5,
+                }}
+              >
+                { category }
+              </Typography>
+              <Grid container spacing={ 2 }>
+                { catSkills.map((skill) => (
+                  <Grid key={ skill.id } size={{ xs: 12, sm: 6, md: 4 }}>
+                    <SkillCard
+                      skill={ skill }
+                      onToggleMain={ handleToggleShowInMain }
+                    />
+                  </Grid>
+                )) }
+              </Grid>
+            </Box>
+          )) }
+        </Box>
+
+        {/* 스킬 추가 다이얼로그 */}
+        <AddSkillDialog
+          open={ addDialogOpen }
+          onClose={ () => setAddDialogOpen(false) }
+          onAdd={ handleAddSkill }
+        />
 
       </Container>
     </Box>
