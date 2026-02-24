@@ -111,9 +111,6 @@ function HeroSection() {
           position: 'relative',
           overflow: 'hidden',
           cursor: 'none',
-          /* 도트 그리드 배경 */
-          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px)',
-          backgroundSize: '36px 36px',
         }}
       >
         {/* 좌측 세로 라벨 */}
