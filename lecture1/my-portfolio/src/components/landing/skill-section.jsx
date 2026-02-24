@@ -1,9 +1,7 @@
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import { useEffect, useRef, useState } from 'react';
 
 /** 스크롤 진입 시 페이드업 애니메이션 래퍼 */
@@ -85,36 +83,6 @@ const SKILL_VISUAL = {
 };
 
 /**
- * DotLevel 컴포넌트
- * 숙련도를 점(●)으로 시각화
- *
- * Props:
- * @param {number} level - 숙련도 (1~5) [Required]
- * @param {string} accentColor - 채워진 점 색상 [Required]
- * @param {boolean} isOpen - 카드 열림 여부 (점 색상 전환 트리거) [Required]
- */
-function DotLevel({ level, accentColor, isOpen }) {
-  return (
-    <Box sx={{ display: 'flex', gap: 0.7, alignItems: 'center' }}>
-      { Array.from({ length: 5 }).map((_, i) => (
-        <Box
-          key={ i }
-          sx={{
-            width: 7,
-            height: 7,
-            borderRadius: '50%',
-            backgroundColor: i < level
-              ? (isOpen ? accentColor : 'var(--color-text-primary)')
-              : 'rgba(0,0,0,0.1)',
-            transition: 'background-color 0.4s ease',
-          }}
-        />
-      )) }
-    </Box>
-  );
-}
-
-/**
  * SkillCard 컴포넌트
  * 인터랙티브 스킬 카드 — 기본(아이콘+이름+점) / 호버(능력 목록 슬라이드인)
  *
@@ -122,27 +90,19 @@ function DotLevel({ level, accentColor, isOpen }) {
  * @param {object} skill - 스킬 데이터 [Required]
  */
 function SkillCard({ skill }) {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const [hovered, setHovered] = useState(false);
-  const isOpen = hovered || isMobile;
-
   const { icon, name, category } = skill;
-  const { abbr, bgColor, accentColor, level, abilities } = SKILL_VISUAL[icon] ?? {};
+  const { abbr, bgColor, accentColor } = SKILL_VISUAL[icon] ?? {};
 
   return (
     <Box
-      onMouseEnter={ () => setHovered(true) }
-      onMouseLeave={ () => setHovered(false) }
       sx={{
         p: { xs: 3, md: 3.5 },
-        border: '1px solid',
-        borderColor: isOpen ? accentColor : 'var(--color-border)',
+        border: '1px solid var(--color-border)',
         borderRadius: 2,
         backgroundColor: '#FFFFFF',
         height: '100%',
         cursor: 'default',
-        transition: 'border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease',
+        transition: 'box-shadow 0.35s ease, transform 0.35s ease',
         '&:hover': {
           boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
           transform: 'translateY(-4px)',
@@ -169,13 +129,11 @@ function SkillCard({ skill }) {
             alignItems: 'center',
             justifyContent: 'center',
             color: accentColor,
-            fontSize: abbr.length > 2 ? '0.7rem' : '0.9rem',
+            fontSize: abbr?.length > 2 ? '0.7rem' : '0.9rem',
             fontWeight: 800,
-            letterSpacing: abbr.length > 2 ? '0' : '-0.02em',
+            letterSpacing: abbr?.length > 2 ? '0' : '-0.02em',
             fontFamily: 'monospace',
             flexShrink: 0,
-            transition: 'transform 0.3s ease',
-            transform: isOpen ? 'scale(1.08)' : 'scale(1)',
           }}
         >
           { abbr }
@@ -187,15 +145,13 @@ function SkillCard({ skill }) {
             px: 1.5,
             py: 0.5,
             borderRadius: '999px',
-            backgroundColor: isOpen ? `${bgColor}18` : 'var(--color-bg-secondary)',
-            border: '1px solid',
-            borderColor: isOpen ? accentColor : 'var(--color-border)',
+            backgroundColor: 'var(--color-bg-secondary)',
+            border: '1px solid var(--color-border)',
             fontSize: '0.62rem',
             fontWeight: 600,
-            color: isOpen ? accentColor : 'var(--color-text-muted)',
+            color: 'var(--color-text-muted)',
             letterSpacing: '0.08em',
             textTransform: 'uppercase',
-            transition: 'all 0.35s ease',
           }}
         >
           { category }
@@ -209,62 +165,10 @@ function SkillCard({ skill }) {
           fontWeight: 700,
           color: 'var(--color-text-primary)',
           letterSpacing: '-0.01em',
-          mb: 1.5,
         }}
       >
         { name }
       </Typography>
-
-      {/* 숙련도 점(●) */}
-      <Box sx={{ mb: isOpen ? 2.5 : 0, transition: 'margin 0.35s ease' }}>
-        <DotLevel level={ level } accentColor={ accentColor } isOpen={ isOpen } />
-      </Box>
-
-      {/* 능력 목록 — 호버/모바일 시 슬라이드인 */}
-      <Box
-        sx={{
-          overflow: 'hidden',
-          maxHeight: isOpen ? '160px' : 0,
-          opacity: isOpen ? 1 : 0,
-          transition: 'max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease',
-        }}
-      >
-        <Box
-          sx={{
-            pt: 2,
-            borderTop: '1px solid var(--color-border)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 1.2,
-          }}
-        >
-          { abilities.map((ability) => (
-            <Box
-              key={ ability }
-              sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}
-            >
-              <Box
-                sx={{
-                  width: 5,
-                  height: 5,
-                  borderRadius: '50%',
-                  backgroundColor: accentColor,
-                  flexShrink: 0,
-                }}
-              />
-              <Typography
-                sx={{
-                  fontSize: '0.85rem',
-                  color: 'var(--color-text-secondary)',
-                  lineHeight: 1.5,
-                }}
-              >
-                { ability }
-              </Typography>
-            </Box>
-          )) }
-        </Box>
-      </Box>
     </Box>
   );
 }
@@ -330,18 +234,6 @@ function SkillSection() {
                 사용하는 도구들
               </Typography>
             </Box>
-            <Typography
-              sx={{
-                fontSize: '0.85rem',
-                color: 'var(--color-text-muted)',
-                lineHeight: 1.8,
-                textAlign: { xs: 'left', md: 'right' },
-              }}
-            >
-              카드에 마우스를 올리면
-              <br />
-              더 자세한 내용을 볼 수 있어요.
-            </Typography>
           </Box>
         </ScrollReveal>
 
