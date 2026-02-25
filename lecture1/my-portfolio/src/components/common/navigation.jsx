@@ -112,9 +112,11 @@ function Navigation() {
         elevation={0}
         sx={{
           transition: 'background-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease',
-          backgroundColor: isLight ? '#FFFFFF' : 'transparent',
-          borderBottom: isLight ? '1px solid #E0E0E0' : 'none',
-          boxShadow: isLight ? '0 2px 12px rgba(0,0,0,0.08)' : 'none',
+          backgroundColor: isLight ? 'rgba(255,255,255,0.75)' : 'transparent',
+          backdropFilter: isLight ? 'blur(16px)' : 'none',
+          WebkitBackdropFilter: isLight ? 'blur(16px)' : 'none',
+          borderBottom: isLight ? '1px solid rgba(0,0,0,0.07)' : 'none',
+          boxShadow: isLight ? '0 2px 12px rgba(0,0,0,0.06)' : 'none',
         }}
       >
         {/* 읽기 진행률 바 */}
