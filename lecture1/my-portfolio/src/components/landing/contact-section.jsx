@@ -1,5 +1,6 @@
 import EmailIcon from '@mui/icons-material/Email';
 import GitHubIcon from '@mui/icons-material/GitHub';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
@@ -26,6 +27,11 @@ const SNS_LINKS = [
     icon: <GitHubIcon />,
     label: 'GitHub',
     href: 'https://github.com/cotalman',
+  },
+  {
+    icon: <LinkedInIcon />,
+    label: 'LinkedIn',
+    href: 'https://linkedin.com',
   },
 ];
 
@@ -86,7 +92,7 @@ function ContactSection() {
               lineHeight: 1.8,
             }}
           >
-            언제든지 편하게 연락주세요. 방명록도 남겨주시면 감사합니다!
+            언제든지 편하게 연락주세요.
           </Typography>
         </Box>
 

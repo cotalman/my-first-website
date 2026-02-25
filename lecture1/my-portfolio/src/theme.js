@@ -31,6 +31,8 @@ const theme = createTheme({
   },
   typography: {
     fontFamily: [
+      'Voces',
+      '"Pretendard GOV"',
       'Pretendard',
       '-apple-system',
       'BlinkMacSystemFont',

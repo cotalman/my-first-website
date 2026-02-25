@@ -8,6 +8,7 @@ import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { useEffect, useRef, useState } from 'react';
 
 /** 섹션 id로 부드럽게 스크롤 이동 */
@@ -39,6 +40,8 @@ function HeroSection() {
   const cursorRef = useRef(null);
   const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
   const [isCursorVisible, setIsCursorVisible] = useState(false);
+  const isMobile = useMediaQuery('(max-width:767px)');
+  const isTablet = useMediaQuery('(max-width:1199px)');
   const [typingText, setTypingText] = useState('');
   const [typingIndex, setTypingIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
@@ -74,10 +77,10 @@ function HeroSection() {
     };
   }, []);
 
-  /** 자기장(Magnetic) 텍스트 효과: 마우스 위치에 따라 헤드라인 미세 이동 */
+  /** 자기장(Magnetic) 텍스트 효과: 마우스 위치에 따라 헤드라인 미세 이동 (데스크톱만) */
   useEffect(() => {
     const el = heroRef.current;
-    if (!el) return;
+    if (!el || isMobile) return;
 
     const onMove = (e) => {
       const rect = el.getBoundingClientRect();
@@ -200,15 +203,16 @@ function HeroSection() {
           pointerEvents: 'none',
         }} />
 
-        {/* ── 플로팅 도형 1: 큰 원 (우상단) ── */}
+        {/* ── 플로팅 도형 1: 큰 원 (우상단, 모바일 숨김) ── */}
         <Box sx={{
           position: 'absolute',
-          width: { xs: 220, md: 360 },
-          height: { xs: 220, md: 360 },
+          display: { xs: 'none', sm: 'block' },
+          width: { sm: 200, md: 360 },
+          height: { sm: 200, md: 360 },
           borderRadius: '50%',
           border: '1px solid rgba(240,78,35,0.11)',
-          top: { xs: '5%', md: '8%' },
-          right: { xs: '-8%', md: '6%' },
+          top: { sm: '5%', md: '8%' },
+          right: { sm: '-5%', md: '6%' },
           animation: 'floatRotate 24s linear infinite',
           pointerEvents: 'none',
           '@keyframes floatRotate': {
@@ -228,14 +232,15 @@ function HeroSection() {
           },
         }} />
 
-        {/* ── 플로팅 도형 2: 회전 사각형 (우측 중간) ── */}
+        {/* ── 플로팅 도형 2: 회전 사각형 (태블릿 이상) ── */}
         <Box sx={{
           position: 'absolute',
-          width: { xs: 70, md: 110 },
-          height: { xs: 70, md: 110 },
+          display: { xs: 'none', sm: 'block' },
+          width: { sm: 70, md: 110 },
+          height: { sm: 70, md: 110 },
           border: '1px solid rgba(255,255,255,0.07)',
-          top: { xs: '18%', md: '22%' },
-          right: { xs: '8%', md: '20%' },
+          top: { sm: '18%', md: '22%' },
+          right: { sm: '8%', md: '20%' },
           animation: 'spinSlow 18s linear infinite',
           pointerEvents: 'none',
           '@keyframes spinSlow': {
@@ -262,15 +267,16 @@ function HeroSection() {
           },
         }} />
 
-        {/* ── 플로팅 도형 4: 위아래 부유 삼각형 ── */}
+        {/* ── 플로팅 도형 4: 위아래 부유 삼각형 (태블릿 이상) ── */}
         <Box sx={{
           position: 'absolute',
+          display: { xs: 'none', sm: 'block' },
           width: 0,
           height: 0,
           borderLeft: '22px solid transparent',
           borderRight: '22px solid transparent',
           borderBottom: '38px solid rgba(240,78,35,0.06)',
-          right: { xs: '6%', md: '14%' },
+          right: { sm: '6%', md: '14%' },
           top: '58%',
           animation: 'floatUpDown 9s ease-in-out infinite',
           pointerEvents: 'none',
@@ -352,17 +358,18 @@ function HeroSection() {
           sx={{
             position: 'relative',
             zIndex: 1,
-            py: { xs: 16, md: 0 },
+            py: { xs: 10, sm: 12, md: 0 },
+            px: { xs: 3, sm: 4, md: 3 },
             pl: { md: 10 },
           }}
         >
 
-          {/* ── "Available for work" 레이블 + 초록 펄스 인디케이터 ── */}
+          {/* ── "Available for work" 레이블 ── */}
           <Box sx={{
             display: 'inline-flex',
             alignItems: 'center',
             gap: 1.5,
-            mb: { xs: 4, md: 6 },
+            mb: { xs: 3, sm: 4, md: 6 },
             opacity: 0,
             animation: 'fadeUp 0.8s ease 0.2s forwards',
             '@keyframes fadeUp': {
@@ -385,16 +392,16 @@ function HeroSection() {
           <Box sx={{
             transform: `translate(${mouseOffset.x * 14}px, ${mouseOffset.y * 8}px)`,
             transition: 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-            mb: { xs: 5, md: 7 },
+            mb: { xs: 4, sm: 5, md: 7 },
           }}>
             {/* 첫째 줄: 그라데이션 흰색 */}
             <Typography
               component='h1'
               sx={{
                 display: 'block',
-                fontSize: 'clamp(3.2rem, 10vw, 9rem)',
+                fontSize: { xs: '2.6rem', sm: '4rem', md: 'clamp(4rem, 9vw, 9rem)' },
                 fontWeight: 800,
-                lineHeight: 0.92,
+                lineHeight: { xs: 1.0, md: 0.92 },
                 letterSpacing: '-0.03em',
                 background: 'linear-gradient(135deg, #F5F5F0 0%, rgba(245,245,240,0.65) 100%)',
                 WebkitBackgroundClip: 'text',
@@ -413,11 +420,11 @@ function HeroSection() {
                 component='h1'
                 sx={{
                   display: 'block',
-                  fontSize: 'clamp(3.2rem, 10vw, 9rem)',
+                  fontSize: { xs: '2.6rem', sm: '4rem', md: 'clamp(4rem, 9vw, 9rem)' },
                   fontWeight: 800,
                   color: 'transparent',
-                  WebkitTextStroke: '1.5px rgba(255,255,255,0.2)',
-                  lineHeight: 0.92,
+                  WebkitTextStroke: { xs: '1px rgba(255,255,255,0.2)', md: '1.5px rgba(255,255,255,0.2)' },
+                  lineHeight: { xs: 1.0, md: 0.92 },
                   letterSpacing: '-0.03em',
                   opacity: 0,
                   animation: 'fadeUp 0.9s ease 0.5s forwards',
@@ -446,20 +453,20 @@ function HeroSection() {
           {/* ── 타이핑 효과 + 설명 + CTA ── */}
           <Box sx={{
             display: 'flex',
-            alignItems: 'flex-end',
+            alignItems: { xs: 'flex-start', md: 'flex-end' },
             justifyContent: 'space-between',
-            flexWrap: { xs: 'wrap', md: 'nowrap' },
-            gap: 4,
+            flexDirection: { xs: 'column', md: 'row' },
+            gap: { xs: 3, md: 4 },
             opacity: 0,
             animation: 'fadeUp 0.9s ease 0.65s forwards',
           }}>
 
             {/* 좌측: 타이핑 + 설명 + 버튼 */}
-            <Box>
+            <Box sx={{ width: '100%' }}>
               {/* 타이핑 텍스트 */}
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2.5 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: { xs: 2, md: 2.5 } }}>
                 <Typography sx={{
-                  fontSize: { xs: '1rem', md: '1.15rem' },
+                  fontSize: { xs: '0.95rem', sm: '1rem', md: '1.15rem' },
                   color: 'rgba(255,255,255,0.65)',
                   fontWeight: 400,
                   lineHeight: 1,
@@ -496,20 +503,25 @@ function HeroSection() {
 
               {/* 부연 설명 */}
               <Typography sx={{
-                fontSize: { xs: '0.875rem', md: '0.9rem' },
+                fontSize: { xs: '0.82rem', sm: '0.875rem', md: '0.9rem' },
                 color: 'rgba(255,255,255,0.28)',
                 letterSpacing: '0.04em',
                 lineHeight: 1.9,
-                mb: 4,
-                maxWidth: 340,
+                mb: { xs: 3, md: 4 },
+                maxWidth: { xs: '100%', md: 340 },
               }}>
                 개발자와 소통하는 디자이너
                 <br />
-                Figma · MUI · React
+                Photoshop · Illustrator · Figma · HTML · CSS
               </Typography>
 
               {/* CTA 버튼 2개 */}
-              <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mb: 3 }}>
+              <Box sx={{
+                display: 'flex',
+                flexDirection: { xs: 'column', sm: 'row' },
+                gap: { xs: 1.5, sm: 2 },
+                mb: 3,
+              }}>
                 {/* Primary CTA: 프로젝트 보기 */}
                 <Button
                   onClick={ () => scrollToSection('projects') }
@@ -528,6 +540,7 @@ function HeroSection() {
                     px: 3.5,
                     py: 1.6,
                     minHeight: 52,
+                    width: { xs: '100%', sm: 'auto' },
                     transition: 'all 0.3s ease',
                     '&:hover': {
                       backgroundColor: '#C42D17',
@@ -555,6 +568,7 @@ function HeroSection() {
                     px: 3.5,
                     py: 1.6,
                     minHeight: 52,
+                    width: { xs: '100%', sm: 'auto' },
                     backgroundColor: 'transparent',
                     transition: 'all 0.3s ease',
                     '&:hover': {
@@ -623,13 +637,14 @@ function HeroSection() {
               </Box>
             </Box>
 
-            {/* 우측: 스크롤 인디케이터 */}
+            {/* 우측: 스크롤 인디케이터 (모바일 숨김) */}
             <Box sx={{
-              display: 'flex',
+              display: { xs: 'none', md: 'flex' },
               flexDirection: 'column',
               alignItems: 'center',
               gap: 1.5,
-              mb: { xs: 0, md: 2 },
+              mb: 2,
+              flexShrink: 0,
             }}>
               <Typography sx={{
                 fontSize: '0.65rem',
