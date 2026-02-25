@@ -109,11 +109,10 @@ function Navigation() {
         position='fixed'
         elevation={0}
         sx={{
-          transition: 'background-color 0.3s ease, backdrop-filter 0.3s ease',
-          backgroundColor: isScrolled ? 'rgba(8, 8, 8, 0.88)' : 'transparent',
-          backdropFilter: isScrolled ? 'blur(16px)' : 'none',
-          borderBottom: isScrolled ? '1px solid rgba(255,255,255,0.07)' : 'none',
-          boxShadow: 'none',
+          transition: 'background-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease',
+          backgroundColor: isScrolled ? '#FFFFFF' : 'transparent',
+          borderBottom: isScrolled ? '1px solid #E0E0E0' : 'none',
+          boxShadow: isScrolled ? '0 2px 12px rgba(0,0,0,0.08)' : 'none',
         }}
       >
         {/* 읽기 진행률 바 */}
@@ -141,9 +140,10 @@ function Navigation() {
               sx={{
                 fontWeight: 700,
                 fontSize: '1.2rem',
-                color: '#FFFFFF',
+                color: isScrolled ? '#1A1A1A' : '#FFFFFF',
                 textDecoration: 'none',
                 letterSpacing: '-0.5px',
+                transition: 'color 0.3s ease',
               }}
             >
               Cotal<Box component='span' sx={{ color: 'var(--color-primary)' }}>.</Box>
@@ -159,7 +159,9 @@ function Navigation() {
                       key={ item.label }
                       onClick={ () => handleNavClick(item.sectionId) }
                       sx={{
-                        color: isActive ? '#FFFFFF' : 'rgba(255,255,255,0.55)',
+                        color: isScrolled
+                          ? (isActive ? '#1A1A1A' : '#555555')
+                          : (isActive ? '#FFFFFF' : 'rgba(255,255,255,0.55)'),
                         fontWeight: isActive ? 600 : 400,
                         fontSize: '0.875rem',
                         px: 1.5,
@@ -167,7 +169,7 @@ function Navigation() {
                         borderRadius: 1,
                         minWidth: 'unset',
                         position: 'relative',
-                        transition: 'color 0.2s',
+                        transition: 'color 0.3s ease',
                         '&::after': {
                           content: '""',
                           position: 'absolute',
@@ -183,8 +185,10 @@ function Navigation() {
                           borderRadius: '1px',
                         },
                         '&:hover': {
-                          color: '#FFFFFF',
-                          backgroundColor: 'rgba(255,255,255,0.06)',
+                          color: isScrolled ? '#1A1A1A' : '#FFFFFF',
+                          backgroundColor: isScrolled
+                            ? 'rgba(0,0,0,0.04)'
+                            : 'rgba(255,255,255,0.06)',
                           '&::after': { transform: 'translateX(-50%) scaleX(1)' },
                         },
                       }}
@@ -200,7 +204,7 @@ function Navigation() {
             { isMobile && (
               <IconButton
                 onClick={ () => setDrawerOpen(true) }
-                sx={{ color: '#FFFFFF' }}
+                sx={{ color: isScrolled ? '#1A1A1A' : '#FFFFFF', transition: 'color 0.3s ease' }}
                 aria-label='메뉴 열기'
               >
                 <MenuIcon />
