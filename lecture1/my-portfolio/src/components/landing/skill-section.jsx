@@ -153,6 +153,7 @@ function SkillSection() {
 
   return (
     <Box
+      id='skills'
       sx={{
         width: '100%',
         backgroundColor: 'var(--color-bg-secondary)',

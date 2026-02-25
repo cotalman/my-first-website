@@ -15,8 +15,7 @@ function App() {
         <CssBaseline />
         <Router basename='/my-first-website'>
           <Navigation />
-          {/* 네비게이션 높이만큼 상단 여백 확보 */}
-          <main style={{ paddingTop: '64px' }}>
+          <main>
             <Routes>
               <Route path='/' element={ <HomePage /> } />
               <Route path='/about' element={ <AboutPage /> } />

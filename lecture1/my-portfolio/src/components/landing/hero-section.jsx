@@ -152,6 +152,7 @@ function HeroSection() {
           Hero 섹션 래퍼
       ══════════════════════════════════════ */}
       <Box
+        id='hero'
         ref={ heroRef }
         onMouseEnter={ () => setIsCursorVisible(true) }
         onMouseLeave={ () => setIsCursorVisible(false) }
