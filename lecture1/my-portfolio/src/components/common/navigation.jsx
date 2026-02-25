@@ -102,6 +102,8 @@ function Navigation() {
   };
 
   const isHomePage = location.pathname === '/';
+  // 서브 페이지이거나 스크롤된 경우 라이트 스타일 적용
+  const isLight = !isHomePage || isScrolled;
 
   return (
     <>
@@ -110,9 +112,9 @@ function Navigation() {
         elevation={0}
         sx={{
           transition: 'background-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease',
-          backgroundColor: isScrolled ? '#FFFFFF' : 'transparent',
-          borderBottom: isScrolled ? '1px solid #E0E0E0' : 'none',
-          boxShadow: isScrolled ? '0 2px 12px rgba(0,0,0,0.08)' : 'none',
+          backgroundColor: isLight ? '#FFFFFF' : 'transparent',
+          borderBottom: isLight ? '1px solid #E0E0E0' : 'none',
+          boxShadow: isLight ? '0 2px 12px rgba(0,0,0,0.08)' : 'none',
         }}
       >
         {/* 읽기 진행률 바 */}
@@ -140,7 +142,7 @@ function Navigation() {
               sx={{
                 fontWeight: 700,
                 fontSize: '1.2rem',
-                color: isScrolled ? '#1A1A1A' : '#FFFFFF',
+                color: isLight ? '#1A1A1A' : '#FFFFFF',
                 textDecoration: 'none',
                 letterSpacing: '-0.5px',
                 transition: 'color 0.3s ease',
@@ -159,7 +161,7 @@ function Navigation() {
                       key={ item.label }
                       onClick={ () => handleNavClick(item.sectionId) }
                       sx={{
-                        color: isScrolled
+                        color: isLight
                           ? (isActive ? '#1A1A1A' : '#555555')
                           : (isActive ? '#FFFFFF' : 'rgba(255,255,255,0.55)'),
                         fontWeight: isActive ? 600 : 400,
@@ -185,10 +187,8 @@ function Navigation() {
                           borderRadius: '1px',
                         },
                         '&:hover': {
-                          color: isScrolled ? '#1A1A1A' : '#FFFFFF',
-                          backgroundColor: isScrolled
-                            ? 'rgba(0,0,0,0.04)'
-                            : 'rgba(255,255,255,0.06)',
+                          color: isLight ? '#1A1A1A' : '#FFFFFF',
+                          backgroundColor: isLight ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.06)',
                           '&::after': { transform: 'translateX(-50%) scaleX(1)' },
                         },
                       }}
@@ -204,7 +204,7 @@ function Navigation() {
             { isMobile && (
               <IconButton
                 onClick={ () => setDrawerOpen(true) }
-                sx={{ color: isScrolled ? '#1A1A1A' : '#FFFFFF', transition: 'color 0.3s ease' }}
+                sx={{ color: isLight ? '#1A1A1A' : '#FFFFFF', transition: 'color 0.3s ease' }}
                 aria-label='메뉴 열기'
               >
                 <MenuIcon />
