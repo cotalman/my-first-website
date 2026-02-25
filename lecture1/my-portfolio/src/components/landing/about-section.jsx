@@ -288,13 +288,12 @@ function AboutSection() {
                   <Box
                     sx={{
                       p: { xs: 3, md: 4 },
-                      border: '1px solid var(--color-border)',
                       borderRadius: 2,
                       height: '100%',
-                      transition: 'border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease',
+                      boxShadow: '0 2px 12px rgba(0,0,0,0.07)',
+                      transition: 'box-shadow 0.25s ease, transform 0.25s ease',
                       '&:hover': {
-                        borderColor: 'var(--color-primary)',
-                        boxShadow: '0 6px 24px rgba(255,0,0,0.08)',
+                        boxShadow: '0 8px 28px rgba(0,0,0,0.14)',
                         transform: 'translateY(-3px)',
                       },
                     }}
