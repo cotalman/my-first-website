@@ -1,4 +1,3 @@
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
@@ -46,6 +45,14 @@ function HeroSection() {
   const [typingIndex, setTypingIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+
+  /** 패럴렉스 스크롤: 배경 이미지 상하 이동 */
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   /** 커스텀 커서: RAF로 DOM 직접 조작 (리렌더 없음) */
   useEffect(() => {
@@ -168,6 +175,38 @@ function HeroSection() {
         }}
       >
 
+        {/* ── 배경 이미지: 노을 산 등반 (패럴렉스) ── */}
+        <Box sx={{
+          position: 'absolute',
+          inset: 0,
+          overflow: 'hidden',
+          pointerEvents: 'none',
+          zIndex: 0,
+        }}>
+          <Box
+            component='img'
+            src='https://images.unsplash.com/photo-1476111021705-ac3b3304fe20?w=1920&q=80'
+            alt=''
+            sx={{
+              position: 'absolute',
+              top: '-20%',
+              left: 0,
+              width: '100%',
+              height: '140%',
+              objectFit: 'cover',
+              objectPosition: 'center 85%',
+              transform: `translateY(${scrollY * 0.35}px)`,
+              willChange: 'transform',
+            }}
+          />
+          {/* 어두운 오버레이: 텍스트 가독성 + 다크 테마 유지 */}
+          <Box sx={{
+            position: 'absolute',
+            inset: 0,
+            background: 'linear-gradient(135deg, rgba(8,8,8,0.82) 0%, rgba(8,8,8,0.60) 50%, rgba(8,8,8,0.75) 100%)',
+          }} />
+        </Box>
+
         {/* ── 배경 레이어 1: 오렌지 라디알 글로우 (좌상단) ── */}
         <Box sx={{
           position: 'absolute',
@@ -178,6 +217,7 @@ function HeroSection() {
           top: '-15%',
           left: '-10%',
           pointerEvents: 'none',
+          zIndex: 1,
         }} />
 
         {/* ── 배경 레이어 2: 오렌지 라디알 글로우 (우하단) ── */}
@@ -190,8 +230,22 @@ function HeroSection() {
           bottom: '0%',
           right: '5%',
           pointerEvents: 'none',
+          zIndex: 1,
         }} />
 
+
+        {/* ── 배경 레이어 3: 오렌지 라디알 글로우 추가 (우하단) ── */}
+        <Box sx={{
+          position: 'absolute',
+          width: { xs: '60vw', md: '40vw' },
+          height: { xs: '60vw', md: '40vw' },
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(255,80,0,0.15) 0%, transparent 60%)',
+          bottom: '-10%',
+          right: '-5%',
+          pointerEvents: 'none',
+          zIndex: 1,
+        }} />
 
         {/* ── 배경 레이어 4: 하단 수평 그라데이션 라인 ── */}
         <Box sx={{
@@ -202,6 +256,7 @@ function HeroSection() {
           height: '1px',
           background: 'linear-gradient(90deg, transparent 0%, rgba(255,0,0,0.4) 50%, transparent 100%)',
           pointerEvents: 'none',
+          zIndex: 1,
         }} />
 
         {/* ── 플로팅 도형 1: 큰 원 (우상단, 모바일 숨김) ── */}
@@ -322,6 +377,7 @@ function HeroSection() {
           transform: 'translateY(-50%) rotate(-90deg)',
           transformOrigin: 'center center',
           display: { xs: 'none', md: 'block' },
+          zIndex: 1,
         }}>
           <Typography sx={{
             fontSize: '0.7rem',
@@ -606,64 +662,6 @@ function HeroSection() {
               </Box>
             </Box>
 
-            {/* 우측: 스크롤 인디케이터 (모바일 숨김) */}
-            <Box sx={{
-              display: { xs: 'none', md: 'flex' },
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: 1.5,
-              mb: 2,
-              flexShrink: 0,
-            }}>
-              <Typography sx={{
-                fontSize: '0.65rem',
-                color: 'rgba(255,255,255,0.18)',
-                letterSpacing: '0.15em',
-                textTransform: 'uppercase',
-                writingMode: 'vertical-rl',
-              }}>
-                Scroll
-              </Typography>
-
-              {/* 스크롤 라인 */}
-              <Box sx={{
-                width: '1px',
-                height: 72,
-                backgroundColor: 'rgba(255,255,255,0.08)',
-                position: 'relative',
-                overflow: 'hidden',
-                '&::after': {
-                  content: '""',
-                  position: 'absolute',
-                  top: '-50%',
-                  left: 0,
-                  width: '100%',
-                  height: '50%',
-                  backgroundColor: '#ff0000',
-                  animation: 'scrollLine 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite',
-                },
-                '@keyframes scrollLine': {
-                  '0%': { top: '-50%' },
-                  '100%': { top: '150%' },
-                },
-              }} />
-
-              {/* 바운스 다운 화살표 (클릭 시 다음 섹션 이동) */}
-              <Box
-                onClick={ () => scrollToSection('about') }
-                sx={{
-                  animation: 'bounceDown 2s ease-in-out infinite',
-                  cursor: 'pointer',
-                  '@keyframes bounceDown': {
-                    '0%, 100%': { transform: 'translateY(0)', opacity: 0.25 },
-                    '50%': { transform: 'translateY(7px)', opacity: 0.7 },
-                  },
-                  '&:hover': { opacity: '1 !important' },
-                }}
-              >
-                <ArrowDownwardIcon sx={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.4)' }} />
-              </Box>
-            </Box>
           </Box>
         </Container>
 
@@ -676,6 +674,7 @@ function HeroSection() {
           color: 'rgba(255,255,255,0.1)',
           letterSpacing: '0.2em',
           textTransform: 'uppercase',
+          zIndex: 1,
         }}>
           © 2026
         </Typography>

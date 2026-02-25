@@ -300,18 +300,7 @@ function AboutSection() {
                   >
                     <Typography
                       sx={{
-                        fontSize: '0.7rem',
-                        fontWeight: 700,
-                        color: 'var(--color-primary)',
-                        letterSpacing: '0.15em',
-                        mb: 2,
-                      }}
-                    >
-                      { num }
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: { xs: '1.1rem', md: '1.2rem' },
+                        fontSize: { xs: '1.4rem', md: '1.6rem' },
                         fontWeight: 700,
                         color: 'var(--color-text-primary)',
                         mb: 1.5,

@@ -112,7 +112,7 @@ function Navigation() {
         elevation={0}
         sx={{
           transition: 'background-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease',
-          backgroundColor: isLight ? 'rgba(255,255,255,0.75)' : 'transparent',
+          backgroundColor: isLight ? 'rgba(255,255,255,0.80)' : 'transparent',
           backdropFilter: isLight ? 'blur(16px)' : 'none',
           WebkitBackdropFilter: isLight ? 'blur(16px)' : 'none',
           borderBottom: isLight ? '1px solid rgba(0,0,0,0.07)' : 'none',

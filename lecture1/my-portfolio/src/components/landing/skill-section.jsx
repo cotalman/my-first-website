@@ -150,17 +150,61 @@ function SkillSection() {
   const navigate = useNavigate();
   const { homeData } = usePortfolio();
   const { topSkills } = homeData;
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <Box
       id='skills'
       sx={{
         width: '100%',
-        backgroundColor: 'var(--color-bg-secondary)',
+        position: 'relative',
+        overflow: 'hidden',
         py: { xs: 10, md: 14 },
       }}
     >
-      <Container maxWidth='lg'>
+      {/* 패럴렉스 배경 이미지 */}
+      <Box
+        sx={{
+          position: 'absolute',
+          inset: 0,
+          overflow: 'hidden',
+          pointerEvents: 'none',
+          zIndex: 0,
+        }}
+      >
+        <Box
+          component='img'
+          src='https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80'
+          alt=''
+          sx={{
+            position: 'absolute',
+            top: '-20%',
+            left: 0,
+            width: '100%',
+            height: '140%',
+            objectFit: 'cover',
+            objectPosition: 'center 15%',
+            transform: `translateY(${scrollY * 0.18}px)`,
+            willChange: 'transform',
+          }}
+        />
+        {/* 다크 오버레이 */}
+        <Box
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            background: 'linear-gradient(135deg, rgba(8,8,8,0.78) 0%, rgba(8,8,8,0.65) 50%, rgba(8,8,8,0.78) 100%)',
+          }}
+        />
+      </Box>
+
+      <Container maxWidth='lg' sx={{ position: 'relative', zIndex: 1 }}>
 
         {/* 섹션 헤더 */}
         <ScrollReveal>
@@ -192,7 +236,7 @@ function SkillSection() {
                 sx={{
                   fontSize: { xs: '1.8rem', md: '2.4rem' },
                   fontWeight: 800,
-                  color: 'var(--color-text-primary)',
+                  color: '#FFFFFF',
                   letterSpacing: '-0.02em',
                   lineHeight: 1.2,
                 }}
@@ -221,14 +265,14 @@ function SkillSection() {
               onClick={ () => navigate('/about') }
               variant='outlined'
               sx={{
-                borderColor: 'var(--color-primary)',
-                color: 'var(--color-primary)',
+                borderColor: 'rgba(255,255,255,0.5)',
+                color: '#FFFFFF',
                 fontWeight: 600,
                 px: 4,
                 py: 1.2,
                 '&:hover': {
-                  backgroundColor: 'rgba(255,0,0,0.06)',
-                  borderColor: 'var(--color-primary)',
+                  backgroundColor: 'rgba(255,255,255,0.08)',
+                  borderColor: '#FFFFFF',
                 },
               }}
             >
