@@ -4,28 +4,17 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
-import MenuItem from '@mui/material/MenuItem';
 import Snackbar from '@mui/material/Snackbar';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { supabase } from '../../utils/supabase-client';
 
-const EMOJI_OPTIONS = ['😊', '👍', '🎉', '💡', '🔥', '💬', '✨', '🙌'];
-
-const REGION_OPTIONS = [
-  '서울', '경기', '인천', '부산', '대구', '광주', '대전', '울산', '세종',
-  '강원', '충북', '충남', '전북', '전남', '경북', '경남', '제주', '해외',
-];
-
 const INITIAL_FORM = {
   name: '',
   message: '',
   email: '',
   sns_account: '',
-  region: '',
-  keyword: '',
-  emoji: '😊',
 };
 
 /**
@@ -59,9 +48,6 @@ function GuestbookForm({ onSubmitSuccess }) {
         message: form.message.trim(),
         email: form.email.trim() || null,
         sns_account: form.sns_account.trim() || null,
-        region: form.region || null,
-        keyword: form.keyword.trim() || null,
-        emoji: form.emoji,
       },
     ]);
     setLoading(false);
@@ -112,25 +98,6 @@ function GuestbookForm({ onSubmitSuccess }) {
           />
         </Grid>
 
-        {/* 이모지 선택 */}
-        <Grid size={{ xs: 12, md: 6 }}>
-          <TextField
-            select
-            fullWidth
-            name='emoji'
-            label='이모지'
-            value={ form.emoji }
-            onChange={ handleChange }
-            sx={ inputSx }
-          >
-            { EMOJI_OPTIONS.map((em) => (
-              <MenuItem key={ em } value={ em }>
-                <Box sx={{ fontSize: '1.3rem' }}>{ em }</Box>
-              </MenuItem>
-            )) }
-          </TextField>
-        </Grid>
-
         {/* 메시지 (필수) */}
         <Grid size={{ xs: 12 }}>
           <TextField
@@ -145,38 +112,6 @@ function GuestbookForm({ onSubmitSuccess }) {
             inputProps={{ maxLength: 300 }}
             sx={ inputSx }
           />
-        </Grid>
-
-        {/* 한마디 키워드 */}
-        <Grid size={{ xs: 12, md: 6 }}>
-          <TextField
-            fullWidth
-            name='keyword'
-            label='한마디 키워드 (선택)'
-            placeholder='예: 열정적인 개발자, 취준생...'
-            value={ form.keyword }
-            onChange={ handleChange }
-            inputProps={{ maxLength: 30 }}
-            sx={ inputSx }
-          />
-        </Grid>
-
-        {/* 지역 */}
-        <Grid size={{ xs: 12, md: 6 }}>
-          <TextField
-            select
-            fullWidth
-            name='region'
-            label='거주 지역 (선택)'
-            value={ form.region }
-            onChange={ handleChange }
-            sx={ inputSx }
-          >
-            <MenuItem value=''>선택 안함</MenuItem>
-            { REGION_OPTIONS.map((r) => (
-              <MenuItem key={ r } value={ r }>{ r }</MenuItem>
-            )) }
-          </TextField>
         </Grid>
 
         {/* 이메일 */}

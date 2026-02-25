@@ -22,9 +22,9 @@ html, body {
 /* CSS 변수 정의 - Welstory 컬러 팔레트 */
 :root {
   /* Primary Colors */
-  --color-primary: #F04E23;
-  --color-primary-light: #FF7A52;
-  --color-primary-dark: #D03A10;
+  --color-primary: #E83820;
+  --color-primary-light: #FF6145;
+  --color-primary-dark: #C42D17;
 
   /* Secondary Colors */
   --color-secondary: #1A1A1A;
@@ -40,10 +40,10 @@ html, body {
   --color-text-muted: #999999;
 
   /* Interactive Colors */
-  --color-button-primary: #F04E23;
-  --color-button-hover: #D03A10;
-  --color-link: #F04E23;
-  --color-link-hover: #D03A10;
+  --color-button-primary: #E83820;
+  --color-button-hover: #C42D17;
+  --color-link: #E83820;
+  --color-link-hover: #C42D17;
 
   /* Border & Divider */
   --color-border: #E0E0E0;

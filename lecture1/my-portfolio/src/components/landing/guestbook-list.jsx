@@ -24,7 +24,7 @@ function GuestbookList({ refreshKey }) {
       setLoading(true);
       const { data, error } = await supabase
         .from('guestbook')
-        .select('id, name, message, region, keyword, emoji, created_at')
+        .select('id, name, message, created_at')
         .order('created_at', { ascending: false })
         .limit(20);
 
@@ -99,39 +99,21 @@ function GuestbookCard({ entry }) {
         },
       }}
     >
-      {/* 상단: 이모지 + 이름 + 날짜 */}
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
-        <Box sx={{ fontSize: '1.5rem', lineHeight: 1 }}>{ entry.emoji || '😊' }</Box>
-        <Box sx={{ flex: 1, minWidth: 0 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
-            <Typography
-              sx={{
-                fontWeight: 700,
-                color: '#FFFFFF',
-                fontSize: '0.95rem',
-              }}
-            >
-              { entry.name }
-            </Typography>
-            { entry.region && (
-              <Box
-                sx={{
-                  fontSize: '0.7rem',
-                  color: 'rgba(255,255,255,0.5)',
-                  backgroundColor: 'rgba(255,255,255,0.08)',
-                  px: 1,
-                  py: 0.2,
-                  borderRadius: 10,
-                }}
-              >
-                { entry.region }
-              </Box>
-            ) }
-          </Box>
-          <Typography sx={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.35)' }}>
-            { date }
-          </Typography>
-        </Box>
+      {/* 상단: 이름 + 날짜 */}
+      <Box sx={{ mb: 1.5 }}>
+        <Typography
+          sx={{
+            fontWeight: 700,
+            color: '#FFFFFF',
+            fontSize: '0.95rem',
+            mb: 0.3,
+          }}
+        >
+          { entry.name }
+        </Typography>
+        <Typography sx={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.35)' }}>
+          { date }
+        </Typography>
       </Box>
 
       {/* 메시지 */}
@@ -146,24 +128,6 @@ function GuestbookCard({ entry }) {
         { entry.message }
       </Typography>
 
-      {/* 키워드 */}
-      { entry.keyword && (
-        <Box
-          sx={{
-            mt: 1.5,
-            display: 'inline-block',
-            fontSize: '0.75rem',
-            color: 'var(--color-primary)',
-            backgroundColor: 'rgba(240,78,35,0.12)',
-            border: '1px solid rgba(240,78,35,0.25)',
-            px: 1.5,
-            py: 0.3,
-            borderRadius: 10,
-          }}
-        >
-          # { entry.keyword }
-        </Box>
-      ) }
     </Box>
   );
 }

@@ -206,7 +206,7 @@ function SkillSection() {
         <ScrollReveal delay={ 0.08 }>
           <Grid container spacing={ 2 } sx={{ mb: { xs: 8, md: 10 } }}>
             { topSkills.map((skill) => (
-              <Grid key={ skill.id } size={{ xs: 6, md: 3 }}>
+              <Grid key={ skill.id } size={{ xs: 6, md: 2.4 }}>
                 <SkillCard skill={ skill } />
               </Grid>
             )) }

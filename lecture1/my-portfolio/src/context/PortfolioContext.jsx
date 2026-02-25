@@ -63,7 +63,7 @@ export const PortfolioProvider = ({ children }) => {
 
     const topSkills = [...aboutMeData.skills]
       .sort((a, b) => (b.level ?? 0) - (a.level ?? 0))
-      .slice(0, 4);
+      .slice(0, 5);
 
     return {
       storySummary,

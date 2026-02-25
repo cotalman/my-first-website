@@ -1,7 +1,5 @@
 import EmailIcon from '@mui/icons-material/Email';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import TwitterIcon from '@mui/icons-material/Twitter';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
@@ -17,8 +15,8 @@ const CONTACT_INFO = [
   {
     icon: <EmailIcon sx={{ fontSize: '1.1rem' }} />,
     label: '이메일',
-    value: 'your@email.com',
-    href: 'mailto:your@email.com',
+    value: 'dp98j100@gmail.com',
+    href: 'mailto:dp98j100@gmail.com',
   },
 ];
 
@@ -28,16 +26,6 @@ const SNS_LINKS = [
     icon: <GitHubIcon />,
     label: 'GitHub',
     href: 'https://github.com/cotalman',
-  },
-  {
-    icon: <LinkedInIcon />,
-    label: 'LinkedIn',
-    href: '#',
-  },
-  {
-    icon: <TwitterIcon />,
-    label: 'Twitter',
-    href: '#',
   },
 ];
 
@@ -64,7 +52,7 @@ function ContactSection() {
         py: { xs: 8, md: 12 },
       }}
     >
-      <Container maxWidth='md'>
+      <Container maxWidth='lg'>
 
         {/* 섹션 헤더 */}
         <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 8 } }}>
