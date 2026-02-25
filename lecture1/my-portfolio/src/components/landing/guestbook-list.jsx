@@ -88,11 +88,11 @@ function GuestbookCard({ entry }) {
   return (
     <Box
       sx={{
-        backgroundColor: 'rgba(255,255,255,0.06)',
+        backgroundColor: 'var(--color-secondary)',
         borderRadius: 2,
         p: 3,
         height: '100%',
-        boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
+        boxShadow: 'none',
         transition: 'box-shadow 0.2s, transform 0.2s',
         '&:hover': {
           boxShadow: '0 8px 28px rgba(0,0,0,0.45)',

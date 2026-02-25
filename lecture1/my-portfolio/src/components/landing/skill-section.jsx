@@ -150,10 +150,17 @@ function SkillSection() {
   const navigate = useNavigate();
   const { homeData } = usePortfolio();
   const { topSkills } = homeData;
-  const [scrollY, setScrollY] = useState(0);
+  const [parallax, setParallax] = useState(0);
+  const sectionRef = useRef(null);
 
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
+    const handleScroll = () => {
+      const el = sectionRef.current;
+      if (!el) return;
+      const sectionTop = el.getBoundingClientRect().top + window.scrollY;
+      const relativeScroll = window.scrollY - sectionTop;
+      setParallax(relativeScroll * 0.18);
+    };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -161,6 +168,7 @@ function SkillSection() {
   return (
     <Box
       id='skills'
+      ref={ sectionRef }
       sx={{
         width: '100%',
         position: 'relative',
@@ -180,17 +188,17 @@ function SkillSection() {
       >
         <Box
           component='img'
-          src='https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80'
+          src='https://images.unsplash.com/photo-1613412993582-cb11da2334f0?w=1920&q=80'
           alt=''
           sx={{
             position: 'absolute',
-            top: '-20%',
+            top: '-30%',
             left: 0,
             width: '100%',
-            height: '140%',
+            height: '160%',
             objectFit: 'cover',
-            objectPosition: 'center 15%',
-            transform: `translateY(${scrollY * 0.18}px)`,
+            objectPosition: 'center 20%',
+            transform: `translateY(${parallax}px)`,
             willChange: 'transform',
           }}
         />

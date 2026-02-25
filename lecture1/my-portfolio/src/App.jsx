@@ -1,6 +1,7 @@
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import Footer from './components/common/footer';
 import Navigation from './components/common/navigation';
 import ScrollToTop from './components/ui/scroll-to-top';
 import { PortfolioProvider } from './context/PortfolioContext';
@@ -24,6 +25,7 @@ function App() {
               <Route path='/projects' element={ <ProjectsPage /> } />
             </Routes>
           </main>
+          <Footer />
         </Router>
       </ThemeProvider>
     </PortfolioProvider>

@@ -185,7 +185,7 @@ function HeroSection() {
         }}>
           <Box
             component='img'
-            src='https://images.unsplash.com/photo-1476111021705-ac3b3304fe20?w=1920&q=80'
+            src='https://images.unsplash.com/photo-1622465911894-1e73cbdc293a?w=1920&q=80'
             alt=''
             sx={{
               position: 'absolute',

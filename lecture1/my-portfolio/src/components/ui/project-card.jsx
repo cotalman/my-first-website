@@ -184,7 +184,8 @@ function ProjectCard({ project }) {
                 fontWeight: 600,
                 py: 0.9,
                 minHeight: 44,
-                '&:hover': { backgroundColor: 'var(--color-primary-dark)' },
+                boxShadow: 'none',
+                '&:hover': { backgroundColor: 'var(--color-primary-dark)', boxShadow: 'none' },
               }}
             >
               View Details
