@@ -12,7 +12,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 /** 섹션 id로 부드럽게 스크롤 이동 */
@@ -50,14 +50,12 @@ function Navigation() {
   const navigate = useNavigate();
   const isMobile = useMediaQuery('(max-width:767px)');
 
-  const [isVisible, setIsVisible] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const [progress, setProgress] = useState(0);
   const [activeSection, setActiveSection] = useState('hero');
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const lastScrollY = useRef(0);
 
-  /** 스크롤 방향 감지 + 읽기 진행률 계산 */
+  /** 스크롤 위치 감지 + 읽기 진행률 계산 */
   useEffect(() => {
     const onScroll = () => {
       const scrollY = window.scrollY;
@@ -65,17 +63,6 @@ function Navigation() {
 
       setProgress(docHeight > 0 ? (scrollY / docHeight) * 100 : 0);
       setIsScrolled(scrollY > 20);
-
-      if (scrollY > 100) {
-        if (scrollY > lastScrollY.current + 5) {
-          setIsVisible(false);
-        } else if (scrollY < lastScrollY.current - 5) {
-          setIsVisible(true);
-        }
-      } else {
-        setIsVisible(true);
-      }
-      lastScrollY.current = scrollY;
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -122,8 +109,7 @@ function Navigation() {
         position='fixed'
         elevation={0}
         sx={{
-          transform: isVisible ? 'translateY(0)' : 'translateY(-100%)',
-          transition: 'transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease, backdrop-filter 0.3s ease',
+          transition: 'background-color 0.3s ease, backdrop-filter 0.3s ease',
           backgroundColor: isScrolled ? 'rgba(8, 8, 8, 0.88)' : 'transparent',
           backdropFilter: isScrolled ? 'blur(16px)' : 'none',
           borderBottom: isScrolled ? '1px solid rgba(255,255,255,0.07)' : 'none',
