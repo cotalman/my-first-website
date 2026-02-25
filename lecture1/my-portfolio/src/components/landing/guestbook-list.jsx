@@ -89,13 +89,14 @@ function GuestbookCard({ entry }) {
     <Box
       sx={{
         backgroundColor: 'rgba(255,255,255,0.06)',
-        border: '1px solid rgba(255,255,255,0.1)',
         borderRadius: 2,
         p: 3,
         height: '100%',
-        transition: 'border-color 0.2s',
+        boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
+        transition: 'box-shadow 0.2s, transform 0.2s',
         '&:hover': {
-          borderColor: 'rgba(255,0,0,0.4)',
+          boxShadow: '0 8px 28px rgba(0,0,0,0.45)',
+          transform: 'translateY(-2px)',
         },
       }}
     >

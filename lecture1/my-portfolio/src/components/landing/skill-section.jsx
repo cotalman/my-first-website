@@ -61,14 +61,14 @@ const SkillCard = memo(function SkillCard({ skill }) {
     <Box
       sx={{
         p: { xs: 3, md: 3.5 },
-        border: '1px solid var(--color-border)',
         borderRadius: 2,
         backgroundColor: '#FFFFFF',
         height: '100%',
         cursor: 'default',
+        boxShadow: '0 2px 12px rgba(0,0,0,0.07)',
         transition: 'box-shadow 0.35s ease, transform 0.35s ease',
         '&:hover': {
-          boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.14)',
           transform: 'translateY(-4px)',
         },
       }}

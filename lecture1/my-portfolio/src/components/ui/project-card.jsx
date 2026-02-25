@@ -43,12 +43,12 @@ function ProjectCard({ project }) {
         flexDirection: 'column',
         height: '100%',
         backgroundColor: '#FFFFFF',
-        border: '1px solid var(--color-border)',
         borderRadius: 2,
         overflow: 'hidden',
+        boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
         transition: 'box-shadow 0.25s ease, transform 0.25s ease',
         '&:hover': {
-          boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.16)',
           transform: 'translateY(-4px)',
         },
       }}
