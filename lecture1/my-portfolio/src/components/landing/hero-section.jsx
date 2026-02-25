@@ -1,11 +1,20 @@
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+
+/** 섹션 id로 부드럽게 스크롤 이동 */
+const scrollToSection = (id) => {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth' });
+};
 
 /** 타이핑 효과에 순환 표시할 역할 텍스트 목록 */
 const TYPING_TEXTS = ['웹디자이너', 'UI/UX 디자이너', 'Figma 디자이너', 'Front-End 개발자'];
@@ -500,10 +509,10 @@ function HeroSection() {
               </Typography>
 
               {/* CTA 버튼 2개 */}
-              <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+              <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mb: 3 }}>
+                {/* Primary CTA: 프로젝트 보기 */}
                 <Button
-                  component={ Link }
-                  to='/projects'
+                  onClick={ () => scrollToSection('projects') }
                   endIcon={
                     <ArrowForwardIcon
                       sx={{ fontSize: '1rem !important', transition: 'transform 0.3s ease' }}
@@ -523,19 +532,19 @@ function HeroSection() {
                     '&:hover': {
                       backgroundColor: '#C42D17',
                       transform: 'translateY(-2px)',
-                      boxShadow: '0 8px 28px rgba(240,78,35,0.4)',
+                      boxShadow: '0 8px 28px rgba(232,56,32,0.45)',
                     },
                     '&:hover .MuiButton-endIcon': {
                       transform: 'translateX(4px)',
                     },
                   }}
                 >
-                  포트폴리오 보기
+                  프로젝트 보기
                 </Button>
 
+                {/* Secondary CTA: 연락하기 */}
                 <Button
-                  component={ Link }
-                  to='/about'
+                  onClick={ () => scrollToSection('contact') }
                   sx={{
                     color: 'rgba(255,255,255,0.65)',
                     fontSize: { xs: '0.875rem', md: '0.95rem' },
@@ -556,8 +565,61 @@ function HeroSection() {
                     },
                   }}
                 >
-                  About Me
+                  연락하기
                 </Button>
+              </Box>
+
+              {/* 소셜 아이콘 */}
+              <Box sx={{ display: 'flex', gap: 1 }}>
+                <Tooltip title='GitHub' placement='top'>
+                  <IconButton
+                    component='a'
+                    href='https://github.com/cotalman'
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    sx={{
+                      color: 'rgba(255,255,255,0.4)',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      borderRadius: 1.5,
+                      width: 44,
+                      height: 44,
+                      transition: 'all 0.25s ease',
+                      '&:hover': {
+                        color: '#fff',
+                        borderColor: 'rgba(255,255,255,0.4)',
+                        backgroundColor: 'rgba(255,255,255,0.07)',
+                        transform: 'translateY(-2px)',
+                      },
+                    }}
+                  >
+                    <GitHubIcon sx={{ fontSize: '1.2rem' }} />
+                  </IconButton>
+                </Tooltip>
+
+                <Tooltip title='LinkedIn' placement='top'>
+                  <IconButton
+                    component='a'
+                    href='https://linkedin.com'
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    sx={{
+                      color: 'rgba(255,255,255,0.4)',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      borderRadius: 1.5,
+                      width: 44,
+                      height: 44,
+                      transition: 'all 0.25s ease',
+                      '&:hover': {
+                        color: '#0A66C2',
+                        borderColor: '#0A66C2',
+                        backgroundColor: 'rgba(10,102,194,0.1)',
+                        transform: 'translateY(-2px)',
+                      },
+                    }}
+                  >
+                    <LinkedInIcon sx={{ fontSize: '1.2rem' }} />
+                  </IconButton>
+                </Tooltip>
               </Box>
             </Box>
 
@@ -602,14 +664,19 @@ function HeroSection() {
                 },
               }} />
 
-              {/* 바운스 다운 화살표 */}
-              <Box sx={{
-                animation: 'bounceDown 2s ease-in-out infinite',
-                '@keyframes bounceDown': {
-                  '0%, 100%': { transform: 'translateY(0)', opacity: 0.25 },
-                  '50%': { transform: 'translateY(7px)', opacity: 0.7 },
-                },
-              }}>
+              {/* 바운스 다운 화살표 (클릭 시 다음 섹션 이동) */}
+              <Box
+                onClick={ () => scrollToSection('about') }
+                sx={{
+                  animation: 'bounceDown 2s ease-in-out infinite',
+                  cursor: 'pointer',
+                  '@keyframes bounceDown': {
+                    '0%, 100%': { transform: 'translateY(0)', opacity: 0.25 },
+                    '50%': { transform: 'translateY(7px)', opacity: 0.7 },
+                  },
+                  '&:hover': { opacity: '1 !important' },
+                }}
+              >
                 <ArrowDownwardIcon sx={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.4)' }} />
               </Box>
             </Box>
