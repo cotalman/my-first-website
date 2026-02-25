@@ -43,11 +43,11 @@ function ScrollToTop() {
         sx={{
           backgroundColor: 'var(--color-primary)',
           color: '#FFFFFF',
-          boxShadow: '0 4px 16px rgba(232,56,32,0.4)',
+          boxShadow: '0 4px 16px rgba(255,0,0,0.4)',
           '&:hover': {
             backgroundColor: 'var(--color-primary-dark)',
             transform: 'translateY(-2px)',
-            boxShadow: '0 6px 20px rgba(232,56,32,0.5)',
+            boxShadow: '0 6px 20px rgba(255,0,0,0.5)',
           },
           transition: 'background-color 0.2s, transform 0.2s, box-shadow 0.2s',
         }}

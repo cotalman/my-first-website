@@ -95,7 +95,7 @@ function GuestbookCard({ entry }) {
         height: '100%',
         transition: 'border-color 0.2s',
         '&:hover': {
-          borderColor: 'rgba(240,78,35,0.4)',
+          borderColor: 'rgba(255,0,0,0.4)',
         },
       }}
     >

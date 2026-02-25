@@ -579,9 +579,9 @@ function AboutPage() {
                   label={ basicInfo.major }
                   size='small'
                   sx={{
-                    backgroundColor: 'rgba(240,78,35,0.08)',
+                    backgroundColor: 'rgba(255,0,0,0.08)',
                     color: 'var(--color-primary)',
-                    border: '1px solid rgba(240,78,35,0.2)',
+                    border: '1px solid rgba(255,0,0,0.2)',
                     fontWeight: 600,
                     fontSize: '0.75rem',
                   }}
@@ -716,7 +716,7 @@ function AboutPage() {
                   '&:hover': {
                     borderColor: 'var(--color-primary)',
                     color: 'var(--color-primary)',
-                    backgroundColor: 'rgba(240,78,35,0.04)',
+                    backgroundColor: 'rgba(255,0,0,0.04)',
                   },
                 }}
               >

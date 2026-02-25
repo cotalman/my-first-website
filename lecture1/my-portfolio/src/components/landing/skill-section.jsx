@@ -227,7 +227,7 @@ function SkillSection() {
                 px: 4,
                 py: 1.2,
                 '&:hover': {
-                  backgroundColor: 'rgba(240,78,35,0.06)',
+                  backgroundColor: 'rgba(255,0,0,0.06)',
                   borderColor: 'var(--color-primary)',
                 },
               }}

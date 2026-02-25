@@ -146,9 +146,9 @@ function ProjectCard({ project }) {
               sx={{
                 fontSize: '0.7rem',
                 height: 24,
-                backgroundColor: 'rgba(240,78,35,0.08)',
+                backgroundColor: 'rgba(255,0,0,0.08)',
                 color: 'var(--color-primary)',
-                border: '1px solid rgba(240,78,35,0.2)',
+                border: '1px solid rgba(255,0,0,0.2)',
                 fontWeight: 600,
               }}
             />

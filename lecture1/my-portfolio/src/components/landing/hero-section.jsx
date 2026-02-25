@@ -174,7 +174,7 @@ function HeroSection() {
           width: { xs: '70vw', md: '50vw' },
           height: { xs: '70vw', md: '50vw' },
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(240,78,35,0.13) 0%, transparent 65%)',
+          background: 'radial-gradient(circle, rgba(255,0,0,0.13) 0%, transparent 65%)',
           top: '-15%',
           left: '-10%',
           pointerEvents: 'none',
@@ -186,7 +186,7 @@ function HeroSection() {
           width: { xs: '50vw', md: '35vw' },
           height: { xs: '50vw', md: '35vw' },
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(240,78,35,0.07) 0%, transparent 65%)',
+          background: 'radial-gradient(circle, rgba(255,0,0,0.07) 0%, transparent 65%)',
           bottom: '0%',
           right: '5%',
           pointerEvents: 'none',
@@ -200,7 +200,7 @@ function HeroSection() {
           left: 0,
           right: 0,
           height: '1px',
-          background: 'linear-gradient(90deg, transparent 0%, rgba(240,78,35,0.4) 50%, transparent 100%)',
+          background: 'linear-gradient(90deg, transparent 0%, rgba(255,0,0,0.4) 50%, transparent 100%)',
           pointerEvents: 'none',
         }} />
 
@@ -211,7 +211,7 @@ function HeroSection() {
           width: { sm: 200, md: 360 },
           height: { sm: 200, md: 360 },
           borderRadius: '50%',
-          border: '1px solid rgba(240,78,35,0.11)',
+          border: '1px solid rgba(255,0,0,0.11)',
           top: { sm: '5%', md: '8%' },
           right: { sm: '-5%', md: '6%' },
           animation: 'floatRotate 24s linear infinite',
@@ -227,7 +227,7 @@ function HeroSection() {
             width: '55%',
             height: '55%',
             borderRadius: '50%',
-            border: '1px solid rgba(240,78,35,0.07)',
+            border: '1px solid rgba(255,0,0,0.07)',
             top: '22%',
             left: '22%',
           },
@@ -259,7 +259,7 @@ function HeroSection() {
           height: 0,
           borderLeft: '22px solid transparent',
           borderRight: '22px solid transparent',
-          borderBottom: '38px solid rgba(240,78,35,0.06)',
+          borderBottom: '38px solid rgba(255,0,0,0.06)',
           right: { sm: '6%', md: '14%' },
           top: '58%',
           animation: 'floatUpDown 9s ease-in-out infinite',
@@ -444,7 +444,7 @@ function HeroSection() {
                   <Box
                     component='span'
                     sx={{
-                      color: '#E83820',
+                      color: '#ff0000',
                       fontWeight: 700,
                     }}
                   >
@@ -457,7 +457,7 @@ function HeroSection() {
                       display: 'inline-block',
                       width: '2px',
                       height: '1em',
-                      backgroundColor: '#E83820',
+                      backgroundColor: '#ff0000',
                       ml: '3px',
                       verticalAlign: 'middle',
                       animation: 'cursorBlink 1s step-end infinite',
@@ -504,7 +504,7 @@ function HeroSection() {
                     fontSize: { xs: '0.875rem', md: '0.95rem' },
                     fontWeight: 600,
                     letterSpacing: '0.04em',
-                    backgroundColor: '#E83820',
+                    backgroundColor: '#ff0000',
                     borderRadius: 0,
                     px: 3.5,
                     py: 1.6,
@@ -512,9 +512,9 @@ function HeroSection() {
                     width: { xs: '100%', sm: 'auto' },
                     transition: 'all 0.3s ease',
                     '&:hover': {
-                      backgroundColor: '#C42D17',
+                      backgroundColor: '#cc0000',
                       transform: 'translateY(-2px)',
-                      boxShadow: '0 8px 28px rgba(232,56,32,0.45)',
+                      boxShadow: '0 8px 28px rgba(255,0,0,0.45)',
                     },
                     '&:hover .MuiButton-endIcon': {
                       transform: 'translateX(4px)',
@@ -639,7 +639,7 @@ function HeroSection() {
                   left: 0,
                   width: '100%',
                   height: '50%',
-                  backgroundColor: '#E83820',
+                  backgroundColor: '#ff0000',
                   animation: 'scrollLine 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite',
                 },
                 '@keyframes scrollLine': {

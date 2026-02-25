@@ -254,7 +254,7 @@ function AboutSection() {
                     fontWeight: 600,
                     px: 2.5,
                     '&:hover': {
-                      backgroundColor: 'rgba(240,78,35,0.06)',
+                      backgroundColor: 'rgba(255,0,0,0.06)',
                       borderColor: 'var(--color-primary)',
                     },
                   }}
@@ -294,7 +294,7 @@ function AboutSection() {
                       transition: 'border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease',
                       '&:hover': {
                         borderColor: 'var(--color-primary)',
-                        boxShadow: '0 6px 24px rgba(240,78,35,0.08)',
+                        boxShadow: '0 6px 24px rgba(255,0,0,0.08)',
                         transform: 'translateY(-3px)',
                       },
                     }}
@@ -368,7 +368,7 @@ function AboutSection() {
                     '&:hover': {
                       borderColor: 'var(--color-primary)',
                       color: 'var(--color-primary)',
-                      backgroundColor: 'rgba(240,78,35,0.05)',
+                      backgroundColor: 'rgba(255,0,0,0.05)',
                     },
                   }}
                 >

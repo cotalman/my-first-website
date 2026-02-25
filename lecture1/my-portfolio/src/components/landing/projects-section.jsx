@@ -117,7 +117,7 @@ function ProjectsSection() {
               minHeight: 48,
               '&:hover': {
                 borderColor: 'var(--color-primary-dark)',
-                backgroundColor: 'rgba(240,78,35,0.04)',
+                backgroundColor: 'rgba(255,0,0,0.04)',
               },
             }}
           >
