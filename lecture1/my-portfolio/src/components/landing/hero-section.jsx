@@ -433,21 +433,6 @@ function HeroSection() {
               >
                 개발 사이.
               </Typography>
-              {/* 오렌지 언더라인 (텍스트 등장 후 좌→우 확장) */}
-              <Box sx={{
-                position: 'absolute',
-                bottom: { xs: 4, md: 10 },
-                left: 0,
-                height: '3px',
-                width: 0,
-                background: 'linear-gradient(90deg, #E83820, #FF7A52)',
-                boxShadow: '0 0 12px rgba(240,78,35,0.6)',
-                animation: 'lineGrow 0.9s cubic-bezier(0.4, 0, 0.2, 1) 1.3s forwards',
-                '@keyframes lineGrow': {
-                  from: { width: '0%' },
-                  to: { width: '100%' },
-                },
-              }} />
             </Box>
           </Box>
 
