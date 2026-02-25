@@ -250,23 +250,6 @@ function HeroSection() {
           },
         }} />
 
-        {/* ── 플로팅 도형 3: 오렌지 포인트 점 ── */}
-        <Box sx={{
-          position: 'absolute',
-          width: 7,
-          height: 7,
-          borderRadius: '50%',
-          backgroundColor: 'rgba(240,78,35,0.8)',
-          boxShadow: '0 0 10px rgba(240,78,35,0.6)',
-          top: '32%',
-          right: { xs: '18%', md: '27%' },
-          animation: 'orbitPulse 3.5s ease-in-out infinite',
-          pointerEvents: 'none',
-          '@keyframes orbitPulse': {
-            '0%, 100%': { opacity: 0.8, transform: 'scale(1)' },
-            '50%': { opacity: 1, transform: 'scale(1.8)', boxShadow: '0 0 18px rgba(240,78,35,0.9)' },
-          },
-        }} />
 
         {/* ── 플로팅 도형 4: 위아래 부유 삼각형 (태블릿 이상) ── */}
         <Box sx={{
