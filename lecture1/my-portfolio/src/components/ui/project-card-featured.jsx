@@ -1,5 +1,4 @@
 import GitHubIcon from '@mui/icons-material/GitHub';
-import LaunchIcon from '@mui/icons-material/Launch';
 import StarIcon from '@mui/icons-material/Star';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -205,33 +204,6 @@ function ProjectCardFeatured({ project }) {
                   }}
                 >
                   View Details
-                </Button>
-              ) }
-              { detail_url && (
-                <Button
-                  component='a'
-                  href={ detail_url }
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  variant='outlined'
-                  size='large'
-                  startIcon={ <LaunchIcon /> }
-                  sx={{
-                    borderColor: 'var(--color-border)',
-                    color: 'var(--color-text-secondary)',
-                    fontWeight: 600,
-                    px: 2.5,
-                    py: 1.2,
-                    minHeight: 48,
-                    fontSize: '0.9rem',
-                    '&:hover': {
-                      borderColor: 'var(--color-primary)',
-                      color: 'var(--color-primary)',
-                      backgroundColor: 'rgba(240,78,35,0.04)',
-                    },
-                  }}
-                >
-                  Live Demo
                 </Button>
               ) }
               { github_url && (

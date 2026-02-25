@@ -1,5 +1,4 @@
 import GitHubIcon from '@mui/icons-material/GitHub';
-import LaunchIcon from '@mui/icons-material/Launch';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
@@ -190,26 +189,6 @@ function ProjectCard({ project }) {
             >
               View Details
             </Button>
-          ) }
-          { detail_url && (
-            <Tooltip title='Live Demo'>
-              <IconButton
-                component='a'
-                href={ detail_url }
-                target='_blank'
-                rel='noopener noreferrer'
-                sx={{
-                  border: '1px solid var(--color-border)',
-                  borderRadius: 1.5,
-                  minWidth: 44,
-                  minHeight: 44,
-                  color: 'var(--color-text-secondary)',
-                  '&:hover': { color: 'var(--color-primary)', borderColor: 'var(--color-primary)' },
-                }}
-              >
-                <LaunchIcon sx={{ fontSize: '1rem' }} />
-              </IconButton>
-            </Tooltip>
           ) }
           { github_url && (
             <Tooltip title='GitHub'>
