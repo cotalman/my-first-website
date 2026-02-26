@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { usePortfolio } from '../../context/PortfolioContext';
 
 /** 스크롤 진입 시 페이드업 애니메이션 래퍼 */
-function ScrollReveal({ children, delay = 0 }) {
+function ScrollReveal({ children, delay = 0, style }) {
   const [visible, setVisible] = useState(false);
   const ref = useRef(null);
 
@@ -26,6 +26,7 @@ function ScrollReveal({ children, delay = 0 }) {
   return (
     <Box
       ref={ ref }
+      style={ style }
       sx={{
         opacity: visible ? 1 : 0,
         transform: visible ? 'translateY(0)' : 'translateY(28px)',
@@ -143,227 +144,230 @@ function AboutSection() {
           </Box>
         </ScrollReveal>
 
-        {/* ── ② 스토리: 사진 + 텍스트 ── */}
-        <ScrollReveal delay={ 0.05 }>
-          <Grid container spacing={{ xs: 5, md: 8 }} sx={{ mb: { xs: 10, md: 14 } }}>
+        {/* ── ② 사진(좌 고정) + 콘텐츠(우) 2단 레이아웃 ── */}
+        <Grid container spacing={{ xs: 6, md: 10 }} alignItems='stretch'>
 
-            {/* 사진 영역 */}
-            <Grid size={{ xs: 12, md: 4 }}>
-              <Box
-                sx={{
-                  position: 'relative',
-                  width: '100%',
-                  paddingTop: '100%',
-                  backgroundColor: '#0F0F0F',
-                  borderRadius: 2,
-                  overflow: 'hidden',
-                }}
-              >
-                { basicInfo.photo ? (
-                  <Box
-                    component='img'
-                    src={ basicInfo.photo }
-                    alt={ basicInfo.name }
+          {/* 좌: 사진 (sticky) */}
+          <Grid size={{ xs: 12, md: 4 }} sx={{ display: 'flex', flexDirection: 'column' }}>
+            <ScrollReveal delay={ 0.05 } style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+              <Box sx={{ position: { md: 'sticky' }, top: { md: 96 }, flex: 1 }}>
+                <Box
+                  sx={{
+                    position: 'relative',
+                    width: '100%',
+                    height: '100%',
+                    minHeight: { xs: '360px', md: '500px' },
+                    backgroundColor: '#0F0F0F',
+                    borderRadius: 2,
+                    overflow: 'hidden',
+                  }}
+                >
+                  { basicInfo.photo ? (
+                    <Box
+                      component='img'
+                      src={ basicInfo.photo }
+                      alt={ basicInfo.name }
+                      sx={{
+                        position: 'absolute',
+                        inset: 0,
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                      }}
+                    />
+                  ) : (
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        inset: 0,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 1.5,
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontSize: { xs: '3.5rem', md: '4.5rem' },
+                          fontWeight: 800,
+                          color: 'rgba(255,255,255,0.12)',
+                          letterSpacing: '-0.04em',
+                          lineHeight: 1,
+                        }}
+                      >
+                        Me.
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: '0.65rem',
+                          color: 'rgba(255,255,255,0.18)',
+                          letterSpacing: '0.2em',
+                          textTransform: 'uppercase',
+                        }}
+                      >
+                        Photo here
+                      </Typography>
+                    </Box>
+                  ) }
+                </Box>
+              </Box>
+            </ScrollReveal>
+          </Grid>
+
+          {/* 우: MY STORY + CORE VALUES + INTERESTS */}
+          <Grid size={{ xs: 12, md: 8 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 8, md: 10 } }}>
+
+              {/* MY STORY */}
+              <ScrollReveal delay={ 0.1 }>
+                <Box>
+                  <Typography
                     sx={{
-                      position: 'absolute',
-                      inset: 0,
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                    }}
-                  />
-                ) : (
-                  <Box
-                    sx={{
-                      position: 'absolute',
-                      inset: 0,
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: 1.5,
+                      fontSize: '0.75rem',
+                      fontWeight: 600,
+                      color: 'var(--color-primary)',
+                      letterSpacing: '0.18em',
+                      textTransform: 'uppercase',
+                      mb: 3,
                     }}
                   >
-                    <Typography
-                      sx={{
-                        fontSize: { xs: '3.5rem', md: '4.5rem' },
-                        fontWeight: 800,
-                        color: 'rgba(255,255,255,0.12)',
-                        letterSpacing: '-0.04em',
-                        lineHeight: 1,
-                      }}
-                    >
-                      Me.
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: '0.65rem',
-                        color: 'rgba(255,255,255,0.18)',
-                        letterSpacing: '0.2em',
-                        textTransform: 'uppercase',
-                      }}
-                    >
-                      Photo here
-                    </Typography>
-                  </Box>
-                ) }
-              </Box>
-            </Grid>
-
-            {/* 스토리 텍스트 */}
-            <Grid size={{ xs: 12, md: 8 }}>
-              <Box
-                sx={{
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  gap: 3,
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontSize: '0.75rem',
-                    fontWeight: 600,
-                    color: 'var(--color-primary)',
-                    letterSpacing: '0.18em',
-                    textTransform: 'uppercase',
-                  }}
-                >
-                  My Story
-                </Typography>
-
-                <Typography
-                  sx={{
-                    fontSize: { xs: '1rem', md: '1.05rem' },
-                    color: 'var(--color-text-secondary)',
-                    lineHeight: 2,
-                  }}
-                >
-                  { storySummary }
-                </Typography>
-
-                <Button
-                  onClick={ () => navigate('/about') }
-                  variant='outlined'
-                  size='small'
-                  sx={{
-                    alignSelf: 'flex-start',
-                    borderColor: 'var(--color-primary)',
-                    color: 'var(--color-primary)',
-                    fontWeight: 600,
-                    px: 2.5,
-                    '&:hover': {
-                      backgroundColor: 'rgba(255,0,0,0.06)',
-                      borderColor: 'var(--color-primary)',
-                    },
-                  }}
-                >
-                  더 알아보기 →
-                </Button>
-
-              </Box>
-            </Grid>
-          </Grid>
-        </ScrollReveal>
-
-        {/* ── ③ 가치관 카드 3개 ── */}
-        <ScrollReveal delay={ 0.05 }>
-          <Box sx={{ mb: { xs: 8, md: 10 } }}>
-            <Typography
-              sx={{
-                fontSize: '0.75rem',
-                fontWeight: 600,
-                color: 'var(--color-text-muted)',
-                letterSpacing: '0.18em',
-                textTransform: 'uppercase',
-                mb: 4,
-              }}
-            >
-              Core Values
-            </Typography>
-            <Grid container spacing={ 2 }>
-              { VALUES.map(({ num, title, desc }) => (
-                <Grid key={ num } size={{ xs: 12, sm: 4 }}>
-                  <Box
+                    My Story
+                  </Typography>
+                  <Typography
                     sx={{
-                      p: { xs: 3, md: 4 },
-                      borderRadius: 2,
-                      height: '100%',
-                      boxShadow: '0 2px 12px rgba(0,0,0,0.07)',
-                      transition: 'box-shadow 0.25s ease, transform 0.25s ease',
+                      fontSize: { xs: '1rem', md: '1.05rem' },
+                      color: 'var(--color-text-secondary)',
+                      lineHeight: 2,
+                      mb: 3,
+                    }}
+                  >
+                    { storySummary }
+                  </Typography>
+                  <Button
+                    onClick={ () => navigate('/about') }
+                    variant='outlined'
+                    size='small'
+                    sx={{
+                      borderColor: 'var(--color-primary)',
+                      color: 'var(--color-primary)',
+                      fontWeight: 600,
+                      px: 2.5,
                       '&:hover': {
-                        boxShadow: '0 8px 28px rgba(0,0,0,0.14)',
-                        transform: 'translateY(-3px)',
+                        backgroundColor: 'rgba(255,0,0,0.06)',
+                        borderColor: 'var(--color-primary)',
                       },
                     }}
                   >
-                    <Typography
-                      sx={{
-                        fontSize: { xs: '1.4rem', md: '1.6rem' },
-                        fontWeight: 700,
-                        color: 'var(--color-text-primary)',
-                        mb: 1.5,
-                      }}
-                    >
-                      { title }
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: '0.88rem',
-                        color: 'var(--color-text-secondary)',
-                        lineHeight: 1.8,
-                      }}
-                    >
-                      { desc }
-                    </Typography>
-                  </Box>
-                </Grid>
-              )) }
-            </Grid>
-          </Box>
-        </ScrollReveal>
-
-        {/* ── ④ 관심사 태그 ── */}
-        <ScrollReveal delay={ 0.05 }>
-          <Box>
-            <Typography
-              sx={{
-                fontSize: '0.75rem',
-                fontWeight: 600,
-                color: 'var(--color-text-muted)',
-                letterSpacing: '0.18em',
-                textTransform: 'uppercase',
-                mb: 2.5,
-              }}
-            >
-              Interests
-            </Typography>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5 }}>
-              { TAGS.map((tag) => (
-                <Box
-                  key={ tag }
-                  sx={{
-                    px: 2.5,
-                    py: 1,
-                    borderRadius: '999px',
-                    fontSize: { xs: '0.85rem', md: '0.9rem' },
-                    color: 'var(--color-text-secondary)',
-                    backgroundColor: 'var(--color-bg-secondary)',
-                    cursor: 'default',
-                    transition: 'all 0.2s ease',
-                    '&:hover': {
-                      color: 'var(--color-primary)',
-                      backgroundColor: 'rgba(255,0,0,0.05)',
-                    },
-                  }}
-                >
-                  { tag }
+                    더 알아보기 →
+                  </Button>
                 </Box>
-              )) }
+              </ScrollReveal>
+
+
+              {/* CORE VALUES */}
+              <ScrollReveal delay={ 0.12 }>
+                <Box>
+                  <Typography
+                    sx={{
+                      fontSize: '0.75rem',
+                      fontWeight: 600,
+                      color: 'var(--color-text-muted)',
+                      letterSpacing: '0.18em',
+                      textTransform: 'uppercase',
+                      mb: 4,
+                    }}
+                  >
+                    Core Values
+                  </Typography>
+                  <Grid container spacing={ 2 }>
+                    { VALUES.map(({ num, title, desc }) => (
+                      <Grid key={ num } size={{ xs: 12, sm: 4 }}>
+                        <Box
+                          sx={{
+                            p: { xs: 3, md: 3.5 },
+                            borderRadius: 2,
+                            height: '100%',
+                            boxShadow: '0 2px 12px rgba(0,0,0,0.07)',
+                            transition: 'box-shadow 0.25s ease, transform 0.25s ease',
+                            '&:hover': {
+                              boxShadow: '0 8px 28px rgba(0,0,0,0.14)',
+                              transform: 'translateY(-3px)',
+                            },
+                          }}
+                        >
+                          <Typography
+                            sx={{
+                              fontSize: { xs: '1.3rem', md: '1.5rem' },
+                              fontWeight: 700,
+                              color: 'var(--color-text-primary)',
+                              mb: 1.5,
+                            }}
+                          >
+                            { title }
+                          </Typography>
+                          <Typography
+                            sx={{
+                              fontSize: '0.88rem',
+                              color: 'var(--color-text-secondary)',
+                              lineHeight: 1.8,
+                            }}
+                          >
+                            { desc }
+                          </Typography>
+                        </Box>
+                      </Grid>
+                    )) }
+                  </Grid>
+                </Box>
+              </ScrollReveal>
+
+
+              {/* INTERESTS */}
+              <ScrollReveal delay={ 0.14 }>
+                <Box>
+                  <Typography
+                    sx={{
+                      fontSize: '0.75rem',
+                      fontWeight: 600,
+                      color: 'var(--color-text-muted)',
+                      letterSpacing: '0.18em',
+                      textTransform: 'uppercase',
+                      mb: 2.5,
+                    }}
+                  >
+                    Interests
+                  </Typography>
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5 }}>
+                    { TAGS.map((tag) => (
+                      <Box
+                        key={ tag }
+                        sx={{
+                          px: 2.5,
+                          py: 1,
+                          borderRadius: '999px',
+                          fontSize: { xs: '0.85rem', md: '0.9rem' },
+                          color: 'var(--color-text-secondary)',
+                          backgroundColor: 'var(--color-bg-secondary)',
+                          cursor: 'default',
+                          transition: 'all 0.2s ease',
+                          '&:hover': {
+                            color: 'var(--color-primary)',
+                            backgroundColor: 'rgba(255,0,0,0.05)',
+                          },
+                        }}
+                      >
+                        { tag }
+                      </Box>
+                    )) }
+                  </Box>
+                </Box>
+              </ScrollReveal>
+
             </Box>
-          </Box>
-        </ScrollReveal>
+          </Grid>
+
+        </Grid>
 
       </Container>
     </Box>
