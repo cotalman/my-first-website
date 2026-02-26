@@ -6,6 +6,7 @@ import Navigation from './components/common/navigation';
 import ScrollToTop from './components/ui/scroll-to-top';
 import { PortfolioProvider } from './context/PortfolioContext';
 import AboutPage from './pages/about-page';
+import AdminPage from './pages/admin-page';
 import HomePage from './pages/home-page';
 import ProjectsPage from './pages/projects-page';
 import theme from './theme';
@@ -23,6 +24,7 @@ function App() {
               <Route path='/' element={ <HomePage /> } />
               <Route path='/about' element={ <AboutPage /> } />
               <Route path='/projects' element={ <ProjectsPage /> } />
+              <Route path='/admin' element={ <AdminPage /> } />
             </Routes>
           </main>
           <Footer />

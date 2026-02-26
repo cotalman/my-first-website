@@ -51,7 +51,7 @@ function ProjectsPage() {
         py: { xs: 10, md: 14 },
       }}
     >
-      <Container maxWidth='lg'>
+      <Container maxWidth={false} sx={{ maxWidth: '1600px', mx: 'auto' }}>
 
         {/* 페이지 헤더 */}
         <Box sx={{ mb: { xs: 6, md: 8 } }}>

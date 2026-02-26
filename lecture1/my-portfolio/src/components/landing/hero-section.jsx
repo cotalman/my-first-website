@@ -394,8 +394,10 @@ function HeroSection() {
             메인 컨텐츠
         ══════════════════════════════════════ */}
         <Container
-          maxWidth='lg'
+          maxWidth={false}
           sx={{
+            maxWidth: '1600px',
+            mx: 'auto',
             position: 'relative',
             zIndex: 1,
             py: { xs: 10, sm: 12, md: 0 },

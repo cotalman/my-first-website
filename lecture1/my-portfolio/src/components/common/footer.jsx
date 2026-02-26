@@ -25,7 +25,7 @@ function Footer() {
         py: { xs: 4, md: 5 },
       }}
     >
-      <Container maxWidth='lg'>
+      <Container maxWidth={false} sx={{ maxWidth: '1600px', mx: 'auto' }}>
         <Box
           sx={{
             display: 'flex',

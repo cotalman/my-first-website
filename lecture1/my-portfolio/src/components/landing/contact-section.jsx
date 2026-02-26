@@ -58,7 +58,7 @@ function ContactSection() {
         py: { xs: 8, md: 12 },
       }}
     >
-      <Container maxWidth='lg'>
+      <Container maxWidth={false} sx={{ maxWidth: '1600px', mx: 'auto' }}>
 
         {/* 섹션 헤더 */}
         <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 8 } }}>

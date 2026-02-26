@@ -60,54 +60,64 @@ const SkillCard = memo(function SkillCard({ skill }) {
   return (
     <Box
       sx={{
-        p: { xs: 3, md: 3.5 },
+        p: { xs: 2.5, md: 3 },
         borderRadius: 2,
         backgroundColor: '#FFFFFF',
         height: '100%',
         cursor: 'default',
         boxShadow: '0 2px 12px rgba(0,0,0,0.07)',
         transition: 'box-shadow 0.35s ease, transform 0.35s ease',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 2.5,
         '&:hover': {
           boxShadow: '0 8px 32px rgba(0,0,0,0.14)',
           transform: 'translateY(-4px)',
         },
       }}
     >
-      {/* 상단: 아이콘 배지 + 카테고리 태그 */}
+      {/* 아이콘 배지 */}
       <Box
         sx={{
+          width: { xs: 64, md: 72 },
+          height: { xs: 64, md: 72 },
+          borderRadius: 2,
+          backgroundColor: bgColor,
           display: 'flex',
-          alignItems: 'flex-start',
-          justifyContent: 'space-between',
-          mb: 3,
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: accentColor,
+          fontSize: abbr?.length > 2 ? '1rem' : '1.4rem',
+          fontWeight: 800,
+          letterSpacing: abbr?.length > 2 ? '0' : '-0.02em',
+          fontFamily: 'monospace',
+          flexShrink: 0,
         }}
       >
-        {/* 아이콘 배지 */}
-        <Box
+        { abbr }
+      </Box>
+
+      {/* 텍스트 영역 */}
+      <Box>
+        {/* 툴 이름 */}
+        <Typography
           sx={{
-            width: 52,
-            height: 52,
-            borderRadius: 1.5,
-            backgroundColor: bgColor,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: accentColor,
-            fontSize: abbr?.length > 2 ? '0.7rem' : '0.9rem',
-            fontWeight: 800,
-            letterSpacing: abbr?.length > 2 ? '0' : '-0.02em',
-            fontFamily: 'monospace',
-            flexShrink: 0,
+            fontSize: { xs: '1.05rem', md: '1.15rem' },
+            fontWeight: 700,
+            color: 'var(--color-text-primary)',
+            letterSpacing: '-0.01em',
+            mb: 0.75,
           }}
         >
-          { abbr }
-        </Box>
+          { name }
+        </Typography>
 
         {/* 카테고리 태그 */}
         <Box
           sx={{
+            display: 'inline-block',
             px: 1.5,
-            py: 0.5,
+            py: 0.4,
             borderRadius: '999px',
             backgroundColor: 'var(--color-bg-secondary)',
             border: '1px solid var(--color-border)',
@@ -121,18 +131,6 @@ const SkillCard = memo(function SkillCard({ skill }) {
           { category }
         </Box>
       </Box>
-
-      {/* 툴 이름 */}
-      <Typography
-        sx={{
-          fontSize: { xs: '1.1rem', md: '1.15rem' },
-          fontWeight: 700,
-          color: 'var(--color-text-primary)',
-          letterSpacing: '-0.01em',
-        }}
-      >
-        { name }
-      </Typography>
     </Box>
   );
 });
@@ -159,7 +157,7 @@ function SkillSection() {
       if (!el) return;
       const sectionTop = el.getBoundingClientRect().top + window.scrollY;
       const relativeScroll = window.scrollY - sectionTop;
-      setParallax(relativeScroll * 0.18);
+      setParallax(relativeScroll * 0.45);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
@@ -212,46 +210,40 @@ function SkillSection() {
         />
       </Box>
 
-      <Container maxWidth='lg' sx={{ position: 'relative', zIndex: 1 }}>
+      <Container maxWidth={false} sx={{ maxWidth: '1600px', mx: 'auto', position: 'relative', zIndex: 1 }}>
 
         {/* 섹션 헤더 */}
         <ScrollReveal>
           <Box
             sx={{
-              display: 'flex',
-              alignItems: 'flex-end',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-              gap: 2,
+              textAlign: 'center',
               mb: { xs: 8, md: 10 },
             }}
           >
-            <Box>
-              <Typography
-                sx={{
-                  fontSize: { xs: '0.75rem', md: '0.8rem' },
-                  fontWeight: 600,
-                  color: 'var(--color-primary)',
-                  letterSpacing: '0.2em',
-                  textTransform: 'uppercase',
-                  mb: 2,
-                }}
-              >
-                Skills
-              </Typography>
-              <Typography
-                variant='h2'
-                sx={{
-                  fontSize: { xs: '1.8rem', md: '2.4rem' },
-                  fontWeight: 800,
-                  color: '#FFFFFF',
-                  letterSpacing: '-0.02em',
-                  lineHeight: 1.2,
-                }}
-              >
-                사용하는 도구들
-              </Typography>
-            </Box>
+            <Typography
+              sx={{
+                fontSize: { xs: '0.75rem', md: '0.8rem' },
+                fontWeight: 600,
+                color: 'var(--color-primary)',
+                letterSpacing: '0.2em',
+                textTransform: 'uppercase',
+                mb: 2,
+              }}
+            >
+              Skills
+            </Typography>
+            <Typography
+              variant='h2'
+              sx={{
+                fontSize: { xs: '1.8rem', md: '2.4rem' },
+                fontWeight: 800,
+                color: '#FFFFFF',
+                letterSpacing: '-0.02em',
+                lineHeight: 1.2,
+              }}
+            >
+              사용하는 도구들
+            </Typography>
           </Box>
         </ScrollReveal>
 

@@ -136,25 +136,6 @@ function ProjectCard({ project }) {
           { description }
         </Typography>
 
-        {/* 기술 스택 뱃지 */}
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75 }}>
-          { tech_stack.map((tech) => (
-            <Chip
-              key={ tech }
-              label={ tech }
-              size='small'
-              sx={{
-                fontSize: '0.7rem',
-                height: 24,
-                backgroundColor: 'rgba(255,0,0,0.08)',
-                color: 'var(--color-primary)',
-                border: '1px solid rgba(255,0,0,0.2)',
-                fontWeight: 600,
-              }}
-            />
-          )) }
-        </Box>
-
         {/* 작업기간 */}
         { work_period && (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>

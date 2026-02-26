@@ -133,7 +133,7 @@ function Navigation() {
           }}
         />
 
-        <Container maxWidth='lg'>
+        <Container maxWidth={false} sx={{ maxWidth: '1600px', mx: 'auto' }}>
           <Toolbar disableGutters sx={{ justifyContent: 'space-between', height: 64 }}>
 
             {/* 로고 */}
@@ -155,7 +155,7 @@ function Navigation() {
 
             {/* 데스크톱 메뉴 */}
             { !isMobile && (
-              <Box sx={{ display: 'flex', gap: 0.5 }}>
+              <Box sx={{ display: 'flex', gap: 0.5, alignItems: 'center' }}>
                 { NAV_ITEMS.map((item) => {
                   const isActive = isHomePage && activeSection === item.sectionId;
                   return (
@@ -199,6 +199,32 @@ function Navigation() {
                     </Button>
                   );
                 }) }
+
+                {/* 관리 페이지 링크 */}
+                <Button
+                  component={ Link }
+                  to='/admin'
+                  sx={{
+                    ml: 1,
+                    color: isLight ? '#555555' : 'rgba(255,255,255,0.55)',
+                    fontSize: '0.875rem',
+                    fontWeight: 400,
+                    px: 1.5,
+                    py: 0.75,
+                    borderRadius: 1,
+                    minWidth: 'unset',
+                    border: '1px solid',
+                    borderColor: isLight ? 'rgba(0,0,0,0.15)' : 'rgba(255,255,255,0.2)',
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      color: isLight ? '#1A1A1A' : '#FFFFFF',
+                      borderColor: isLight ? 'rgba(0,0,0,0.4)' : 'rgba(255,255,255,0.5)',
+                      backgroundColor: isLight ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.06)',
+                    },
+                  }}
+                >
+                  관리
+                </Button>
               </Box>
             ) }
 
@@ -298,6 +324,41 @@ function Navigation() {
               </ListItemButton>
             );
           }) }
+
+          {/* 관리 페이지 */}
+          <ListItemButton
+            component={ Link }
+            to='/admin'
+            onClick={ () => setDrawerOpen(false) }
+            sx={{
+              px: 2.5,
+              py: 1.5,
+              mt: 1,
+              borderTop: '1px solid rgba(255,255,255,0.07)',
+              '&:hover': { backgroundColor: 'rgba(255,255,255,0.05)' },
+            }}
+          >
+            <Box
+              sx={{
+                width: 2,
+                height: 18,
+                backgroundColor: 'transparent',
+                borderRadius: 1,
+                mr: 2,
+                flexShrink: 0,
+              }}
+            />
+            <ListItemText
+              primary='관리'
+              primaryTypographyProps={{
+                sx: {
+                  color: 'rgba(255,255,255,0.4)',
+                  fontWeight: 400,
+                  fontSize: '0.95rem',
+                },
+              }}
+            />
+          </ListItemButton>
         </List>
       </Drawer>
     </>

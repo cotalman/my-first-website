@@ -88,7 +88,7 @@ function AboutSection() {
         py: { xs: 10, md: 14 },
       }}
     >
-      <Container maxWidth='lg'>
+      <Container maxWidth={false} sx={{ maxWidth: '1600px', mx: 'auto' }}>
 
         {/* 섹션 레이블 */}
         <ScrollReveal>

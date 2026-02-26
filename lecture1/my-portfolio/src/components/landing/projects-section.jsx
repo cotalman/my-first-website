@@ -48,7 +48,7 @@ function ProjectsSection() {
         py: { xs: 8, md: 12 },
       }}
     >
-      <Container maxWidth='lg'>
+      <Container maxWidth={false} sx={{ maxWidth: '1600px', mx: 'auto' }}>
         {/* 섹션 헤더 */}
         <Box sx={{ textAlign: 'center', mb: { xs: 5, md: 7 } }}>
           <Typography
