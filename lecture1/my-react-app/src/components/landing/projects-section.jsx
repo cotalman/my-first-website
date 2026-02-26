@@ -25,7 +25,7 @@ const PROJECTS = [
     statusColor: '#4ade80',
     techs: ['React', 'MUI v7', 'Vite', 'React Router'],
     github: 'https://github.com',
-    demo: 'https://github.com',
+    demo: 'https://my-first-website-x17r.vercel.app/',
   },
   {
     id: 'ui-gallery',
