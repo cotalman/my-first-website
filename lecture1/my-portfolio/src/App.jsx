@@ -16,7 +16,7 @@ function App() {
     <PortfolioProvider>
       <ThemeProvider theme={ theme }>
         <CssBaseline />
-        <Router basename='/my-first-website'>
+        <Router>
           <Navigation />
           <ScrollToTop />
           <main>
