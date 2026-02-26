@@ -62,7 +62,7 @@ const SkillCard = memo(function SkillCard({ skill }) {
       sx={{
         p: { xs: 2.5, md: 3 },
         borderRadius: 2,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: 'var(--color-bg-primary)',
         height: '100%',
         cursor: 'default',
         boxShadow: '0 2px 12px rgba(0,0,0,0.07)',

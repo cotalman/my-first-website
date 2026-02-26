@@ -1,5 +1,7 @@
 import CloseIcon from '@mui/icons-material/Close';
+import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 import MenuIcon from '@mui/icons-material/Menu';
+import WbSunnyRoundedIcon from '@mui/icons-material/WbSunnyRounded';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -14,6 +16,7 @@ import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useThemeMode } from '../../context/ThemeContext';
 
 /** 섹션 id로 부드럽게 스크롤 이동 */
 const scrollToSection = (id) => {
@@ -45,10 +48,73 @@ const NAV_ITEMS = [
  * Example usage:
  * <Navigation />
  */
+/**
+ * ThemeToggle 컴포넌트 — 해/달 슬라이딩 pill 토글
+ *
+ * Props:
+ * @param {boolean} isDark - 현재 다크 모드 여부 [Required]
+ * @param {function} onToggle - 클릭 핸들러 [Required]
+ *
+ * Example usage:
+ * <ThemeToggle isDark={true} onToggle={toggle} />
+ */
+function ThemeToggle({ isDark, onToggle }) {
+  return (
+    <Box
+      onClick={onToggle}
+      role='button'
+      aria-label={isDark ? '라이트 모드로 전환' : '다크 모드로 전환'}
+      sx={{
+        ml: 1.5,
+        width: 52,
+        height: 26,
+        borderRadius: '13px',
+        background: isDark ? 'rgba(255,51,51,0.18)' : 'rgba(251,191,36,0.18)',
+        border: `1px solid ${isDark ? 'rgba(255,51,51,0.38)' : 'rgba(251,191,36,0.50)'}`,
+        cursor: 'pointer',
+        position: 'relative',
+        flexShrink: 0,
+        transition: 'background 0.35s ease, border-color 0.35s ease',
+        '&:hover': {
+          background: isDark ? 'rgba(255,51,51,0.28)' : 'rgba(251,191,36,0.28)',
+        },
+      }}
+    >
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 2,
+          left: isDark ? 2 : 26,
+          width: 20,
+          height: 20,
+          borderRadius: '50%',
+          background: isDark
+            ? 'linear-gradient(135deg, #ff3333, #cc0000)'
+            : 'linear-gradient(135deg, #fbbf24, #f59e0b)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          transition: 'left 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.35s ease',
+          boxShadow: isDark
+            ? '0 2px 8px rgba(255,51,51,0.5)'
+            : '0 2px 8px rgba(251,191,36,0.5)',
+        }}
+      >
+        {isDark ? (
+          <DarkModeRoundedIcon sx={{ fontSize: 11, color: '#fff' }} />
+        ) : (
+          <WbSunnyRoundedIcon sx={{ fontSize: 11, color: '#fff' }} />
+        )}
+      </Box>
+    </Box>
+  );
+}
+
 function Navigation() {
   const location = useLocation();
   const navigate = useNavigate();
   const isMobile = useMediaQuery('(max-width:767px)');
+  const { isDark, toggleTheme } = useThemeMode();
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -102,8 +168,8 @@ function Navigation() {
   };
 
   const isHomePage = location.pathname === '/';
-  // 서브 페이지이거나 스크롤된 경우 라이트 스타일 적용
-  const isLight = !isHomePage || isScrolled;
+  // 서브 페이지이거나 스크롤된 경우 배경 적용
+  const hasBackground = !isHomePage || isScrolled;
 
   return (
     <>
@@ -112,11 +178,11 @@ function Navigation() {
         elevation={0}
         sx={{
           transition: 'background-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease',
-          backgroundColor: isLight ? 'rgba(255,255,255,0.80)' : 'transparent',
-          backdropFilter: isLight ? 'blur(16px)' : 'none',
-          WebkitBackdropFilter: isLight ? 'blur(16px)' : 'none',
-          borderBottom: isLight ? '1px solid rgba(0,0,0,0.07)' : 'none',
-          boxShadow: isLight ? '0 2px 12px rgba(0,0,0,0.06)' : 'none',
+          backgroundColor: hasBackground ? 'var(--nav-bg-scrolled)' : 'transparent',
+          backdropFilter: hasBackground ? 'blur(16px)' : 'none',
+          WebkitBackdropFilter: hasBackground ? 'blur(16px)' : 'none',
+          borderBottom: hasBackground ? '1px solid var(--nav-border-scrolled)' : 'none',
+          boxShadow: hasBackground ? 'var(--nav-shadow-scrolled)' : 'none',
         }}
       >
         {/* 읽기 진행률 바 */}
@@ -144,7 +210,7 @@ function Navigation() {
               sx={{
                 fontWeight: 700,
                 fontSize: '1.2rem',
-                color: isLight ? '#1A1A1A' : '#FFFFFF',
+                color: hasBackground ? 'var(--color-text-primary)' : '#FFFFFF',
                 textDecoration: 'none',
                 letterSpacing: '-0.5px',
                 transition: 'color 0.3s ease',
@@ -163,8 +229,8 @@ function Navigation() {
                       key={ item.label }
                       onClick={ () => handleNavClick(item.sectionId) }
                       sx={{
-                        color: isLight
-                          ? (isActive ? '#1A1A1A' : '#555555')
+                        color: hasBackground
+                          ? (isActive ? 'var(--color-text-primary)' : 'var(--color-text-secondary)')
                           : (isActive ? '#FFFFFF' : 'rgba(255,255,255,0.55)'),
                         fontWeight: isActive ? 600 : 400,
                         fontSize: '0.875rem',
@@ -189,8 +255,8 @@ function Navigation() {
                           borderRadius: '1px',
                         },
                         '&:hover': {
-                          color: isLight ? '#1A1A1A' : '#FFFFFF',
-                          backgroundColor: isLight ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.06)',
+                          color: hasBackground ? 'var(--color-text-primary)' : '#FFFFFF',
+                          backgroundColor: hasBackground ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.06)',
                           '&::after': { transform: 'translateX(-50%) scaleX(1)' },
                         },
                       }}
@@ -200,13 +266,16 @@ function Navigation() {
                   );
                 }) }
 
+                {/* 다크모드 토글 */}
+                <ThemeToggle isDark={isDark} onToggle={toggleTheme} />
+
                 {/* 관리 페이지 링크 */}
                 <Button
                   component={ Link }
                   to='/admin'
                   sx={{
                     ml: 1,
-                    color: isLight ? '#555555' : 'rgba(255,255,255,0.55)',
+                    color: hasBackground ? 'var(--color-text-secondary)' : 'rgba(255,255,255,0.55)',
                     fontSize: '0.875rem',
                     fontWeight: 400,
                     px: 1.5,
@@ -214,12 +283,12 @@ function Navigation() {
                     borderRadius: 1,
                     minWidth: 'unset',
                     border: '1px solid',
-                    borderColor: isLight ? 'rgba(0,0,0,0.15)' : 'rgba(255,255,255,0.2)',
+                    borderColor: hasBackground ? 'var(--color-border)' : 'rgba(255,255,255,0.2)',
                     transition: 'all 0.3s ease',
                     '&:hover': {
-                      color: isLight ? '#1A1A1A' : '#FFFFFF',
-                      borderColor: isLight ? 'rgba(0,0,0,0.4)' : 'rgba(255,255,255,0.5)',
-                      backgroundColor: isLight ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.06)',
+                      color: hasBackground ? 'var(--color-text-primary)' : '#FFFFFF',
+                      borderColor: hasBackground ? 'var(--color-text-secondary)' : 'rgba(255,255,255,0.5)',
+                      backgroundColor: hasBackground ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.06)',
                     },
                   }}
                 >
@@ -230,13 +299,16 @@ function Navigation() {
 
             {/* 모바일 햄버거 버튼 */}
             { isMobile && (
-              <IconButton
-                onClick={ () => setDrawerOpen(true) }
-                sx={{ color: isLight ? '#1A1A1A' : '#FFFFFF', transition: 'color 0.3s ease' }}
-                aria-label='메뉴 열기'
-              >
-                <MenuIcon />
-              </IconButton>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <ThemeToggle isDark={isDark} onToggle={toggleTheme} />
+                <IconButton
+                  onClick={ () => setDrawerOpen(true) }
+                  sx={{ color: hasBackground ? 'var(--color-text-primary)' : '#FFFFFF', transition: 'color 0.3s ease' }}
+                  aria-label='메뉴 열기'
+                >
+                  <MenuIcon />
+                </IconButton>
+              </Box>
             ) }
 
           </Toolbar>

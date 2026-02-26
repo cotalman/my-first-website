@@ -19,8 +19,9 @@ html, body {
   flex-direction: column;
 }
 
-/* CSS 변수 정의 - Welstory 컬러 팔레트 */
-:root {
+/* CSS 변수 정의 - Welstory 컬러 팔레트 (라이트 기본) */
+:root,
+:root[data-theme='light'] {
   /* Primary Colors */
   --color-primary: #ff0000;
   --color-primary-light: #ff4444;
@@ -48,4 +49,56 @@ html, body {
   /* Border & Divider */
   --color-border: #E0E0E0;
   --color-divider: #CCCCCC;
+
+  /* Nav */
+  --nav-bg-scrolled: rgba(255, 255, 255, 0.80);
+  --nav-border-scrolled: rgba(0, 0, 0, 0.07);
+  --nav-shadow-scrolled: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* =============================================
+   다크 테마 CSS 변수
+   ============================================= */
+:root[data-theme='dark'] {
+  /* Primary - 레드 계열 유지 */
+  --color-primary: #ff3333;
+  --color-primary-light: #ff6666;
+  --color-primary-dark: #cc0000;
+
+  /* Secondary */
+  --color-secondary: #0a0a0a;
+  --color-accent: #2B3A2E;
+
+  /* Background */
+  --color-bg-primary: #111111;
+  --color-bg-secondary: #1a1a1a;
+
+  /* Text */
+  --color-text-primary: #f0f0f0;
+  --color-text-secondary: #a0a0a0;
+  --color-text-muted: #666666;
+
+  /* Interactive */
+  --color-button-primary: #ff3333;
+  --color-button-hover: #cc0000;
+  --color-link: #ff3333;
+  --color-link-hover: #ff6666;
+
+  /* Border & Divider */
+  --color-border: #2a2a2a;
+  --color-divider: #333333;
+
+  /* Nav */
+  --nav-bg-scrolled: rgba(10, 10, 10, 0.88);
+  --nav-border-scrolled: rgba(255, 255, 255, 0.07);
+  --nav-shadow-scrolled: 0 2px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* 테마 전환 색상 애니메이션 */
+html {
+  transition: background-color 0.35s ease;
+}
+
+body {
+  transition: background-color 0.35s ease, color 0.35s ease;
 }
