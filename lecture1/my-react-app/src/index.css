@@ -21,3 +21,73 @@ html, body {
   display: flex;
   flex-direction: column;
 }
+
+/* =============================================
+   다크 테마 CSS 변수 (기본값)
+   ============================================= */
+:root,
+:root[data-theme='dark'] {
+  --hero-bg: linear-gradient(135deg, #0a0e1a 0%, #0f1b35 55%, #1a0a2e 100%);
+  --section-bg-a: linear-gradient(180deg, #0d111f 0%, #111827 100%);
+  --section-bg-b: linear-gradient(180deg, #111827 0%, #0d111f 100%);
+  --section-bg-c: linear-gradient(180deg, #0d111f 0%, #080c18 100%);
+
+  --nav-bg-scrolled: rgba(13, 17, 31, 0.92);
+  --nav-border: rgba(255, 255, 255, 0.08);
+
+  --text-100: #f8fafc;
+  --text-65: rgba(248, 250, 252, 0.65);
+  --text-50: rgba(248, 250, 252, 0.50);
+  --text-42: rgba(248, 250, 252, 0.42);
+  --text-38: rgba(248, 250, 252, 0.38);
+  --text-25: rgba(248, 250, 252, 0.25);
+
+  --surface: rgba(255, 255, 255, 0.03);
+  --surface-hover: rgba(99, 102, 241, 0.10);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(129, 140, 248, 0.30);
+
+  --input-bg: rgba(255, 255, 255, 0.04);
+  --input-border: rgba(255, 255, 255, 0.12);
+  --input-text: rgba(248, 250, 252, 0.85);
+  --input-label: rgba(248, 250, 252, 0.40);
+}
+
+/* =============================================
+   라이트 테마 CSS 변수
+   ============================================= */
+:root[data-theme='light'] {
+  --hero-bg: linear-gradient(135deg, #e8ecf5 0%, #edf1fb 55%, #f0eaf8 100%);
+  --section-bg-a: linear-gradient(180deg, #f1f5fd 0%, #eef1f8 100%);
+  --section-bg-b: linear-gradient(180deg, #eef1f8 0%, #f1f5fd 100%);
+  --section-bg-c: linear-gradient(180deg, #f1f5fd 0%, #e8ecf5 100%);
+
+  --nav-bg-scrolled: rgba(240, 244, 255, 0.92);
+  --nav-border: rgba(0, 0, 0, 0.09);
+
+  --text-100: #0f172a;
+  --text-65: rgba(15, 23, 42, 0.65);
+  --text-50: rgba(15, 23, 42, 0.50);
+  --text-42: rgba(15, 23, 42, 0.42);
+  --text-38: rgba(15, 23, 42, 0.38);
+  --text-25: rgba(15, 23, 42, 0.25);
+
+  --surface: rgba(255, 255, 255, 0.70);
+  --surface-hover: rgba(99, 102, 241, 0.07);
+  --border: rgba(0, 0, 0, 0.09);
+  --border-hover: rgba(99, 102, 241, 0.35);
+
+  --input-bg: rgba(255, 255, 255, 0.80);
+  --input-border: rgba(0, 0, 0, 0.15);
+  --input-text: rgba(15, 23, 42, 0.85);
+  --input-label: rgba(15, 23, 42, 0.45);
+}
+
+/* 테마 전환 색상 애니메이션 */
+html {
+  transition: background-color 0.4s ease;
+}
+
+body {
+  transition: background-color 0.4s ease, color 0.4s ease;
+}

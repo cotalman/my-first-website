@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
+import useScrollAnimation from '../../hooks/use-scroll-animation';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
@@ -93,19 +94,23 @@ function ProjectCard({ project, animationDelay = 0, isVisible = false }) {
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        background: 'rgba(255,255,255,0.03)',
-        border: '1px solid rgba(255,255,255,0.08)',
+        background: 'var(--surface)',
+        border: '1px solid var(--border)',
         borderRadius: '16px',
         overflow: 'hidden',
         backdropFilter: 'blur(12px)',
         boxShadow: isHovered
           ? `0 24px 64px ${glowColor}, 0 0 0 1px rgba(255,255,255,0.12)`
           : '0 4px 24px rgba(0,0,0,0.3)',
-        transform: isHovered ? 'translateY(-8px)' : 'translateY(0)',
-        transition: 'all 0.35s ease',
+        transition: 'opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease',
         opacity: isVisible ? 1 : 0,
-        marginTop: isVisible ? '0' : '24px',
-        transitionDelay: `${animationDelay}s`,
+        transform: isHovered
+          ? 'translate3d(0, -8px, 0)'
+          : isVisible
+            ? 'translate3d(0, 0, 0)'
+            : 'translate3d(0, 48px, 0)',
+        transitionDelay: isHovered ? '0s' : `${animationDelay}s`,
+        willChange: 'transform, opacity',
       }}
     >
       {/* 그라데이션 헤더 */}
@@ -215,7 +220,7 @@ function ProjectCard({ project, animationDelay = 0, isVisible = false }) {
         <Typography
           component="h3"
           sx={{
-            color: '#f8fafc',
+            color: 'var(--text-100)',
             fontSize: '1.1rem',
             fontWeight: 700,
             letterSpacing: '-0.01em',
@@ -228,7 +233,7 @@ function ProjectCard({ project, animationDelay = 0, isVisible = false }) {
         {/* 설명 */}
         <Typography
           sx={{
-            color: 'rgba(248,250,252,0.5)',
+            color: 'var(--text-50)',
             fontSize: '0.88rem',
             lineHeight: 1.75,
             flexGrow: 1,
@@ -247,7 +252,7 @@ function ProjectCard({ project, animationDelay = 0, isVisible = false }) {
               sx={{
                 background: 'rgba(129,140,248,0.1)',
                 border: '1px solid rgba(129,140,248,0.2)',
-                color: 'rgba(248,250,252,0.65)',
+                color: 'var(--text-65)',
                 fontSize: '0.72rem',
                 fontWeight: 500,
               }}
@@ -259,7 +264,7 @@ function ProjectCard({ project, animationDelay = 0, isVisible = false }) {
         <Box
           sx={{
             height: '1px',
-            background: 'rgba(255,255,255,0.07)',
+            background: 'var(--border)',
           }}
         />
 
@@ -279,7 +284,7 @@ function ProjectCard({ project, animationDelay = 0, isVisible = false }) {
               fontWeight: 600,
               textTransform: 'none',
               fontSize: '0.82rem',
-              color: 'rgba(248,250,252,0.7)',
+              color: 'var(--text-65)',
               borderColor: 'rgba(255,255,255,0.15)',
               transition: 'all 0.2s ease',
               '&:hover': {
@@ -337,26 +342,7 @@ function ProjectCard({ project, animationDelay = 0, isVisible = false }) {
  * <ProjectsSection />
  */
 function ProjectsSection() {
-  const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1 },
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
+  const { ref: sectionRef, isVisible } = useScrollAnimation({ threshold: 0.12 });
 
   return (
     <Box
@@ -366,7 +352,8 @@ function ProjectsSection() {
       sx={{
         position: 'relative',
         width: '100%',
-        background: 'linear-gradient(180deg, #111827 0%, #0d111f 100%)',
+        background: 'var(--section-bg-b)',
+        transition: 'background 0.4s ease',
         py: { xs: 10, md: 14 },
         overflow: 'hidden',
       }}
@@ -394,8 +381,9 @@ function ProjectsSection() {
             textAlign: 'center',
             mb: { xs: 6, md: 8 },
             opacity: isVisible ? 1 : 0,
-            transform: isVisible ? 'translateY(0)' : 'translateY(24px)',
+            transform: isVisible ? 'translate3d(0, 0, 0)' : 'translate3d(0, -32px, 0)',
             transition: 'opacity 0.8s ease, transform 0.8s ease',
+            willChange: 'transform, opacity',
           }}
         >
           {/* 섹션 뱃지 */}
@@ -433,7 +421,7 @@ function ProjectsSection() {
               fontSize: { xs: '2rem', md: '2.8rem' },
               fontWeight: 800,
               lineHeight: 1.15,
-              color: '#f8fafc',
+              color: 'var(--text-100)',
               letterSpacing: '-0.02em',
               mb: 1.5,
             }}
@@ -453,7 +441,7 @@ function ProjectsSection() {
           </Typography>
           <Typography
             sx={{
-              color: 'rgba(248,250,252,0.42)',
+              color: 'var(--text-42)',
               fontSize: { xs: '0.9rem', md: '1rem' },
               lineHeight: 1.7,
             }}

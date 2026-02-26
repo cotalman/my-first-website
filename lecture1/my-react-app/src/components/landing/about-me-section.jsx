@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import useScrollAnimation from '../../hooks/use-scroll-animation';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
@@ -39,27 +39,7 @@ const STATS = [
  * <AboutMeSection />
  */
 function AboutMeSection() {
-  const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef(null);
-
-  // 뷰포트 진입 시 애니메이션 트리거
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1 },
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
+  const { ref: sectionRef, isVisible } = useScrollAnimation({ threshold: 0.12 });
 
   return (
     <Box
@@ -69,7 +49,8 @@ function AboutMeSection() {
       sx={{
         position: 'relative',
         width: '100%',
-        background: 'linear-gradient(180deg, #0d111f 0%, #111827 100%)',
+        background: 'var(--section-bg-a)',
+        transition: 'background 0.4s ease',
         py: { xs: 10, md: 14 },
         overflow: 'hidden',
       }}
@@ -115,8 +96,9 @@ function AboutMeSection() {
                 alignItems: 'center',
                 gap: 4,
                 opacity: isVisible ? 1 : 0,
-                transform: isVisible ? 'translateY(0)' : 'translateY(32px)',
-                transition: 'opacity 0.9s ease, transform 0.9s ease',
+                transform: isVisible ? 'translate3d(0, 0, 0)' : 'translate3d(-48px, 0, 0)',
+                transition: 'opacity 0.85s ease, transform 0.85s ease',
+                willChange: 'transform, opacity',
               }}
             >
               {/* 프로필 이미지 */}
@@ -177,7 +159,7 @@ function AboutMeSection() {
               <Box sx={{ textAlign: 'center' }}>
                 <Typography
                   sx={{
-                    color: '#f8fafc',
+                    color: 'var(--text-100)',
                     fontSize: { xs: '1.6rem', md: '1.8rem' },
                     fontWeight: 700,
                     letterSpacing: '-0.01em',
@@ -204,8 +186,8 @@ function AboutMeSection() {
                     gap: 0.5,
                   }}
                 >
-                  <LocationOnIcon sx={{ fontSize: 14, color: 'rgba(248,250,252,0.35)' }} />
-                  <Typography sx={{ color: 'rgba(248,250,252,0.35)', fontSize: '0.82rem' }}>
+                  <LocationOnIcon sx={{ fontSize: 14, color: 'var(--text-38)' }} />
+                  <Typography sx={{ color: 'var(--text-38)', fontSize: '0.82rem' }}>
                     서울, 대한민국
                   </Typography>
                 </Box>
@@ -242,7 +224,7 @@ function AboutMeSection() {
                     <Icon sx={{ fontSize: 20, color: '#818cf8', mb: 0.5 }} />
                     <Typography
                       sx={{
-                        color: '#f8fafc',
+                        color: 'var(--text-100)',
                         fontSize: '1.15rem',
                         fontWeight: 700,
                         lineHeight: 1,
@@ -253,7 +235,7 @@ function AboutMeSection() {
                     </Typography>
                     <Typography
                       sx={{
-                        color: 'rgba(248,250,252,0.4)',
+                        color: 'var(--text-42)',
                         fontSize: '0.7rem',
                         fontWeight: 500,
                       }}
@@ -271,8 +253,9 @@ function AboutMeSection() {
             <Box
               sx={{
                 opacity: isVisible ? 1 : 0,
-                transform: isVisible ? 'translateY(0)' : 'translateY(32px)',
-                transition: 'opacity 0.9s ease 0.2s, transform 0.9s ease 0.2s',
+                transform: isVisible ? 'translate3d(0, 0, 0)' : 'translate3d(48px, 0, 0)',
+                transition: 'opacity 0.85s ease 0.18s, transform 0.85s ease 0.18s',
+                willChange: 'transform, opacity',
               }}
             >
               {/* 섹션 뱃지 */}
@@ -309,7 +292,7 @@ function AboutMeSection() {
                   fontSize: { xs: '2rem', md: '2.6rem' },
                   fontWeight: 800,
                   lineHeight: 1.15,
-                  color: '#f8fafc',
+                  color: 'var(--text-100)',
                   letterSpacing: '-0.02em',
                   mb: 0.5,
                 }}
@@ -335,7 +318,7 @@ function AboutMeSection() {
               {/* 소개 본문 */}
               <Typography
                 sx={{
-                  color: 'rgba(248,250,252,0.65)',
+                  color: 'var(--text-65)',
                   fontSize: { xs: '0.95rem', md: '1.05rem' },
                   lineHeight: 1.9,
                   mb: 2,
@@ -346,7 +329,7 @@ function AboutMeSection() {
               </Typography>
               <Typography
                 sx={{
-                  color: 'rgba(248,250,252,0.42)',
+                  color: 'var(--text-42)',
                   fontSize: { xs: '0.88rem', md: '0.95rem' },
                   lineHeight: 1.9,
                   mb: 4,
@@ -370,7 +353,7 @@ function AboutMeSection() {
               {/* 기술 관심사 태그 */}
               <Typography
                 sx={{
-                  color: 'rgba(248,250,252,0.45)',
+                  color: 'var(--text-42)',
                   fontSize: '0.75rem',
                   fontWeight: 600,
                   letterSpacing: '0.1em',
@@ -395,7 +378,7 @@ function AboutMeSection() {
                     sx={{
                       background: 'rgba(99,102,241,0.1)',
                       border: '1px solid rgba(99,102,241,0.22)',
-                      color: 'rgba(248,250,252,0.7)',
+                      color: 'var(--text-65)',
                       fontSize: '0.8rem',
                       fontWeight: 500,
                       transition: 'all 0.2s ease',
@@ -448,8 +431,8 @@ function AboutMeSection() {
                     fontWeight: 600,
                     textTransform: 'none',
                     fontSize: '0.92rem',
-                    color: 'rgba(248,250,252,0.72)',
-                    borderColor: 'rgba(248,250,252,0.2)',
+                    color: 'var(--text-65)',
+                    borderColor: 'var(--border)',
                     transition: 'all 0.25s ease',
                     '&:hover': {
                       borderColor: '#818cf8',

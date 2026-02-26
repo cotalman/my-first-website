@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import useParallax from '../../hooks/use-parallax';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
@@ -10,10 +11,10 @@ import CodeIcon from '@mui/icons-material/Code';
 const TYPING_TEXTS = ['React Developer', 'UI/UX Designer', 'MUI Specialist', 'Code Craftsman'];
 
 const BLOBS = [
-  { size: 520, top: '-18%', left: '-8%', color: 'rgba(99, 102, 241, 0.14)', duration: 8 },
-  { size: 420, bottom: '-12%', right: '-6%', color: 'rgba(168, 85, 247, 0.11)', duration: 10 },
-  { size: 320, top: '35%', right: '3%', color: 'rgba(236, 72, 153, 0.08)', duration: 7 },
-  { size: 220, top: '18%', left: '28%', color: 'rgba(59, 130, 246, 0.09)', duration: 9 },
+  { size: 520, top: '-18%', left: '-8%', color: 'rgba(99, 102, 241, 0.14)', duration: 8, depth: 0.12 },
+  { size: 420, bottom: '-12%', right: '-6%', color: 'rgba(168, 85, 247, 0.11)', duration: 10, depth: 0.20 },
+  { size: 320, top: '35%', right: '3%', color: 'rgba(236, 72, 153, 0.08)', duration: 7, depth: 0.08 },
+  { size: 220, top: '18%', left: '28%', color: 'rgba(59, 130, 246, 0.09)', duration: 9, depth: 0.16 },
 ];
 
 const CODE_LINES = [
@@ -45,6 +46,7 @@ const CODE_LINES = [
  * <HeroSection />
  */
 function HeroSection() {
+  const scrollY = useParallax();
   const [displayText, setDisplayText] = useState('');
   const [textIndex, setTextIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
@@ -94,7 +96,8 @@ function HeroSection() {
         display: 'flex',
         alignItems: 'center',
         overflow: 'hidden',
-        background: 'linear-gradient(135deg, #0a0e1a 0%, #0f1b35 55%, #1a0a2e 100%)',
+        background: 'var(--hero-bg)',
+        transition: 'background 0.4s ease',
       }}
     >
       {/* 도트 그리드 패턴 오버레이 */}
@@ -108,30 +111,40 @@ function HeroSection() {
         }}
       />
 
-      {/* 발광 블롭 도형들 */}
+      {/* 발광 블롭 도형들 — outer: 패럴렉스, inner: float 애니메이션 */}
       {BLOBS.map((blob, i) => (
         <Box
           key={i}
+          style={{ '--py': `${scrollY * blob.depth}px` }}
           sx={{
             position: 'absolute',
-            width: blob.size,
-            height: blob.size,
-            borderRadius: '50%',
-            background: `radial-gradient(circle, ${blob.color} 0%, transparent 70%)`,
             top: blob.top,
             bottom: blob.bottom,
             left: blob.left,
             right: blob.right,
-            filter: 'blur(80px)',
+            width: blob.size,
+            height: blob.size,
+            transform: 'translate3d(0, var(--py), 0)',
+            willChange: 'transform',
             pointerEvents: 'none',
-            [`@keyframes blobFloat${i}`]: {
-              '0%, 100%': { transform: 'translate(0, 0) scale(1)' },
-              '33%': { transform: `translate(${10 + i * 4}px, -14px) scale(1.04)` },
-              '66%': { transform: `translate(-8px, ${9 + i * 3}px) scale(0.96)` },
-            },
-            animation: `blobFloat${i} ${blob.duration}s ease-in-out infinite`,
           }}
-        />
+        >
+          <Box
+            sx={{
+              width: '100%',
+              height: '100%',
+              borderRadius: '50%',
+              background: `radial-gradient(circle, ${blob.color} 0%, transparent 70%)`,
+              filter: 'blur(80px)',
+              [`@keyframes blobFloat${i}`]: {
+                '0%, 100%': { transform: 'translate(0, 0) scale(1)' },
+                '33%': { transform: `translate(${10 + i * 4}px, -14px) scale(1.04)` },
+                '66%': { transform: `translate(-8px, ${9 + i * 3}px) scale(0.96)` },
+              },
+              animation: `blobFloat${i} ${blob.duration}s ease-in-out infinite`,
+            }}
+          />
+        </Box>
       ))}
 
       {/* 메인 콘텐츠 */}
@@ -181,7 +194,7 @@ function HeroSection() {
                   fontSize: { xs: '2.6rem', sm: '3.4rem', md: '4.4rem' },
                   fontWeight: 800,
                   lineHeight: 1.1,
-                  color: '#f8fafc',
+                  color: 'var(--text-100)',
                   letterSpacing: '-0.02em',
                   mb: 0.5,
                 }}
@@ -218,7 +231,7 @@ function HeroSection() {
               >
                 <Typography
                   sx={{
-                    color: 'rgba(248,250,252,0.5)',
+                    color: 'var(--text-50)',
                     fontSize: { xs: '1rem', md: '1.2rem' },
                   }}
                 >
@@ -253,7 +266,7 @@ function HeroSection() {
                 </Box>
                 <Typography
                   sx={{
-                    color: 'rgba(248,250,252,0.5)',
+                    color: 'var(--text-50)',
                     fontSize: { xs: '1rem', md: '1.2rem' },
                     ml: 0.5,
                   }}
@@ -265,7 +278,7 @@ function HeroSection() {
               {/* 설명 */}
               <Typography
                 sx={{
-                  color: 'rgba(248,250,252,0.42)',
+                  color: 'var(--text-42)',
                   fontSize: { xs: '0.9rem', md: '1.02rem' },
                   lineHeight: 1.85,
                   mb: 4,
@@ -321,12 +334,12 @@ function HeroSection() {
                     fontWeight: 600,
                     textTransform: 'none',
                     fontSize: { xs: '0.9rem', md: '1rem' },
-                    color: 'rgba(248,250,252,0.72)',
-                    borderColor: 'rgba(248,250,252,0.2)',
+                    color: 'var(--text-65)',
+                    borderColor: 'var(--border)',
                     transition: 'all 0.25s ease',
                     '&:hover': {
-                      borderColor: 'rgba(248,250,252,0.4)',
-                      background: 'rgba(248,250,252,0.05)',
+                      borderColor: 'var(--border-hover)',
+                      background: 'var(--surface-hover)',
                       transform: 'translateY(-3px)',
                     },
                   }}
@@ -377,11 +390,11 @@ function HeroSection() {
             flexDirection: 'column',
             alignItems: 'center',
             gap: 0.5,
-            color: 'rgba(248,250,252,0.28)',
+            color: 'var(--text-25)',
             cursor: 'pointer',
             pointerEvents: 'auto',
             transition: 'color 0.2s ease',
-            '&:hover': { color: 'rgba(248,250,252,0.6)' },
+            '&:hover': { color: 'var(--text-65)' },
             '@keyframes scrollBounce': {
               '0%, 100%': { transform: 'translateY(0)' },
               '50%': { transform: 'translateY(8px)' },

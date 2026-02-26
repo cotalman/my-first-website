@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
+import useScrollAnimation from '../../hooks/use-scroll-animation';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
@@ -44,15 +45,15 @@ const CONTACT_ITEMS = [
   },
 ];
 
-/** 텍스트 필드 공통 sx — 다크 배경에 맞게 스타일 오버라이드 */
+/** 텍스트 필드 공통 sx — CSS 변수 기반으로 다크/라이트 모드 대응 */
 const textFieldSx = {
   '& .MuiOutlinedInput-root': {
-    color: 'rgba(248,250,252,0.85)',
+    color: 'var(--input-text)',
     fontSize: '0.92rem',
     borderRadius: '10px',
-    background: 'rgba(255,255,255,0.04)',
+    background: 'var(--input-bg)',
     '& fieldset': {
-      borderColor: 'rgba(255,255,255,0.12)',
+      borderColor: 'var(--input-border)',
     },
     '&:hover fieldset': {
       borderColor: 'rgba(129,140,248,0.5)',
@@ -63,7 +64,7 @@ const textFieldSx = {
     },
   },
   '& .MuiInputLabel-root': {
-    color: 'rgba(248,250,252,0.4)',
+    color: 'var(--input-label)',
     fontSize: '0.9rem',
     '&.Mui-focused': {
       color: '#818cf8',
@@ -96,8 +97,8 @@ function ContactItem({ item }) {
         gap: 2,
         p: 2,
         borderRadius: '12px',
-        border: '1px solid rgba(255,255,255,0.07)',
-        background: 'rgba(255,255,255,0.03)',
+        border: '1px solid var(--border)',
+        background: 'var(--surface)',
         transition: 'all 0.25s ease',
         cursor: href ? 'pointer' : 'default',
         textDecoration: 'none',
@@ -134,7 +135,7 @@ function ContactItem({ item }) {
       <Box>
         <Typography
           sx={{
-            color: 'rgba(248,250,252,0.38)',
+            color: 'var(--text-38)',
             fontSize: '0.72rem',
             fontWeight: 600,
             letterSpacing: '0.06em',
@@ -145,7 +146,7 @@ function ContactItem({ item }) {
         </Typography>
         <Typography
           sx={{
-            color: 'rgba(248,250,252,0.75)',
+            color: 'var(--text-65)',
             fontSize: '0.88rem',
             fontWeight: 500,
           }}
@@ -172,28 +173,9 @@ function ContactItem({ item }) {
  * <ContactSection />
  */
 function ContactSection() {
-  const [isVisible, setIsVisible] = useState(false);
+  const { ref: sectionRef, isVisible } = useScrollAnimation({ threshold: 0.12 });
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const sectionRef = useRef(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1 },
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -216,7 +198,8 @@ function ContactSection() {
       sx={{
         position: 'relative',
         width: '100%',
-        background: 'linear-gradient(180deg, #0d111f 0%, #080c18 100%)',
+        background: 'var(--section-bg-c)',
+        transition: 'background 0.4s ease',
         py: { xs: 10, md: 14 },
         overflow: 'hidden',
       }}
@@ -257,8 +240,9 @@ function ContactSection() {
             textAlign: 'center',
             mb: { xs: 6, md: 8 },
             opacity: isVisible ? 1 : 0,
-            transform: isVisible ? 'translateY(0)' : 'translateY(24px)',
+            transform: isVisible ? 'translate3d(0, 0, 0)' : 'translate3d(0, -32px, 0)',
             transition: 'opacity 0.8s ease, transform 0.8s ease',
+            willChange: 'transform, opacity',
           }}
         >
           <Box
@@ -294,7 +278,7 @@ function ContactSection() {
               fontSize: { xs: '2rem', md: '2.8rem' },
               fontWeight: 800,
               lineHeight: 1.15,
-              color: '#f8fafc',
+              color: 'var(--text-100)',
               letterSpacing: '-0.02em',
               mb: 1.5,
             }}
@@ -314,7 +298,7 @@ function ContactSection() {
           </Typography>
           <Typography
             sx={{
-              color: 'rgba(248,250,252,0.42)',
+              color: 'var(--text-42)',
               fontSize: { xs: '0.9rem', md: '1rem' },
               lineHeight: 1.7,
             }}
@@ -331,14 +315,15 @@ function ContactSection() {
             <Box
               sx={{
                 opacity: isVisible ? 1 : 0,
-                transform: isVisible ? 'translateY(0)' : 'translateY(32px)',
-                transition: 'opacity 0.9s ease 0.1s, transform 0.9s ease 0.1s',
+                transform: isVisible ? 'translate3d(0, 0, 0)' : 'translate3d(-48px, 0, 0)',
+                transition: 'opacity 0.85s ease 0.1s, transform 0.85s ease 0.1s',
+                willChange: 'transform, opacity',
               }}
             >
               <Typography
                 component="h3"
                 sx={{
-                  color: '#f8fafc',
+                  color: 'var(--text-100)',
                   fontSize: { xs: '1.4rem', md: '1.6rem' },
                   fontWeight: 700,
                   letterSpacing: '-0.01em',
@@ -351,7 +336,7 @@ function ContactSection() {
               </Typography>
               <Typography
                 sx={{
-                  color: 'rgba(248,250,252,0.45)',
+                  color: 'var(--text-42)',
                   fontSize: '0.9rem',
                   lineHeight: 1.8,
                   mb: 4,
@@ -412,12 +397,13 @@ function ContactSection() {
             <Box
               sx={{
                 opacity: isVisible ? 1 : 0,
-                transform: isVisible ? 'translateY(0)' : 'translateY(32px)',
-                transition: 'opacity 0.9s ease 0.25s, transform 0.9s ease 0.25s',
+                transform: isVisible ? 'translate3d(0, 0, 0)' : 'translate3d(48px, 0, 0)',
+                transition: 'opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s',
+                willChange: 'transform, opacity',
                 p: { xs: 3, md: 4 },
                 borderRadius: '20px',
-                background: 'rgba(255,255,255,0.03)',
-                border: '1px solid rgba(255,255,255,0.08)',
+                background: 'var(--surface)',
+                border: '1px solid var(--border)',
                 backdropFilter: 'blur(12px)',
               }}
             >
@@ -451,7 +437,7 @@ function ContactSection() {
                   </Box>
                   <Typography
                     sx={{
-                      color: '#f8fafc',
+                      color: 'var(--text-100)',
                       fontSize: '1.3rem',
                       fontWeight: 700,
                     }}
@@ -460,7 +446,7 @@ function ContactSection() {
                   </Typography>
                   <Typography
                     sx={{
-                      color: 'rgba(248,250,252,0.5)',
+                      color: 'var(--text-50)',
                       fontSize: '0.9rem',
                       lineHeight: 1.7,
                     }}
@@ -479,7 +465,7 @@ function ContactSection() {
                       borderRadius: '10px',
                       fontWeight: 600,
                       textTransform: 'none',
-                      color: 'rgba(248,250,252,0.7)',
+                      color: 'var(--text-65)',
                       borderColor: 'rgba(255,255,255,0.15)',
                       '&:hover': {
                         borderColor: '#818cf8',
