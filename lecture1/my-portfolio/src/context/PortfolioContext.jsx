@@ -1,6 +1,12 @@
 import { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import { supabase } from '../utils/supabase-client';
 
 const PortfolioContext = createContext();
+
+/** Supabase Storage 프로필 사진 공개 URL (파일 없으면 Avatar가 자동 fallback 처리) */
+const { data: { publicUrl: profilePhotoUrl } } = supabase.storage
+  .from('portfolio-profile')
+  .getPublicUrl('profile');
 
 const INITIAL_ABOUT_DATA = {
   basicInfo: {
@@ -8,7 +14,7 @@ const INITIAL_ABOUT_DATA = {
     education: '',
     major: 'IT계열',
     experience: '프론트엔드 개발 학습 중',
-    photo: localStorage.getItem('portfolio_photo') || '',
+    photo: profilePhotoUrl,
   },
   sections: [
     {

@@ -26,6 +26,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { supabase } from '../utils/supabase-client';
 import { usePortfolio } from '../context/PortfolioContext';
 
 /** 카테고리별 색상/스타일 설정 */
@@ -462,21 +463,30 @@ function AboutPage() {
     setSnackbar({ open: true, message });
   }, []);
 
-  /** 프로필 사진 선택 → URL.createObjectURL 로컬 미리보기 */
-  const handlePhotoChange = useCallback((e) => {
+  /** 프로필 사진 선택 → Supabase Storage 업로드 */
+  const handlePhotoChange = useCallback(async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const base64 = event.target.result;
-      localStorage.setItem('portfolio_photo', base64);
-      setAboutData((prev) => ({
-        ...prev,
-        basicInfo: { ...prev.basicInfo, photo: base64 },
-      }));
-      showSnackbar('프로필 사진이 업데이트되었습니다.');
-    };
-    reader.readAsDataURL(file);
+
+    const { error } = await supabase.storage
+      .from('portfolio-profile')
+      .upload('profile', file, { upsert: true });
+
+    if (error) {
+      showSnackbar('사진 업로드에 실패했습니다.');
+      return;
+    }
+
+    const { data: { publicUrl } } = supabase.storage
+      .from('portfolio-profile')
+      .getPublicUrl('profile');
+
+    const urlWithTimestamp = `${publicUrl}?t=${Date.now()}`;
+    setAboutData((prev) => ({
+      ...prev,
+      basicInfo: { ...prev.basicInfo, photo: urlWithTimestamp },
+    }));
+    showSnackbar('프로필 사진이 업데이트되었습니다.');
   }, [setAboutData, showSnackbar]);
 
   /** 새 스킬 추가 */
