@@ -215,19 +215,6 @@ function SectionTabPanel({ section, value, index, onContentChange }) {
               { section.content }
             </Typography>
           </Fade>
-          <Button
-            size='small'
-            startIcon={ <EditIcon sx={{ fontSize: '0.9rem' }} /> }
-            onClick={ () => { setDraft(section.content); setIsEditing(true); } }
-            sx={{
-              color: 'var(--color-text-muted)',
-              fontSize: '0.8rem',
-              '&:hover': { color: 'var(--color-primary)' },
-            }}
-            aria-label={ `${section.title} 수정` }
-          >
-            수정
-          </Button>
         </Box>
       ) }
     </Box>
@@ -721,28 +708,6 @@ function AboutPage() {
               </Typography>
             </Box>
 
-            <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-              <Button
-                startIcon={ <AddIcon /> }
-                onClick={ () => setAddDialogOpen(true) }
-                variant='outlined'
-                size='small'
-                sx={{
-                  height: 40,
-                  borderColor: 'var(--color-border)',
-                  color: 'var(--color-text-secondary)',
-                  fontWeight: 600,
-                  px: 2,
-                  '&:hover': {
-                    borderColor: 'var(--color-primary)',
-                    color: 'var(--color-primary)',
-                    backgroundColor: 'rgba(255,0,0,0.04)',
-                  },
-                }}
-              >
-                스킬 추가
-              </Button>
-            </Box>
           </Box>
 
           {/* 카테고리별 그룹 */}
