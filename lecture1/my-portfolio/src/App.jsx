@@ -1,6 +1,7 @@
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Route, BrowserRouter as Router, Routes, useLocation } from 'react-router-dom';
 import Footer from './components/common/footer';
 import Navigation from './components/common/navigation';
 import ScrollToTop from './components/ui/scroll-to-top';
@@ -12,6 +13,15 @@ import HomePage from './pages/home-page';
 import ProjectsPage from './pages/projects-page';
 import { darkTheme, lightTheme } from './theme';
 
+/** 라우트 변경 시 페이지 최상단으로 스크롤 */
+function ScrollToTopOnNavigate() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [pathname]);
+  return null;
+}
+
 function AppContent() {
   const { isDark } = useThemeMode();
 
@@ -19,6 +29,7 @@ function AppContent() {
     <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
       <CssBaseline />
       <Router basename={import.meta.env.BASE_URL}>
+        <ScrollToTopOnNavigate />
         <Navigation />
         <ScrollToTop />
         <main>
