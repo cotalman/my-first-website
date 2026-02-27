@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import AdminPasswordDialog from '../ui/admin-password-dialog';
 
 /** 섹션 id로 부드럽게 스크롤 이동 */
 const scrollToSection = (id) => {
@@ -54,6 +55,12 @@ function Navigation() {
   const [progress, setProgress] = useState(0);
   const [activeSection, setActiveSection] = useState('hero');
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [passwordDialogOpen, setPasswordDialogOpen] = useState(false);
+
+  const handleAdminClick = () => {
+    setDrawerOpen(false);
+    setPasswordDialogOpen(true);
+  };
 
   /** 스크롤 위치 감지 + 읽기 진행률 계산 */
   useEffect(() => {
@@ -202,8 +209,7 @@ function Navigation() {
 
                 {/* 관리 페이지 링크 */}
                 <Button
-                  component={ Link }
-                  to='/admin'
+                  onClick={ handleAdminClick }
                   sx={{
                     ml: 1,
                     color: hasBackground ? 'var(--color-text-secondary)' : 'rgba(255,255,255,0.55)',
@@ -242,6 +248,12 @@ function Navigation() {
           </Toolbar>
         </Container>
       </AppBar>
+
+      {/* 관리자 비밀번호 다이얼로그 */}
+      <AdminPasswordDialog
+        isOpen={ passwordDialogOpen }
+        onClose={ () => setPasswordDialogOpen(false) }
+      />
 
       {/* ── 모바일 사이드 Drawer ── */}
       <Drawer
@@ -327,9 +339,7 @@ function Navigation() {
 
           {/* 관리 페이지 */}
           <ListItemButton
-            component={ Link }
-            to='/admin'
-            onClick={ () => setDrawerOpen(false) }
+            onClick={ handleAdminClick }
             sx={{
               px: 2.5,
               py: 1.5,

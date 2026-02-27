@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { Route, BrowserRouter as Router, Routes, useLocation } from 'react-router-dom';
 import Footer from './components/common/footer';
 import Navigation from './components/common/navigation';
+import ProtectedAdminRoute from './components/common/protected-admin-route';
 import ScrollToTop from './components/ui/scroll-to-top';
 import { PortfolioProvider } from './context/PortfolioContext';
 import { useThemeMode } from './context/ThemeContext';
@@ -39,7 +40,7 @@ function AppContent() {
             <Route path='/' element={<HomePage />} />
             <Route path='/about' element={<AboutPage />} />
             <Route path='/projects' element={<ProjectsPage />} />
-            <Route path='/admin' element={<AdminPage />} />
+            <Route path='/admin' element={<ProtectedAdminRoute><AdminPage /></ProtectedAdminRoute>} />
           </Routes>
         </main>
         <Footer />

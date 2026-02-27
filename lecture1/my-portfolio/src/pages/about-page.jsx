@@ -1,5 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import PersonIcon from '@mui/icons-material/Person';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import Alert from '@mui/material/Alert';
@@ -26,8 +27,9 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { supabase } from '../utils/supabase-client';
+import AdminPasswordDialog from '../components/ui/admin-password-dialog';
 import { usePortfolio } from '../context/PortfolioContext';
+import { supabase } from '../utils/supabase-client';
 
 /** 카테고리별 색상/스타일 설정 */
 const CATEGORY_CONFIG = {
@@ -68,21 +70,31 @@ const BLANK_FORM = { name: '', category: 'Frontend', description: '' };
 
 /**
  * PhotoUploadArea 컴포넌트
- * 클릭 시 로컬 이미지 파일 선택 및 세션 미리보기
+ * 클릭 시 인증 확인 후 로컬 이미지 파일 선택
  *
  * Props:
  * @param {string} photo - 현재 사진 URL [Required]
  * @param {function} onPhotoChange - 파일 선택 이벤트 핸들러 [Required]
+ * @param {boolean} isAuthenticated - 편집 인증 여부 [Optional, 기본값: false]
+ * @param {function} onRequestAuth - 미인증 상태에서 클릭 시 호출되는 인증 요청 핸들러 [Optional]
  *
  * Example usage:
- * <PhotoUploadArea photo={photo} onPhotoChange={handlePhotoChange} />
+ * <PhotoUploadArea photo={photo} onPhotoChange={handlePhotoChange} isAuthenticated={isAuth} onRequestAuth={openDialog} />
  */
-const PhotoUploadArea = memo(function PhotoUploadArea({ photo, onPhotoChange }) {
+const PhotoUploadArea = memo(function PhotoUploadArea({ photo, onPhotoChange, isAuthenticated = false, onRequestAuth }) {
   const inputRef = useRef(null);
+
+  const handleClick = () => {
+    if (isAuthenticated) {
+      inputRef.current?.click();
+    } else {
+      onRequestAuth?.();
+    }
+  };
 
   return (
     <Box
-      onClick={ () => inputRef.current?.click() }
+      onClick={ handleClick }
       sx={{
         position: 'relative',
         width: { xs: 96, md: 136 },
@@ -104,7 +116,7 @@ const PhotoUploadArea = memo(function PhotoUploadArea({ photo, onPhotoChange }) 
         { !photo && <PersonIcon sx={{ fontSize: { xs: '2.8rem', md: '3.4rem' } }} /> }
       </Avatar>
 
-      {/* 호버 오버레이 */}
+      {/* 호버 오버레이 — 인증 상태에 따라 아이콘 변경 */}
       <Box
         className='photo-overlay'
         sx={{
@@ -121,10 +133,21 @@ const PhotoUploadArea = memo(function PhotoUploadArea({ photo, onPhotoChange }) 
           transition: 'opacity 0.25s ease',
         }}
       >
-        <PhotoCameraIcon sx={{ color: '#FFFFFF', fontSize: '1.4rem' }} />
-        <Typography sx={{ color: '#FFFFFF', fontSize: '0.6rem', letterSpacing: '0.06em' }}>
-          업로드
-        </Typography>
+        { isAuthenticated ? (
+          <>
+            <PhotoCameraIcon sx={{ color: '#FFFFFF', fontSize: '1.4rem' }} />
+            <Typography sx={{ color: '#FFFFFF', fontSize: '0.6rem', letterSpacing: '0.06em' }}>
+              업로드
+            </Typography>
+          </>
+        ) : (
+          <>
+            <LockOutlinedIcon sx={{ color: '#FFFFFF', fontSize: '1.4rem' }} />
+            <Typography sx={{ color: '#FFFFFF', fontSize: '0.6rem', letterSpacing: '0.06em' }}>
+              잠금
+            </Typography>
+          </>
+        ) }
       </Box>
 
       <input
@@ -445,6 +468,8 @@ function AboutPage() {
   const [activeTab, setActiveTab] = useState(0);
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: '' });
+  const [isPhotoAuthenticated, setIsPhotoAuthenticated] = useState(false);
+  const [photoPasswordDialogOpen, setPhotoPasswordDialogOpen] = useState(false);
 
   const showSnackbar = useCallback((message) => {
     setSnackbar({ open: true, message });
@@ -557,6 +582,8 @@ function AboutPage() {
             <PhotoUploadArea
               photo={ basicInfo.photo }
               onPhotoChange={ handlePhotoChange }
+              isAuthenticated={ isPhotoAuthenticated }
+              onRequestAuth={ () => setPhotoPasswordDialogOpen(true) }
             />
 
             <Box sx={{ textAlign: { xs: 'center', sm: 'left' } }}>
@@ -741,6 +768,13 @@ function AboutPage() {
           open={ addDialogOpen }
           onClose={ () => setAddDialogOpen(false) }
           onAdd={ handleAddSkill }
+        />
+
+        {/* 프로필 사진 수정 인증 다이얼로그 */}
+        <AdminPasswordDialog
+          isOpen={ photoPasswordDialogOpen }
+          onClose={ () => setPhotoPasswordDialogOpen(false) }
+          onSuccess={ () => setIsPhotoAuthenticated(true) }
         />
 
       </Container>
