@@ -60,7 +60,7 @@ const SkillCard = memo(function SkillCard({ skill }) {
   return (
     <Box
       sx={{
-        p: { xs: 2.5, md: 3 },
+        p: { xs: 2, md: 3 },
         borderRadius: 2,
         backgroundColor: 'var(--color-bg-primary)',
         height: '100%',
@@ -68,8 +68,10 @@ const SkillCard = memo(function SkillCard({ skill }) {
         boxShadow: '0 2px 12px rgba(0,0,0,0.07)',
         transition: 'box-shadow 0.35s ease, transform 0.35s ease',
         display: 'flex',
+        flexDirection: { xs: 'column', md: 'row' },
         alignItems: 'center',
-        gap: 2.5,
+        gap: { xs: 1, md: 2.5 },
+        textAlign: { xs: 'center', md: 'left' },
         '&:hover': {
           boxShadow: '0 8px 32px rgba(0,0,0,0.14)',
           transform: 'translateY(-4px)',
@@ -79,15 +81,15 @@ const SkillCard = memo(function SkillCard({ skill }) {
       {/* 아이콘 배지 */}
       <Box
         sx={{
-          width: { xs: 64, md: 72 },
-          height: { xs: 64, md: 72 },
+          width: { xs: 48, md: 72 },
+          height: { xs: 48, md: 72 },
           borderRadius: 2,
           backgroundColor: bgColor,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           color: accentColor,
-          fontSize: abbr?.length > 2 ? '1rem' : '1.4rem',
+          fontSize: { xs: abbr?.length > 2 ? '0.75rem' : '1.1rem', md: abbr?.length > 2 ? '1rem' : '1.4rem' },
           fontWeight: 800,
           letterSpacing: abbr?.length > 2 ? '0' : '-0.02em',
           fontFamily: 'monospace',
@@ -98,15 +100,18 @@ const SkillCard = memo(function SkillCard({ skill }) {
       </Box>
 
       {/* 텍스트 영역 */}
-      <Box>
+      <Box sx={{ minWidth: 0, width: { xs: '100%', md: 'auto' } }}>
         {/* 툴 이름 */}
         <Typography
           sx={{
-            fontSize: { xs: '1.05rem', md: '1.15rem' },
+            fontSize: { xs: '0.85rem', md: '1.15rem' },
             fontWeight: 700,
             color: 'var(--color-text-primary)',
             letterSpacing: '-0.01em',
             mb: 0.75,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
           }}
         >
           { name }
