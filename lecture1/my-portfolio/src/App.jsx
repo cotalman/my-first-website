@@ -13,11 +13,13 @@ import HomePage from './pages/home-page';
 import ProjectsPage from './pages/projects-page';
 import { darkTheme, lightTheme } from './theme';
 
-/** 라우트 변경 시 페이지 최상단으로 스크롤 */
+/** 라우트 변경 시 페이지 최상단으로 스크롤 (scrollTo state가 있으면 스킵) */
 function ScrollToTopOnNavigate() {
-  const { pathname } = useLocation();
+  const { pathname, state } = useLocation();
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
+    if (!state?.scrollTo) {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
   }, [pathname]);
   return null;
 }

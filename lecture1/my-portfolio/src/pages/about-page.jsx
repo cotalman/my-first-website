@@ -24,8 +24,8 @@ import Tabs from '@mui/material/Tabs';
 import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import { memo, useCallback, useMemo, useRef, useState } from 'react';
-
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { usePortfolio } from '../context/PortfolioContext';
 
 /** 카테고리별 색상/스타일 설정 */
@@ -494,6 +494,16 @@ function AboutPage() {
     showSnackbar('내용이 저장되었습니다. 홈 탭에 반영됩니다.');
   }, [updateSectionContent, showSnackbar]);
 
+  const location = useLocation();
+
+  /** scrollTo state가 있으면 해당 섹션으로 스크롤 */
+  useEffect(() => {
+    if (location.state?.scrollTo) {
+      const el = document.getElementById(location.state.scrollTo);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, []);
+
   const { basicInfo, sections, skills } = aboutData;
 
   /** 카테고리별 그룹핑 — skills 변경 시에만 재계산 */
@@ -663,7 +673,7 @@ function AboutPage() {
         </Box>
 
         {/* ── 기술 스택 섹션 ── */}
-        <Box>
+        <Box id='tech-stack'>
           {/* 섹션 헤더 */}
           <Box
             sx={{

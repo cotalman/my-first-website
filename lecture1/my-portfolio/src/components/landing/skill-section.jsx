@@ -4,6 +4,7 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { memo, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { usePortfolio } from '../../context/PortfolioContext';
 
 /** 스크롤 진입 시 페이드업 애니메이션 래퍼 */
@@ -144,13 +145,11 @@ const SkillCard = memo(function SkillCard({ skill }) {
  * <SkillSection />
  */
 function SkillSection() {
-  const { homeData, aboutMeData } = usePortfolio();
+  const navigate = useNavigate();
+  const { homeData } = usePortfolio();
   const { topSkills } = homeData;
-  const [showAll, setShowAll] = useState(false);
   const [parallax, setParallax] = useState(0);
   const sectionRef = useRef(null);
-
-  const displaySkills = showAll ? aboutMeData.skills : topSkills;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -251,7 +250,7 @@ function SkillSection() {
         {/* 스킬 카드 */}
         <ScrollReveal delay={ 0.08 }>
           <Grid container spacing={ 2 } sx={{ mb: { xs: 8, md: 10 } }}>
-            { displaySkills.map((skill) => (
+            { topSkills.map((skill) => (
               <Grid key={ skill.id } size={{ xs: 6, md: 2.4 }}>
                 <SkillCard skill={ skill } />
               </Grid>
@@ -259,11 +258,11 @@ function SkillSection() {
           </Grid>
         </ScrollReveal>
 
-        {/* 전체 스킬 보기 / 접기 버튼 */}
+        {/* 전체 스킬 보기 버튼 */}
         <ScrollReveal delay={ 0.16 }>
           <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
             <Button
-              onClick={ () => setShowAll((prev) => !prev) }
+              onClick={ () => navigate('/about', { state: { scrollTo: 'tech-stack' } }) }
               variant='outlined'
               sx={{
                 borderColor: 'rgba(255,255,255,0.5)',
@@ -277,7 +276,7 @@ function SkillSection() {
                 },
               }}
             >
-              { showAll ? '접기 ↑' : '전체 스킬 보기 →' }
+              전체 스킬 보기 →
             </Button>
           </Box>
         </ScrollReveal>
