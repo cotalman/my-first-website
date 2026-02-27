@@ -18,7 +18,7 @@ function AppContent() {
   return (
     <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
       <CssBaseline />
-      <Router>
+      <Router basename={import.meta.env.BASE_URL}>
         <Navigation />
         <ScrollToTop />
         <main>
