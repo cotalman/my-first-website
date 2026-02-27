@@ -4,7 +4,6 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { memo, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { usePortfolio } from '../../context/PortfolioContext';
 
 /** 스크롤 진입 시 페이드업 애니메이션 래퍼 */
@@ -145,11 +144,13 @@ const SkillCard = memo(function SkillCard({ skill }) {
  * <SkillSection />
  */
 function SkillSection() {
-  const navigate = useNavigate();
-  const { homeData } = usePortfolio();
+  const { homeData, aboutMeData } = usePortfolio();
   const { topSkills } = homeData;
+  const [showAll, setShowAll] = useState(false);
   const [parallax, setParallax] = useState(0);
   const sectionRef = useRef(null);
+
+  const displaySkills = showAll ? aboutMeData.skills : topSkills;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -247,10 +248,10 @@ function SkillSection() {
           </Box>
         </ScrollReveal>
 
-        {/* 스킬 카드 4개 */}
+        {/* 스킬 카드 */}
         <ScrollReveal delay={ 0.08 }>
           <Grid container spacing={ 2 } sx={{ mb: { xs: 8, md: 10 } }}>
-            { topSkills.map((skill) => (
+            { displaySkills.map((skill) => (
               <Grid key={ skill.id } size={{ xs: 6, md: 2.4 }}>
                 <SkillCard skill={ skill } />
               </Grid>
@@ -258,11 +259,11 @@ function SkillSection() {
           </Grid>
         </ScrollReveal>
 
-        {/* 전체 스킬 보기 버튼 */}
+        {/* 전체 스킬 보기 / 접기 버튼 */}
         <ScrollReveal delay={ 0.16 }>
           <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
             <Button
-              onClick={ () => navigate('/about') }
+              onClick={ () => setShowAll((prev) => !prev) }
               variant='outlined'
               sx={{
                 borderColor: 'rgba(255,255,255,0.5)',
@@ -276,7 +277,7 @@ function SkillSection() {
                 },
               }}
             >
-              전체 스킬 보기 →
+              { showAll ? '접기 ↑' : '전체 스킬 보기 →' }
             </Button>
           </Box>
         </ScrollReveal>
